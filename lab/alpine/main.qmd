@@ -1,0 +1,21 @@
+---
+metadata-files:
+  - shell/step.yaml
+  - filesystem/step.yaml
+---
+
+# Alpine
+
+{{< include _assgiment-description.qmd >}}
+
+## Задания
+
+### {{< meta shell.title >}}
+
+{{< include shell/_theory.qmd >}}
+
+{{< include shell/_task.qmd >}}
+
+{{< include shell/_solution.qmd >}}
+
+### {{ meta filesystem.title }}

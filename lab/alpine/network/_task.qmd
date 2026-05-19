@@ -1,0 +1,32 @@
+## Этап 3. Настройка сети и проверка IP-адреса
+
+В Alpine сеть можно настроить через `setup-interfaces`; для DHCP есть автоматический вариант, а при ручной настройке используются `/etc/network/interfaces` и `/etc/resolv.conf`. После изменения сетевых настроек служба `networking` запускается через OpenRC. ([docs.alpinelinux.org][2])
+
+### Задание 1. Включить DHCP для первого проводного интерфейса
+
+**Требуется:** автоматически настроить интерфейс и вывести сетевые адреса.
+
+**Решение:**
+
+```sh
+#!/bin/sh
+setup-interfaces -a -r
+rc-update add networking boot
+ip addr show
+ip route show
+```
+
+### Задание 2. Определить основной IP-адрес ВМ
+
+**Требуется:** найти интерфейс маршрута по умолчанию и его IPv4-адрес.
+
+**Решение:**
+
+```sh
+#!/bin/sh
+iface=$(ip route | awk '/default/ {print $5; exit}')
+addr=$(ip -4 addr show "$iface" | awk '/inet / {print $2; exit}')
+echo "iface=$iface"
+echo "ip=$addr"
+ping -c 3 1.1.1.1
+```

@@ -1,0 +1,23 @@
+project:
+  type: book
+  output-dir: _s-book
+
+book:
+  chapters:
+    - index.qmd
+
+    - part: "Задания"
+      chapters:
+        - lab/ubuntu/main.qmd
+
+
+  appendices:
+    - part: "Shell"
+      chapters:
+        - shell/sh.qmd
+        - shell/bash.qmd
+        - part: "Tools"
+    - part: "Tools"
+      chapters:
+        - nano/main.qmd
+

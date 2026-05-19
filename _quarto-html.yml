@@ -1,0 +1,8 @@
+format:
+  html:
+    number-depth: 3
+    syntax-definitions:
+        - "/usr/share/org.kde.syntax-highlighting/syntax-bundled/fish.xml"
+    theme:
+      - cosmo
+      - brand

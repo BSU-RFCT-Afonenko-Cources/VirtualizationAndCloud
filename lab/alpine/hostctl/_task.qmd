@@ -1,0 +1,48 @@
+### Задание 2. Задать имя хоста
+
+**Требуется:** установить имя хоста `alpine-lab` и проверить его.
+
+**Решение:**
+
+проверить какое установлено сейчас, переустановить
+
+```sh
+#!/bin/sh
+setup-keymap us us
+setup-hostname alpine-lab
+rc-service hostname restart
+hostname
+```
+
+
+
+### Задание 1. Настроить часовой пояс
+
+Часовой пояс можно настроить через `setup-timezone`
+
+**Требуется:** установить часовой пояс `Europe/Minsk` и вывести текущее время.
+
+**Решение:**
+
+```sh
+#!/bin/sh
+apk add --no-cache tzdata
+cp /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
+echo Europe/Warsaw > /etc/timezone
+date
+```
+
+### Включить синхронизацию времени
+
+**Требуется:** установить и запустить `chronyd`.
+
+**Решение:**
+
+```sh
+#!/bin/sh
+apk add --no-cache chrony
+rc-update add chronyd default
+rc-service chronyd start
+rc-service chronyd status
+```
+

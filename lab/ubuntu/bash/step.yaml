@@ -1,0 +1,22 @@
+bash:
+    title: "Командная оболочка bash"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
+      pre-step:
+        exec:
+          - prepare.sh
+      check:
+        exec:
+              - check/report.fish
+              - check/array.fish
+              - check/backup.fish
+              - check/project.fish
+
+      solution:
+        import:
+              - solution/report.sh
+              - solution/backup.sh
+              - solution/project.sh
+        exec:
+              - solution/report.sh

@@ -1,0 +1,13 @@
+title: "Работа с дистрибутивом Alpine"
+description: _assigment-description.md
+time-limit-minutes: 45
+virtual-machines:
+  - host:
+      template: ubuntu-24-base
+      import:
+        - from: /tools/qemu/alpine/alpine-install-guest-tools.exp
+          to: ~/alpine-install-guest-tools.exp
+      prepare: assigment-prepare/prepare.fish
+
+steps:
+    - shell/step.yml

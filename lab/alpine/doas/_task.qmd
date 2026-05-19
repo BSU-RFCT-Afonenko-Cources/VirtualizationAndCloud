@@ -1,0 +1,155 @@
+Ниже — 3 задания для учебной Alpine Linux VM. Во всех примерах проверочные скрипты запускать **от root**. В решениях используется `/etc/doas.d/*.conf`, потому что Alpine описывает этот каталог как место для правил doas, а `/etc/doas.d/*.conf` может переопределять `/etc/doas.conf`. Alpine также указывает, что `doas` не установлен по умолчанию. ([wiki.alpinelinux.org][1])
+
+Для автоматической проверки я использую `nopass`. В реальной системе для широкого админ-доступа чаще разумнее `persist`, а не `nopass`: `nopass` отключает ввод пароля, `persist` запоминает успешную аутентификацию на некоторое время. Синтаксис правил: `permit|deny [options] identity [as target] [cmd command [args ...]]`; `cmd` и `args` позволяют ограничивать конкретную команду и её аргументы. ([man.openbsd.org][2])
+
+---
+
+## 1. Запуск одной команды от root через группу `wheel`
+
+**Задание.**
+Создать пользователя `labadmin`, добавить его в группу `wheel` и разрешить членам `wheel` запускать только команду `id` от имени root через `doas`.
+
+Студент должен получить:
+
+```sh
+doas /usr/bin/id -u
+# 0
+```
+
+**Решение, 8 строк:**
+
+```sh
+#!/bin/sh
+set -eu
+apk add --no-cache doas
+adduser -D labadmin 2>/dev/null || true
+adduser labadmin wheel 2>/dev/null || true
+mkdir -p /etc/doas.d
+ID="$(command -v id)"
+printf 'permit nopass :wheel as root cmd %s\n' "$ID" > /etc/doas.d/20-lab-id.conf
+```
+
+**Скрипт проверки:**
+
+```sh
+#!/bin/sh
+set -eu
+fail(){ echo "FAIL: $1"; exit 1; }
+
+[ "$(id -u)" -eq 0 ] || fail "запустите проверку от root"
+ID="$(command -v id)"
+
+command -v doas >/dev/null || fail "doas не установлен"
+id -nG labadmin | tr ' ' '\n' | grep -qx wheel || fail "labadmin не в группе wheel"
+grep -Rqsx "permit nopass :wheel as root cmd $ID" /etc/doas.d /etc/doas.conf || fail "нет правильного правила doas"
+
+OUT="$(su - labadmin -c "doas $ID -u")" || fail "labadmin не смог выполнить id через doas"
+[ "$OUT" = "0" ] || fail "ожидался uid 0, получено: $OUT"
+
+echo "OK: задание 1 выполнено"
+```
+
+---
+
+## 2. Разрешение только одной команды с конкретными аргументами
+
+**Задание.**
+Создать пользователя `labops` и разрешить ему через `doas` выполнить только:
+
+```sh
+mkdir -p /srv/lab2
+```
+
+Он не должен иметь возможность через это правило создавать другие каталоги, например `/root/lab2-forbidden`.
+
+**Решение, 8 строк:**
+
+```sh
+#!/bin/sh
+set -eu
+apk add --no-cache doas
+adduser -D labops 2>/dev/null || true
+mkdir -p /etc/doas.d
+MKDIR="$(command -v mkdir)"
+printf 'permit nopass labops as root cmd %s args -p /srv/lab2\n' "$MKDIR" > /etc/doas.d/30-lab2-mkdir.conf
+rm -rf /srv/lab2
+```
+
+**Скрипт проверки:**
+
+```sh
+#!/bin/sh
+set -eu
+fail(){ echo "FAIL: $1"; exit 1; }
+
+[ "$(id -u)" -eq 0 ] || fail "запустите проверку от root"
+MKDIR="$(command -v mkdir)"
+
+command -v doas >/dev/null || fail "doas не установлен"
+grep -Rqsx "permit nopass labops as root cmd $MKDIR args -p /srv/lab2" /etc/doas.d /etc/doas.conf || fail "нет правила с точными аргументами"
+
+rm -rf /srv/lab2 /root/lab2-forbidden
+su - labops -c "doas $MKDIR -p /srv/lab2" || fail "разрешённая команда не выполнилась"
+[ -d /srv/lab2 ] || fail "каталог /srv/lab2 не создан"
+
+if su - labops -c "doas $MKDIR /root/lab2-forbidden" >/dev/null 2>&1; then
+  fail "опасно: labops смог выполнить mkdir с другими аргументами"
+fi
+[ ! -d /root/lab2-forbidden ] || fail "создан запрещённый каталог"
+
+echo "OK: задание 2 выполнено"
+```
+
+---
+
+## 3. Запуск команды от имени другого обычного пользователя и настройка окружения
+
+**Задание.**
+Создать пользователей `deployer` и `appuser`. Разрешить `deployer` через `doas` запускать от имени `appuser`:
+
+1. `id -un`, чтобы увидеть имя целевого пользователя;
+2. `env` без аргументов, причём в окружении должна появиться переменная `LAB_ROLE=deployer`.
+
+Это демонстрирует `as target` и `setenv`.
+
+**Решение, 8 строк:**
+
+```sh
+#!/bin/sh
+set -eu
+apk add --no-cache doas
+adduser -D appuser 2>/dev/null || true
+adduser -D deployer 2>/dev/null || true
+mkdir -p /etc/doas.d
+ID="$(command -v id)"; ENV="$(command -v env)"
+printf 'permit nopass deployer as appuser cmd %s args -un\npermit nopass setenv { LAB_ROLE=deployer } deployer as appuser cmd %s args\n' "$ID" "$ENV" > /etc/doas.d/40-lab3-appuser.conf
+```
+
+**Скрипт проверки:**
+
+```sh
+#!/bin/sh
+set -eu
+fail(){ echo "FAIL: $1"; exit 1; }
+
+[ "$(id -u)" -eq 0 ] || fail "запустите проверку от root"
+ID="$(command -v id)"
+ENV="$(command -v env)"
+
+grep -Rqsx "permit nopass deployer as appuser cmd $ID args -un" /etc/doas.d /etc/doas.conf || fail "нет правила для id -un"
+grep -Rqsx "permit nopass setenv { LAB_ROLE=deployer } deployer as appuser cmd $ENV args" /etc/doas.d /etc/doas.conf || fail "нет правила setenv для env"
+
+OUT="$(su - deployer -c "doas -u appuser $ID -un")" || fail "deployer не смог выполнить id от имени appuser"
+[ "$OUT" = "appuser" ] || fail "ожидался appuser, получено: $OUT"
+
+su - deployer -c "doas -u appuser $ENV" | grep -qx 'LAB_ROLE=deployer' || fail "LAB_ROLE=deployer не найден в окружении"
+
+if su - deployer -c "doas -u root $ID -un" >/dev/null 2>&1; then
+  fail "опасно: deployer смог выполнить команду от root"
+fi
+
+echo "OK: задание 3 выполнено"
+```
+
+[1]: https://wiki.alpinelinux.org/wiki/Setting_up_a_new_user "Setting up a new user - Alpine Linux"
+[2]: https://man.openbsd.org/doas.conf "doas.conf(5) - OpenBSD manual pages"

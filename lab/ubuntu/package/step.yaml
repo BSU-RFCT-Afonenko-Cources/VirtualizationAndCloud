@@ -1,0 +1,14 @@
+package:
+    title: "Система управления пакетами APT"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
+      pre-step:
+        exec:
+          - prepare.sh
+
+      check:
+        exec:
+          - check/install.fish
+          - check/update.fish
+

@@ -1,0 +1,15 @@
+mock:
+    title: "Первые шаги"
+    task: _task.qmd
+    theory: _task.qmd
+    actions:
+      pre-step:
+        exec:
+          - prepare.sh
+      check:
+        exec:
+          - check.fish
+
+      solution:
+        exec:
+          - check.fish

@@ -1,0 +1,41 @@
+:::{#sol-lab-alpine-shell-print}
+#### Приветствие с аргументом
+Создадим файл `print.sh`
+
+``` sh
+{{< include shell/solution/print.sh >}}
+```
+:::
+
+
+:::{#sol-lab-alpine-shell-exists}
+#### Проверка существования файла
+
+Файл `exists.sh`
+
+``` sh
+{{< include shell/solution/exists.sh >}}
+```
+:::
+
+
+:::{#sol-lab-alpine-shell-copy}
+#### Копирование с проверкой аргументов
+
+Файл `copy.sh`
+
+``` sh
+{{< include shell/solution/copy.sh >}}
+```
+:::
+
+
+:::{#sol-lab-alpine-shell-tempfile}
+#### Создание временного файла
+
+Файл `temp.sh`
+
+``` sh
+{{< include shell/solution/temp.sh >}}
+```
+:::

@@ -1,0 +1,15 @@
+Изучите
+
+- [Скрипты @sec-shell-sh-script]
+- [Перенаправление ввода вывода @sec-shell-sh-io-redirect]
+- [Массивы @sec-shell-bash-array]
+
+
+:::{#exm-lab-ubuntu-bash-run}
+#### Запуск скрипта
+
+``` bash
+chmod u+x script.sh
+./script.sh
+```
+:::

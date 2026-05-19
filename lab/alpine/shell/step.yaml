@@ -1,0 +1,24 @@
+shell:
+    title: "Командная оболочка sh"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
+      - host:
+          working-dir: ""
+          #pre-step: prep.fish
+          #post-step: post-step.fish
+          #pre-check: pre-check.fish
+          check:
+            exec:
+              - check/copy.fish
+              - check/exists.fish
+              - check/print.fish
+              - check/temp.fish
+          solution:
+            import:
+              - solution/copy.sh
+              - solution/exists.sh
+              - solution/print.sh
+              - solution/temp.sh
+            exec:
+              - solution/solution.fish

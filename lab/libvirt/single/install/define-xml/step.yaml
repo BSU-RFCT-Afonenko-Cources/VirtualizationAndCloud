@@ -1,0 +1,17 @@
+title: "Жизненный цикл"
+description: _description.md
+actions:
+  - host:
+#      pre-step: prep.fish           # опционально, запуск при открытии этого этапа
+      post-step: post-step.fish      # опционально, запуск после successful check
+      pre-check: pre-check.fish      # опционально, запуск по нажатии check
+      check: check.fish              # обязательно
+      solution: solution.fish        # обязательно
+      import-script:                 # опционально
+        - from: /tools/qemu/alpine/install-guest-tools.exp  # пути относительно каталога проекта, который задаётся course.yaml
+          to: ~/install-guest-tools.exp
+        - from: guest.sh
+          to: ~/guest.sh
+      import-content:
+        - from: filename.aboba
+          to: ~/biba.txt

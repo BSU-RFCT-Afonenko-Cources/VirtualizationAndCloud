@@ -1,0 +1,35 @@
+# Этап 11. Консольный браузер `lynx`
+
+`lynx` — текстовый WWW-браузер для терминала. Он полезен на серверах без графического интерфейса, когда нужно быстро открыть веб-страницу из консоли. ([lynx.invisible-island.net][8])
+
+## Задание 1
+
+Откройте сайт Ubuntu в текстовом браузере.
+
+Решение:
+
+```bash
+lynx https://ubuntu.com
+```
+
+Полезные клавиши:
+
+```text
+↑ ↓      — перемещение
+Enter    — открыть ссылку
+q        — выход
+y        — подтвердить выход
+```
+
+## Задание 2
+
+Сохраните текстовую версию страницы Ubuntu в файл и определите сколько строк в ней содержиться. Количество строк запишите в файл length.
+
+Решение:
+
+```bash
+mkdir -p /tmp/lab-ubuntu/lynx
+lynx -dump -nolist https://ubuntu.com > /tmp/lab-ubuntu/lynx/ubuntu.txt
+head -n 20 /tmp/lab-ubuntu/lynx/ubuntu.txt
+wc -l /tmp/lab-ubuntu/lynx/ubuntu.txt
+```

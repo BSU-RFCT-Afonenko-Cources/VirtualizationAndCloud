@@ -1,0 +1,14 @@
+nano:
+    title: "Текстовый редактор nano"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
+      pre-step:
+        import:
+          - prepare/app.conf
+        exec:
+          - prepare/setmod.sh
+      check:
+        exec:
+          - check/file.fish
+          - check/config.fish

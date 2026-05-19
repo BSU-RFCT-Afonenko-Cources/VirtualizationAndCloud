@@ -1,0 +1,2268 @@
+Ниже — подробный план лабораторного занятия по теме **«Виртуализация с QEMU/KVM через libvirt и virsh»**. План рассчитан на практическое знакомство студента с созданием, настройкой, управлением, резервным копированием, восстановлением и базовой сетевой конфигурацией виртуальной машины.
+
+## 1. Тема занятия
+
+**Создание и администрирование виртуальных машин QEMU/KVM с использованием libvirt и virsh**
+
+`virsh` — это основной CLI-интерфейс libvirt для управления гостевыми доменами: создания, запуска, остановки, просмотра состояния и конфигурации виртуальных машин. Libvirt, в свою очередь, предоставляет единый слой управления гипервизорами, включая QEMU/KVM. ([libvirt.org][1])
+
+
+
+## 2. Цель занятия
+
+Сформировать у студентов практические навыки работы с виртуальными машинами на базе **QEMU/KVM** с использованием инструментов **libvirt** и **virsh**.
+
+Студент должен научиться:
+
+* проверять готовность хоста к аппаратной виртуализации;
+* создавать виртуальную машину;
+* изменять конфигурацию ВМ через XML-описание libvirt;
+* управлять жизненным циклом ВМ;
+* выполнять сохранение состояния, резервное копирование и восстановление;
+* работать с виртуальными сетями libvirt;
+* диагностировать базовые проблемы запуска, сети и хранения.
+
+
+
+## 3. Продолжительность
+
+**4 академических часа**
+Рекомендуемый формат:
+**30 минут теория + 120 минут практика + 30 минут защита результатов и обсуждение ошибок**
+
+
+
+## 4. Требования к рабочему месту
+
+### Аппаратные требования
+
+* ПК или сервер с поддержкой аппаратной виртуализации:
+
+  * Intel VT-x или AMD-V;
+* минимум 8 ГБ ОЗУ;
+* минимум 30 ГБ свободного места на диске;
+* Linux-хост, желательно Ubuntu/Debian/Fedora/AlmaLinux/Rocky Linux.
+
+### Программные требования
+
+На хосте должны быть установлены:
+
+```bash
+qemu-kvm
+libvirt-daemon
+libvirt-clients
+virt-install
+virt-viewer
+bridge-utils
+genisoimage
+```
+
+Для Debian/Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients virtinst virt-viewer bridge-utils genisoimage
+```
+
+Для RHEL/Fedora-подобных систем:
+
+```bash
+sudo dnf install -y qemu-kvm libvirt virt-install virt-viewer bridge-utils
+```
+
+
+## 5. Предварительная теория
+
+### 5.1. Основные понятия
+
+Преподаватель кратко объясняет:
+
+
+## 6. Структура лабораторной работы
+
+### Этап 1. Проверка среды виртуализации
+
+**Цель:** убедиться, что хост готов к запуску ВМ.
+
+#### Задание 1.1. Проверить поддержку виртуализации
+
+
+Если результат больше `0`, аппаратная виртуализация доступна.
+
+#### Задание 1.2. Проверить доступность KVM
+
+
+#### Задание 1.3. Проверить пользователя
+
+```bash
+groups
+```
+
+
+
+После этого требуется повторный вход в систему.
+
+#### Задание 1.4. Проверить подключение virsh
+
+```bash
+virsh uri
+virsh list --all
+```
+
+Ожидаемый результат:
+
+```text
+ Id   Name   State
+--
+```
+
+или список существующих ВМ.
+
+
+проверка на доступ без sudo virsh list --all
+
+
+## 7. Создание виртуальной машины
+
+### Этап 2. Подготовка диска виртуальной машины
+
+**Цель:** создать виртуальный диск в формате `qcow2`.
+
+Формат `qcow2` удобен для лабораторных работ, так как поддерживает динамическое выделение места и снапшоты.
+
+```bash
+mkdir -p ~/vm-lab/images
+
+qemu-img create -f qcow2 ~/vm-lab/images/student-vm.qcow2 10G
+```
+
+Проверка:
+
+```bash
+qemu-img info ~/vm-lab/images/student-vm.qcow2
+```
+
+Проверка что такой файл существует
+
+
+### Этап 3. Создание ВМ с помощью virt-install
+
+**Цель:** создать ВМ, которая будет управляться через libvirt и virsh.
+
+Пример для ISO-образа Debian/Ubuntu/AlmaLinux:
+
+```bash
+virt-install \
+  --name student-vm \
+  --memory 2048 \
+  --vcpus 2 \
+  --disk path=$HOME/vm-lab/images/student-vm.qcow2,format=qcow2,size=10 \
+  --cdrom $HOME/iso/linux.iso \
+  --os-variant generic \
+  --network network=default \
+  --graphics vnc \
+  --console pty,target_type=serial \
+  --noautoconsole
+```
+
+Проверить создание:
+
+```bash
+virsh list --all
+```
+
+Ожидаемый результат:
+
+```text
+ Id   Name         State
+-
+ -    student-vm   shut off
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Подключиться к консоли:
+
+```bash
+virsh console student-vm
+```
+
+или через графическую консоль:
+
+```bash
+virt-viewer student-vm
+```
+
+
+## 8. Управление конфигурацией виртуальной машины
+
+### Этап 4. Просмотр XML-конфигурации
+
+**Цель:** изучить, как libvirt описывает ВМ.
+
+```bash
+virsh dumpxml student-vm > student-vm.xml
+less student-vm.xml
+```
+
+Обратить внимание на разделы:
+
+```xml
+<name>
+<memory>
+<vcpu>
+<os>
+<devices>
+<disk>
+<interface>
+<graphics>
+```
+
+
+### Этап 5. Изменение параметров ВМ
+
+#### 5.1. Изменить количество памяти
+
+Выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Проверить состояние:
+
+```bash
+virsh domstate student-vm
+```
+
+Изменить объем памяти:
+
+```bash
+virsh setmaxmem student-vm 3072M --config
+virsh setmem student-vm 3072M --config
+```
+
+Проверить:
+
+```bash
+virsh dominfo student-vm
+```
+
+#### 5.2. Изменить количество vCPU
+
+```bash
+virsh setvcpus student-vm 2 --config
+```
+
+Проверка:
+
+```bash
+virsh vcpuinfo student-vm
+```
+
+#### 5.3. Редактировать XML напрямую
+
+```bash
+virsh edit student-vm
+```
+
+Студент должен найти и объяснить следующие элементы:
+
+```xml
+<memory unit='KiB'>
+<vcpu placement='static'>
+<disk type='file' device='disk'>
+<interface type='network'>
+```
+
+## 9. Управление состоянием виртуальной машины
+
+### Этап 6. Жизненный цикл ВМ
+
+Libvirt описывает базовый жизненный цикл ВМ: создание, запуск, остановку, удаление, а также другие операции управления состоянием. ([libvirt Wiki][3])
+
+#### 6.1. Просмотр всех ВМ
+
+```bash
+virsh list --all
+```
+
+#### 6.2. Запуск
+
+```bash
+virsh start student-vm
+```
+
+#### 6.3. Корректное завершение работы
+
+```bash
+virsh shutdown student-vm
+```
+
+#### 6.4. Принудительное выключение
+
+```bash
+virsh destroy student-vm
+```
+
+Обсуждение:
+`shutdown` отправляет гостевой ОС сигнал завершения работы, а `destroy` грубо останавливает домен, что похоже на отключение питания.
+
+#### 6.5. Перезагрузка
+
+```bash
+virsh reboot student-vm
+```
+
+#### 6.6. Приостановка и продолжение работы
+
+```bash
+virsh suspend student-vm
+virsh resume student-vm
+```
+
+#### 6.7. Сохранение состояния ВМ
+
+```bash
+virsh managedsave student-vm
+```
+
+Проверка:
+
+```bash
+virsh list --all
+```
+
+Запуск после сохранения:
+
+```bash
+virsh start student-vm
+```
+
+## 10. Снапшоты, резервные копии и восстановление
+
+### Этап 7. Создание снапшота
+
+**Цель:** сохранить состояние ВМ перед потенциально опасными изменениями.
+
+Снапшоты могут сохранять состояние диска, памяти и устройств гостевой ВМ в определенный момент времени; они часто используются перед рискованными изменениями или для возврата к «чистому» состоянию. ([Red Hat Documentation][4])
+
+Создать снапшот:
+
+```bash
+virsh snapshot-create-as \
+  --domain student-vm \
+  --name clean-install \
+  --description "Clean system after installation"
+```
+
+Просмотреть список снапшотов:
+
+```bash
+virsh snapshot-list student-vm
+```
+
+Информация о снапшоте:
+
+```bash
+virsh snapshot-info student-vm clean-install
+```
+
+
+### Этап 8. Проверка восстановления из снапшота
+
+Внутри ВМ студент создает файл:
+
+```bash
+touch ~/test-after-snapshot.txt
+```
+
+Затем выключает или оставляет ВМ в допустимом состоянии, после чего выполняет откат:
+
+```bash
+virsh snapshot-revert student-vm clean-install
+```
+
+Проверяет, исчез ли созданный файл.
+
+
+
+### Этап 9. Резервное копирование диска ВМ
+
+**Цель:** сделать копию виртуального диска для восстановления.
+
+Сначала выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Проверить, что ВМ остановлена:
+
+```bash
+virsh domstate student-vm
+```
+
+Создать каталог для бэкапов:
+
+```bash
+mkdir -p ~/vm-lab/backups
+```
+
+Скопировать диск:
+
+```bash
+cp ~/vm-lab/images/student-vm.qcow2 ~/vm-lab/backups/student-vm-backup.qcow2
+```
+
+Проверить копию:
+
+```bash
+qemu-img info ~/vm-lab/backups/student-vm-backup.qcow2
+```
+
+
+
+### Этап 10. Экспорт XML-конфигурации ВМ
+
+```bash
+virsh dumpxml student-vm > ~/vm-lab/backups/student-vm.xml
+```
+
+Теперь резервная копия состоит минимум из двух частей:
+
+```text
+student-vm-backup.qcow2
+student-vm.xml
+```
+
+### Этап 11. Восстановление ВМ из резервной копии
+
+Удалить определение ВМ, не удаляя диск:
+
+```bash
+virsh undefine student-vm
+```
+
+Проверить:
+
+```bash
+virsh list --all
+```
+
+Восстановить XML:
+
+```bash
+virsh define ~/vm-lab/backups/student-vm.xml
+```
+
+Проверить:
+
+```bash
+virsh list --all
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+### Этап 12. Восстановление с новым именем
+
+Создать копию XML:
+
+```bash
+cp ~/vm-lab/backups/student-vm.xml ~/vm-lab/backups/student-vm-restored.xml
+```
+
+Отредактировать:
+
+```bash
+nano ~/vm-lab/backups/student-vm-restored.xml
+```
+
+Изменить:
+
+```xml
+<name>student-vm-restored</name>
+```
+
+Удалить строки с UUID:
+
+```xml
+<uuid>...</uuid>
+```
+
+Также изменить путь к диску:
+
+```xml
+<source file='/home/user/vm-lab/backups/student-vm-backup.qcow2'/>
+```
+
+Определить новую ВМ:
+
+```bash
+virsh define ~/vm-lab/backups/student-vm-restored.xml
+```
+
+Проверить:
+
+```bash
+virsh list --all
+```
+
+## 11. Базовая работа с сетью
+
+### Этап 13. Изучение сетей libvirt
+
+Libvirt использует XML-описание для виртуальных сетей; поддерживаются разные варианты, включая изолированные сети, NAT-сети, сети через существующий bridge и macvtap. ([libvirt.org][5])
+
+Просмотреть сети:
+
+```bash
+virsh net-list --all
+```
+
+Обычно по умолчанию есть сеть:
+
+```text
+default
+```
+
+Посмотреть XML сети:
+
+```bash
+virsh net-dumpxml default
+```
+
+Пример типичной NAT-сети:
+
+```xml
+<network>
+  <name>default</name>
+  <bridge name='virbr0'/>
+  <forward mode='nat'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254'/>
+    </dhcp>
+  </ip>
+</network>
+```
+
+
+
+### Этап 14. Проверка сетевого подключения ВМ
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Посмотреть интерфейсы ВМ:
+
+```bash
+virsh domiflist student-vm
+```
+
+Получить IP-адрес:
+
+```bash
+virsh domifaddr student-vm
+```
+
+Если IP не отображается, внутри ВМ выполнить:
+
+```bash
+ip a
+```
+
+Проверить доступность шлюза:
+
+```bash
+ping 192.168.122.1
+```
+
+Проверить доступность интернета:
+
+```bash
+ping 8.8.8.8
+```
+
+Проверить DNS:
+
+```bash
+ping example.com
+```
+
+
+
+### Этап 15. Создание собственной изолированной сети
+
+Создать файл:
+
+```bash
+nano isolated-net.xml
+```
+
+Содержимое:
+
+```xml
+<network>
+  <name>isolated-lab</name>
+  <bridge name='virbr10'/>
+  <ip address='10.10.10.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='10.10.10.100' end='10.10.10.200'/>
+    </dhcp>
+  </ip>
+</network>
+```
+
+Создать сеть:
+
+```bash
+virsh net-define isolated-net.xml
+```
+
+Запустить сеть:
+
+```bash
+virsh net-start isolated-lab
+```
+
+Включить автозапуск:
+
+```bash
+virsh net-autostart isolated-lab
+```
+
+Проверить:
+
+```bash
+virsh net-list --all
+```
+
+
+
+### Этап 16. Подключение ВМ к новой сети
+
+Выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Отредактировать конфигурацию:
+
+```bash
+virsh edit student-vm
+```
+
+Найти блок:
+
+```xml
+<interface type='network'>
+  <source network='default'/>
+</interface>
+```
+
+Изменить на:
+
+```xml
+<interface type='network'>
+  <source network='isolated-lab'/>
+  <model type='virtio'/>
+</interface>
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Проверить IP:
+
+```bash
+virsh domifaddr student-vm
+```
+
+Ожидаемый адрес должен быть из диапазона:
+
+```text
+10.10.10.100–10.10.10.200
+```
+
+
+
+## 12. Диагностика и типовые ошибки
+
+### Ошибка 1. Нет доступа к `/dev/kvm`
+
+Проверить:
+
+```bash
+ls -l /dev/kvm
+groups
+```
+
+Решение:
+
+```bash
+sudo usermod -aG kvm $USER
+```
+
+
+
+### Ошибка 2. ВМ не получает IP-адрес
+
+Проверить сеть:
+
+```bash
+virsh net-list --all
+virsh net-info default
+virsh net-dumpxml default
+```
+
+Проверить интерфейсы:
+
+```bash
+virsh domiflist student-vm
+```
+
+Проверить DHCP внутри гостевой ОС:
+
+```bash
+ip a
+sudo dhclient -v
+```
+
+
+
+### Ошибка 3. ВМ не запускается после изменения XML
+
+Проверить XML:
+
+```bash
+virsh dumpxml student-vm
+```
+
+Попробовать открыть редактор:
+
+```bash
+virsh edit student-vm
+```
+
+Посмотреть логи:
+
+```bash
+journalctl -u libvirtd
+```
+
+или:
+
+```bash
+journalctl -u virtqemud
+```
+
+
+
+### Ошибка 4. Конфликт имени ВМ
+
+Проверить список:
+
+```bash
+virsh list --all
+```
+
+Удалить определение старой ВМ:
+
+```bash
+virsh undefine имя_вм
+```
+
+
+
+## 13. Индивидуальные задания для студентов
+
+Каждый студент должен выполнить следующие действия:
+
+1. Создать ВМ с именем:
+
+```text
+student-<номер_группы>-<фамилия>
+```
+
+2. Настроить параметры:
+
+```text
+RAM: 2048 МБ
+vCPU: 2
+Disk: 10 ГБ qcow2
+Network: default
+```
+
+3. Установить гостевую ОС или загрузить live-образ.
+
+4. Сохранить XML-конфигурацию ВМ.
+
+5. Изменить объем памяти через `virsh`.
+
+6. Выполнить команды:
+
+```bash
+virsh start
+virsh shutdown
+virsh suspend
+virsh resume
+virsh reboot
+virsh dominfo
+virsh domiflist
+virsh domifaddr
+```
+
+7. Создать снапшот.
+
+8. Создать тестовый файл внутри ВМ.
+
+9. Выполнить откат к снапшоту.
+
+10. Создать резервную копию диска и XML.
+
+11. Восстановить ВМ из XML.
+
+12. Создать отдельную сеть `isolated-lab`.
+
+13. Подключить ВМ к новой сети.
+
+14. Проверить получение IP-адреса.
+
+
+
+## 14. Контрольные вопросы
+
+1. Чем QEMU отличается от KVM?
+2. Для чего используется libvirt?
+3. Что такое домен в терминологии libvirt?
+4. Чем отличаются команды `shutdown` и `destroy`?
+5. Что делает команда `virsh define`?
+6. Чем отличается `virsh define` от `virsh create`?
+7. Где хранится XML-конфигурация виртуальной машины?
+8. Какие параметры ВМ можно изменить через `virsh edit`?
+9. Что такое `qcow2`?
+10. Для чего используются снапшоты?
+11. Чем снапшот отличается от полноценной резервной копии?
+12. Почему перед копированием диска желательно выключить ВМ?
+13. Что делает сеть `default` в libvirt?
+14. Чем NAT-сеть отличается от изолированной сети?
+15. Как узнать IP-адрес виртуальной машины через `virsh`?
+
+
+
+## 15. Требования к отчету
+
+Отчет должен содержать:
+
+1. Титульную страницу.
+2. Цель лабораторной работы.
+3. Краткое описание QEMU, KVM, libvirt и virsh.
+4. Скриншоты или текстовый вывод команд:
+
+   * `virsh list --all`;
+   * `virsh dominfo`;
+   * `virsh dumpxml`;
+   * `virsh snapshot-list`;
+   * `virsh net-list --all`;
+   * `virsh domiflist`;
+   * `virsh domifaddr`.
+5. XML-фрагмент конфигурации ВМ.
+6. XML-фрагмент конфигурации сети.
+7. Описание созданного снапшота.
+8. Описание процедуры резервного копирования.
+9. Описание процедуры восстановления.
+10. Ответы на контрольные вопросы.
+11. Вывод о проделанной работе.
+
+
+
+## 16. Критерии оценивания
+
+| Критерий                                         |   Баллы |
+|  | : |
+| Проверка среды виртуализации выполнена корректно |      10 |
+| ВМ создана и успешно запущена                    |      15 |
+| Конфигурация ВМ изменена через virsh/XML         |      15 |
+| Выполнено управление состоянием ВМ               |      15 |
+| Создан и проверен снапшот                        |      10 |
+| Выполнено резервное копирование диска и XML      |      10 |
+| Выполнено восстановление ВМ                      |      10 |
+| Создана и подключена виртуальная сеть            |      10 |
+| Отчет оформлен полно и аккуратно                 |       5 |
+| **Итого**                                        | **100** |
+
+
+
+## 17. Дополнительное задание повышенной сложности
+
+Для студентов, выполнивших основную часть раньше:
+
+### Вариант 1. Клонирование ВМ
+
+Скопировать диск:
+
+```bash
+cp student-vm.qcow2 student-vm-clone.qcow2
+```
+
+Экспортировать XML:
+
+```bash
+virsh dumpxml student-vm > clone.xml
+```
+
+Изменить:
+
+```xml
+<name>student-vm-clone</name>
+```
+
+Удалить:
+
+```xml
+<uuid>...</uuid>
+```
+
+Изменить путь к диску.
+
+Зарегистрировать клон:
+
+```bash
+virsh define clone.xml
+```
+
+
+
+### Вариант 2. Добавление второго сетевого интерфейса
+
+```bash
+virsh attach-interface \
+  --domain student-vm \
+  --type network \
+  --source isolated-lab \
+  --model virtio \
+  --config
+```
+
+Проверить:
+
+```bash
+virsh domiflist student-vm
+```
+
+
+
+### Вариант 3. Добавление дополнительного диска
+
+Создать диск:
+
+```bash
+qemu-img create -f qcow2 ~/vm-lab/images/extra-disk.qcow2 2G
+```
+
+Подключить:
+
+```bash
+virsh attach-disk student-vm \
+  ~/vm-lab/images/extra-disk.qcow2 \
+  vdb \
+  --driver qemu \
+  --subdriver qcow2 \
+  --targetbus virtio \
+  --config
+```
+
+Проверить внутри ВМ:
+
+```bash
+lsblk
+```
+
+
+
+## 18. Итог занятия
+
+В результате лабораторной работы студент должен уметь самостоятельно:
+
+* создавать виртуальные машины QEMU/KVM;
+* управлять ими через `virsh`;
+* изменять XML-конфигурацию;
+* запускать, останавливать, приостанавливать и восстанавливать ВМ;
+* создавать снапшоты;
+* выполнять резервное копирование и восстановление;
+* создавать и подключать виртуальные сети;
+* диагностировать типовые проблемы виртуализации.
+
+[1]: https://www.libvirt.org/manpages/virsh.html?utm_source=chatgpt.com "virsh"
+[2]: https://libvirt.org/formatdomain.html?utm_source=chatgpt.com "Domain XML format"
+[3]: https://wiki.libvirt.org/VM_lifecycle.html?utm_source=chatgpt.com "Virtual Machine Lifecycle"
+[4]: https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/virtualization_deployment_and_administration_guide/sect-managing_guest_virtual_machines_with_virsh-managing_snapshots?utm_source=chatgpt.com "20.39. Managing Snapshots"
+[5]: https://libvirt.org/formatnetwork.html?utm_source=chatgpt.com "Network XML format"
+
+
+## Дополнительный этап лабораторной работы: управление хранилищами и томами libvirt
+
+### Этап 18. Volume management в libvirt: пулы хранения и тома
+
+**Цель этапа:** познакомиться с базовыми задачами управления хранилищем виртуальных машин через libvirt: созданием storage pool, созданием volume, просмотром информации о томах, подключением дополнительного диска к ВМ, изменением размера тома, резервным копированием и удалением неиспользуемых томов.
+
+В этом этапе используется ВМ:
+
+```text
+student-vm
+```
+
+При выполнении работы студент должен заменить это имя на имя своей виртуальной машины.
+
+## 18.1. Основные понятия
+
+В libvirt хранение виртуальных машин обычно описывается двумя сущностями:
+
+```text
+Storage pool — пул хранения, то есть место или источник хранения данных.
+Storage volume — том внутри пула, например qcow2-диск виртуальной машины.
+```
+
+Примеры пулов хранения:
+
+```text
+dir     — каталог на файловой системе хоста;
+fs      — отдельная файловая система;
+logical — LVM;
+disk    — физический диск;
+iscsi   — iSCSI-хранилище;
+netfs   — NFS-хранилище.
+```
+
+В лабораторной работе будет использоваться простой и безопасный вариант — пул типа `dir`, то есть каталог на хостовой машине.
+
+## 18.2. Просмотр существующих пулов хранения
+
+Посмотреть список пулов хранения:
+
+```bash
+virsh pool-list --all
+```
+
+Получить подробную информацию о стандартном пуле, если он существует:
+
+```bash
+virsh pool-info default
+```
+
+Посмотреть XML-конфигурацию пула:
+
+```bash
+virsh pool-dumpxml default
+```
+
+Посмотреть тома внутри пула:
+
+```bash
+virsh vol-list default
+```
+
+Если пул `default` отсутствует, это не является ошибкой: студент создаст собственный пул хранения на следующем этапе.
+
+## 18.3. Создание собственного пула хранения
+
+Создать каталог для пула хранения:
+
+```bash
+mkdir -p ~/vm-lab/storage-pool
+```
+
+Создать пул хранения типа `dir`:
+
+```bash
+virsh pool-define-as \
+  lab-pool \
+  dir \
+  --target "$HOME/vm-lab/storage-pool"
+```
+
+Запустить пул:
+
+```bash
+virsh pool-start lab-pool
+```
+
+Включить автозапуск пула:
+
+```bash
+virsh pool-autostart lab-pool
+```
+
+Проверить состояние:
+
+```bash
+virsh pool-list --all
+```
+
+Получить информацию о пуле:
+
+```bash
+virsh pool-info lab-pool
+```
+
+Ожидаемый результат должен содержать:
+
+```text
+Name:           lab-pool
+State:          running
+Autostart:      yes
+```
+
+## 18.4. Создание тома в пуле хранения
+
+Создать том `data-disk.qcow2` размером 2 ГБ:
+
+```bash
+virsh vol-create-as \
+  lab-pool \
+  data-disk.qcow2 \
+  2G \
+  --format qcow2
+```
+
+Проверить список томов:
+
+```bash
+virsh vol-list lab-pool
+```
+
+Получить информацию о созданном томе:
+
+```bash
+virsh vol-info data-disk.qcow2 --pool lab-pool
+```
+
+Получить путь к тому:
+
+```bash
+virsh vol-path data-disk.qcow2 --pool lab-pool
+```
+
+Сохранить путь в переменную:
+
+```bash
+DATA_DISK=$(virsh vol-path data-disk.qcow2 --pool lab-pool)
+echo "$DATA_DISK"
+```
+
+## 18.5. Создание тома на основе XML-описания
+
+Создать XML-файл тома:
+
+```bash
+nano ~/vm-lab/data-disk-xml.xml
+```
+
+Добавить содержимое:
+
+```xml
+<volume>
+  <name>data-disk-xml.qcow2</name>
+  <capacity unit='G'>2</capacity>
+  <allocation unit='G'>0</allocation>
+  <target>
+    <format type='qcow2'/>
+  </target>
+</volume>
+```
+
+Создать том по XML:
+
+```bash
+virsh vol-create lab-pool ~/vm-lab/data-disk-xml.xml
+```
+
+Проверить:
+
+```bash
+virsh vol-list lab-pool
+```
+
+Получить информацию:
+
+```bash
+virsh vol-info data-disk-xml.qcow2 --pool lab-pool
+```
+
+## 18.6. Подключение дополнительного тома к виртуальной машине
+
+Выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Проверить состояние:
+
+```bash
+virsh domstate student-vm
+```
+
+Если ВМ не выключилась:
+
+```bash
+virsh destroy student-vm
+```
+
+Подключить созданный том как дополнительный диск `vdb`:
+
+```bash
+virsh attach-disk student-vm \
+  "$DATA_DISK" \
+  vdb \
+  --driver qemu \
+  --subdriver qcow2 \
+  --targetbus virtio \
+  --config
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Проверить подключенные диски на хосте:
+
+```bash
+virsh domblklist student-vm
+```
+
+Внутри гостевой ОС проверить появление нового диска:
+
+```bash
+lsblk
+```
+
+Ожидаемый результат: должен появиться новый диск, например:
+
+```text
+vdb    252:16   0   2G  0 disk
+```
+
+## 18.7. Разметка и форматирование дополнительного диска внутри ВМ
+
+Внутри гостевой ОС создать раздел на новом диске:
+
+```bash
+sudo fdisk /dev/vdb
+```
+
+В интерактивном режиме выполнить:
+
+```text
+n — создать новый раздел
+p — primary
+1 — номер раздела
+Enter — начало по умолчанию
+Enter — конец по умолчанию
+w — записать изменения
+```
+
+Создать файловую систему:
+
+```bash
+sudo mkfs.ext4 /dev/vdb1
+```
+
+Создать точку монтирования:
+
+```bash
+sudo mkdir -p /mnt/data
+```
+
+Смонтировать диск:
+
+```bash
+sudo mount /dev/vdb1 /mnt/data
+```
+
+Проверить:
+
+```bash
+df -h
+```
+
+Создать тестовый файл:
+
+```bash
+echo "libvirt volume test" | sudo tee /mnt/data/test.txt
+```
+
+Проверить чтение:
+
+```bash
+cat /mnt/data/test.txt
+```
+
+## 18.8. Отключение тома от виртуальной машины
+
+Внутри гостевой ОС размонтировать диск:
+
+```bash
+sudo umount /mnt/data
+```
+
+Выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Отключить диск от ВМ:
+
+```bash
+virsh detach-disk student-vm vdb --config
+```
+
+Проверить:
+
+```bash
+virsh domblklist student-vm
+```
+
+Диск `vdb` больше не должен отображаться в списке устройств ВМ.
+
+## 18.9. Повторное подключение существующего тома
+
+Снова подключить тот же том:
+
+```bash
+virsh attach-disk student-vm \
+  "$DATA_DISK" \
+  vdb \
+  --driver qemu \
+  --subdriver qcow2 \
+  --targetbus virtio \
+  --config
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Внутри гостевой ОС проверить, что данные сохранились:
+
+```bash
+sudo mkdir -p /mnt/data
+sudo mount /dev/vdb1 /mnt/data
+cat /mnt/data/test.txt
+```
+
+Ожидаемый результат:
+
+```text
+libvirt volume test
+```
+
+## 18.10. Увеличение размера volume
+
+Выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Увеличить размер тома `data-disk.qcow2` до 4 ГБ:
+
+```bash
+virsh vol-resize data-disk.qcow2 4G --pool lab-pool
+```
+
+Проверить размер тома:
+
+```bash
+virsh vol-info data-disk.qcow2 --pool lab-pool
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Внутри гостевой ОС проверить размер диска:
+
+```bash
+lsblk
+```
+
+Расширить раздел, например если используется `/dev/vdb1`.
+
+Вариант через `growpart`:
+
+```bash
+sudo growpart /dev/vdb 1
+```
+
+Если `growpart` отсутствует:
+
+```bash
+sudo apt install cloud-guest-utils
+```
+
+или для RHEL/Fedora:
+
+```bash
+sudo dnf install cloud-utils-growpart
+```
+
+Расширить файловую систему ext4:
+
+```bash
+sudo resize2fs /dev/vdb1
+```
+
+Проверить результат:
+
+```bash
+df -h /mnt/data
+```
+
+## 18.11. Клонирование тома
+
+Создать клон тома:
+
+```bash
+virsh vol-clone \
+  data-disk.qcow2 \
+  data-disk-clone.qcow2 \
+  --pool lab-pool
+```
+
+Проверить список томов:
+
+```bash
+virsh vol-list lab-pool
+```
+
+Получить информацию о клоне:
+
+```bash
+virsh vol-info data-disk-clone.qcow2 --pool lab-pool
+```
+
+Проверить путь к клону:
+
+```bash
+virsh vol-path data-disk-clone.qcow2 --pool lab-pool
+```
+
+## 18.12. Резервное копирование volume
+
+Получить путь к тому:
+
+```bash
+DATA_DISK=$(virsh vol-path data-disk.qcow2 --pool lab-pool)
+```
+
+Создать каталог резервных копий:
+
+```bash
+mkdir -p ~/vm-lab/volume-backups
+```
+
+Выключить ВМ, если том подключен к ней:
+
+```bash
+virsh shutdown student-vm
+```
+
+Скопировать том:
+
+```bash
+cp "$DATA_DISK" ~/vm-lab/volume-backups/data-disk-backup.qcow2
+```
+
+Проверить резервную копию:
+
+```bash
+qemu-img info ~/vm-lab/volume-backups/data-disk-backup.qcow2
+```
+
+Проверить контрольную сумму:
+
+```bash
+sha256sum "$DATA_DISK" ~/vm-lab/volume-backups/data-disk-backup.qcow2
+```
+
+## 18.13. Восстановление volume из резервной копии
+
+Удалить поврежденный или тестовый том:
+
+```bash
+virsh vol-delete data-disk.qcow2 --pool lab-pool
+```
+
+Восстановить том копированием файла в каталог пула:
+
+```bash
+cp ~/vm-lab/volume-backups/data-disk-backup.qcow2 ~/vm-lab/storage-pool/data-disk.qcow2
+```
+
+Обновить сведения пула:
+
+```bash
+virsh pool-refresh lab-pool
+```
+
+Проверить, что том снова появился:
+
+```bash
+virsh vol-list lab-pool
+```
+
+Получить информацию:
+
+```bash
+virsh vol-info data-disk.qcow2 --pool lab-pool
+```
+
+## 18.14. Удаление неиспользуемых томов
+
+Посмотреть список томов:
+
+```bash
+virsh vol-list lab-pool
+```
+
+Удалить ненужный клон:
+
+```bash
+virsh vol-delete data-disk-clone.qcow2 --pool lab-pool
+```
+
+Удалить том, созданный по XML, если он больше не нужен:
+
+```bash
+virsh vol-delete data-disk-xml.qcow2 --pool lab-pool
+```
+
+Проверить свободное место в пуле:
+
+```bash
+virsh pool-info lab-pool
+```
+
+## 18.15. Типовые задачи volume management
+
+### Задача 1. Найти путь к диску ВМ
+
+```bash
+virsh domblklist student-vm
+```
+
+или для конкретного volume:
+
+```bash
+virsh vol-path data-disk.qcow2 --pool lab-pool
+```
+
+### Задача 2. Проверить размер и формат тома
+
+```bash
+virsh vol-info data-disk.qcow2 --pool lab-pool
+qemu-img info "$(virsh vol-path data-disk.qcow2 --pool lab-pool)"
+```
+
+### Задача 3. Создать новый диск для ВМ
+
+```bash
+virsh vol-create-as lab-pool new-disk.qcow2 5G --format qcow2
+```
+
+### Задача 4. Подключить дополнительный диск к ВМ
+
+```bash
+NEW_DISK=$(virsh vol-path new-disk.qcow2 --pool lab-pool)
+
+virsh attach-disk student-vm \
+  "$NEW_DISK" \
+  vdc \
+  --driver qemu \
+  --subdriver qcow2 \
+  --targetbus virtio \
+  --config
+```
+
+### Задача 5. Отключить дополнительный диск от ВМ
+
+```bash
+virsh detach-disk student-vm vdc --config
+```
+
+### Задача 6. Увеличить размер диска
+
+```bash
+virsh vol-resize new-disk.qcow2 10G --pool lab-pool
+```
+
+После этого внутри гостевой ОС необходимо расширить раздел и файловую систему.
+
+### Задача 7. Создать копию тома
+
+```bash
+virsh vol-clone new-disk.qcow2 new-disk-copy.qcow2 --pool lab-pool
+```
+
+### Задача 8. Удалить ненужный том
+
+```bash
+virsh vol-delete new-disk-copy.qcow2 --pool lab-pool
+```
+
+### Задача 9. Обновить список томов после ручного копирования файлов
+
+```bash
+virsh pool-refresh lab-pool
+```
+
+### Задача 10. Остановить и удалить пул хранения
+
+Важно: перед удалением пула убедиться, что тома из него не используются виртуальными машинами.
+
+Остановить пул:
+
+```bash
+virsh pool-destroy lab-pool
+```
+
+Удалить определение пула из libvirt:
+
+```bash
+virsh pool-undefine lab-pool
+```
+
+Если нужно удалить и файлы на диске хоста:
+
+```bash
+rm -rf ~/vm-lab/storage-pool
+```
+
+## 18.16. Что студент должен отразить в отчете
+
+В отчет добавить раздел **«Управление хранилищами и томами libvirt»**.
+
+В нем необходимо указать:
+
+1. Имя созданного storage pool.
+2. Тип пула хранения.
+3. Путь к каталогу пула.
+4. Список созданных volumes.
+5. Формат и размер созданного volume.
+6. К какой ВМ был подключен дополнительный диск.
+7. Какой target использовался для подключения диска, например `vdb`.
+8. Какой раздел и файловая система были созданы внутри гостевой ОС.
+9. Результат записи и чтения тестового файла.
+10. Результат увеличения размера volume.
+11. Описание резервного копирования и восстановления volume.
+12. Список удаленных неиспользуемых томов.
+13. Вывод о том, зачем нужны storage pool и volume в libvirt.
+
+## 18.17. Контрольные вопросы
+
+1. Что такое storage pool в libvirt?
+2. Что такое storage volume?
+3. Чем пул типа `dir` отличается от пула типа `logical`?
+4. Почему удобно создавать диски через `virsh vol-create-as`, а не просто через `qemu-img`?
+5. Как узнать путь к volume?
+6. Как проверить формат volume?
+7. Чем отличается `vol-delete` от удаления файла через `rm`?
+8. Что делает команда обновления пула хранения?
+9. Почему перед резервным копированием volume желательно выключить ВМ?
+10. Что нужно сделать внутри гостевой ОС после увеличения размера volume?
+11. Чем отличается клонирование volume от резервного копирования?
+12. Почему перед удалением пула нужно проверить, не используются ли его тома виртуальными машинами?
+
+## 18.18. Критерии оценивания этапа
+
+| Критерий                                                              |   Баллы |
+| --------------------------------------------------------------------- | ------: |
+| Просмотрены существующие пулы и тома                                  |      10 |
+| Создан и запущен собственный storage pool                             |      15 |
+| Создан volume в формате qcow2                                         |      10 |
+| Volume подключен к ВМ как дополнительный диск                         |      15 |
+| Диск размечен, отформатирован и смонтирован внутри гостевой ОС        |      15 |
+| Проверено сохранение данных после отключения и повторного подключения |      10 |
+| Выполнено увеличение размера volume                                   |      10 |
+| Выполнено резервное копирование и восстановление volume               |      10 |
+| Удалены неиспользуемые volumes                                        |       5 |
+| **Итого**                                                             | **100** |
+
+
+Ниже можно добавить к этапу 18 отдельный подраздел, посвященный **Storage pool redundancy and multiplication** — то есть резервированию, дублированию и размножению пулов хранения и томов между разными хранилищами.
+
+## 18.19. Storage pool redundancy and multiplication
+
+**Цель:** научиться создавать несколько пулов хранения, копировать тома между ними, использовать резервный пул для восстановления ВМ и проверять, что виртуальная машина может быть перенесена на другой набор дисков без повторной установки.
+
+В этом разделе будут использоваться два пула хранения:
+
+```text
+lab-pool-primary   — основной пул хранения
+lab-pool-backup    — резервный пул хранения
+```
+
+### 18.19.1. Создание основного и резервного пулов хранения
+
+Создать каталоги для двух пулов:
+
+```bash
+mkdir -p ~/vm-lab/storage-primary
+mkdir -p ~/vm-lab/storage-backup
+```
+
+Создать основной пул:
+
+```bash
+virsh pool-define-as \
+  lab-pool-primary \
+  dir \
+  --target "$HOME/vm-lab/storage-primary"
+```
+
+Создать резервный пул:
+
+```bash
+virsh pool-define-as \
+  lab-pool-backup \
+  dir \
+  --target "$HOME/vm-lab/storage-backup"
+```
+
+Запустить оба пула:
+
+```bash
+virsh pool-start lab-pool-primary
+virsh pool-start lab-pool-backup
+```
+
+Включить автозапуск:
+
+```bash
+virsh pool-autostart lab-pool-primary
+virsh pool-autostart lab-pool-backup
+```
+
+Проверить состояние:
+
+```bash
+virsh pool-list --all
+```
+
+### 18.19.2. Создание тома в основном пуле
+
+Создать том в основном пуле:
+
+```bash
+virsh vol-create-as \
+  lab-pool-primary \
+  primary-data.qcow2 \
+  2G \
+  --format qcow2
+```
+
+Проверить том:
+
+```bash
+virsh vol-list lab-pool-primary
+virsh vol-info primary-data.qcow2 --pool lab-pool-primary
+```
+
+Получить путь к тому:
+
+```bash
+PRIMARY_VOL=$(virsh vol-path primary-data.qcow2 --pool lab-pool-primary)
+echo "$PRIMARY_VOL"
+```
+
+### 18.19.3. Подключение основного тома к ВМ
+
+Выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Если ВМ не завершилась корректно:
+
+```bash
+virsh destroy student-vm
+```
+
+Подключить том к ВМ как дополнительный диск:
+
+```bash
+virsh attach-disk student-vm \
+  "$PRIMARY_VOL" \
+  vdb \
+  --driver qemu \
+  --subdriver qcow2 \
+  --targetbus virtio \
+  --config
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Проверить подключение:
+
+```bash
+virsh domblklist student-vm
+```
+
+Внутри гостевой ОС разметить, отформатировать и смонтировать диск, затем создать тестовый файл:
+
+```bash
+sudo fdisk /dev/vdb
+sudo mkfs.ext4 /dev/vdb1
+sudo mkdir -p /mnt/redundant-data
+sudo mount /dev/vdb1 /mnt/redundant-data
+echo "primary pool data" | sudo tee /mnt/redundant-data/check.txt
+cat /mnt/redundant-data/check.txt
+```
+
+### 18.19.4. Создание резервной копии тома во втором пуле
+
+Выключить ВМ, чтобы получить согласованную копию диска:
+
+```bash
+virsh shutdown student-vm
+```
+
+Получить путь к резервному пулу:
+
+```bash
+BACKUP_POOL_PATH=$(virsh pool-dumpxml lab-pool-backup | awk -F"[<>]" '/<path>/ {print $3}')
+echo "$BACKUP_POOL_PATH"
+```
+
+Скопировать том из основного пула в резервный:
+
+```bash
+cp "$PRIMARY_VOL" "$BACKUP_POOL_PATH/primary-data-backup.qcow2"
+```
+
+Обновить сведения о резервном пуле:
+
+```bash
+virsh pool-refresh lab-pool-backup
+```
+
+Проверить, что том появился в резервном пуле:
+
+```bash
+virsh vol-list lab-pool-backup
+virsh vol-info primary-data-backup.qcow2 --pool lab-pool-backup
+```
+
+Получить путь к резервному тому:
+
+```bash
+BACKUP_VOL=$(virsh vol-path primary-data-backup.qcow2 --pool lab-pool-backup)
+echo "$BACKUP_VOL"
+```
+
+### 18.19.5. Проверка целостности копии
+
+Сравнить контрольные суммы основного и резервного тома:
+
+```bash
+sha256sum "$PRIMARY_VOL" "$BACKUP_VOL"
+```
+
+Если контрольные суммы совпадают, копия была создана корректно.
+
+Также можно проверить оба файла через `qemu-img`:
+
+```bash
+qemu-img info "$PRIMARY_VOL"
+qemu-img info "$BACKUP_VOL"
+```
+
+### 18.19.6. Переключение ВМ на резервный том
+
+Отключить основной том от ВМ:
+
+```bash
+virsh detach-disk student-vm vdb --config
+```
+
+Подключить резервный том вместо основного:
+
+```bash
+virsh attach-disk student-vm \
+  "$BACKUP_VOL" \
+  vdb \
+  --driver qemu \
+  --subdriver qcow2 \
+  --targetbus virtio \
+  --config
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Проверить список дисков:
+
+```bash
+virsh domblklist student-vm
+```
+
+Внутри гостевой ОС смонтировать диск и проверить наличие тестового файла:
+
+```bash
+sudo mkdir -p /mnt/redundant-data
+sudo mount /dev/vdb1 /mnt/redundant-data
+cat /mnt/redundant-data/check.txt
+```
+
+Ожидаемый результат:
+
+```text
+primary pool data
+```
+
+Это подтверждает, что ВМ может использовать том, восстановленный из резервного пула.
+
+## 18.20. Multiplication: создание нескольких копий тома
+
+**Цель:** научиться создавать несколько независимых копий одного тома для разных сценариев: тестирования, резервирования или подготовки нескольких однотипных ВМ.
+
+### 18.20.1. Создание нескольких копий тома в резервном пуле
+
+Выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Создать несколько копий резервного тома:
+
+```bash
+cp "$BACKUP_VOL" "$BACKUP_POOL_PATH/data-copy-01.qcow2"
+cp "$BACKUP_VOL" "$BACKUP_POOL_PATH/data-copy-02.qcow2"
+cp "$BACKUP_VOL" "$BACKUP_POOL_PATH/data-copy-03.qcow2"
+```
+
+Обновить пул:
+
+```bash
+virsh pool-refresh lab-pool-backup
+```
+
+Проверить список томов:
+
+```bash
+virsh vol-list lab-pool-backup
+```
+
+Проверить информацию о копиях:
+
+```bash
+virsh vol-info data-copy-01.qcow2 --pool lab-pool-backup
+virsh vol-info data-copy-02.qcow2 --pool lab-pool-backup
+virsh vol-info data-copy-03.qcow2 --pool lab-pool-backup
+```
+
+### 18.20.2. Создание копии через `virsh vol-clone`
+
+Если исходный том и копия находятся в одном пуле, можно использовать `vol-clone`:
+
+```bash
+virsh vol-clone \
+  primary-data-backup.qcow2 \
+  data-copy-clone.qcow2 \
+  --pool lab-pool-backup
+```
+
+Проверить:
+
+```bash
+virsh vol-list lab-pool-backup
+```
+
+### 18.20.3. Проверка независимости копий
+
+Подключить одну из копий к ВМ:
+
+```bash
+COPY_VOL=$(virsh vol-path data-copy-01.qcow2 --pool lab-pool-backup)
+
+virsh attach-disk student-vm \
+  "$COPY_VOL" \
+  vdc \
+  --driver qemu \
+  --subdriver qcow2 \
+  --targetbus virtio \
+  --config
+```
+
+Запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Внутри гостевой ОС смонтировать диск и изменить данные:
+
+```bash
+sudo mkdir -p /mnt/copy-data
+sudo mount /dev/vdc1 /mnt/copy-data
+echo "modified copy 01" | sudo tee /mnt/copy-data/copy-check.txt
+cat /mnt/copy-data/copy-check.txt
+```
+
+После этого выключить ВМ и подключить другую копию, например `data-copy-02.qcow2`, чтобы убедиться, что изменения из `data-copy-01.qcow2` не появились в другой копии.
+
+## 18.21. Имитация отказа основного пула хранения
+
+**Цель:** проверить, сможет ли студент восстановить работу ВМ при потере основного storage pool.
+
+### 18.21.1. Подготовка к имитации отказа
+
+Выключить ВМ:
+
+```bash
+virsh shutdown student-vm
+```
+
+Убедиться, что ВМ выключена:
+
+```bash
+virsh domstate student-vm
+```
+
+Посмотреть, какие диски подключены к ВМ:
+
+```bash
+virsh domblklist student-vm
+```
+
+### 18.21.2. Отключение основного пула
+
+Остановить основной пул:
+
+```bash
+virsh pool-destroy lab-pool-primary
+```
+
+Проверить состояние пулов:
+
+```bash
+virsh pool-list --all
+```
+
+Если ВМ была настроена на диск из основного пула, запуск должен стать невозможным или диск будет недоступен.
+
+### 18.21.3. Восстановление работы через резервный пул
+
+Получить путь к резервному тому:
+
+```bash
+BACKUP_VOL=$(virsh vol-path primary-data-backup.qcow2 --pool lab-pool-backup)
+```
+
+Открыть XML-конфигурацию ВМ:
+
+```bash
+virsh edit student-vm
+```
+
+В блоке дополнительного диска заменить путь к основному тому:
+
+```xml
+<source file='/home/user/vm-lab/storage-primary/primary-data.qcow2'/>
+```
+
+на путь к резервному тому:
+
+```xml
+<source file='/home/user/vm-lab/storage-backup/primary-data-backup.qcow2'/>
+```
+
+После сохранения XML запустить ВМ:
+
+```bash
+virsh start student-vm
+```
+
+Проверить, что ВМ использует диск из резервного пула:
+
+```bash
+virsh domblklist student-vm
+```
+
+## 18.22. Сравнение основного и резервного пулов
+
+Студент должен заполнить таблицу в отчете.
+
+| Параметр          | Основной пул               | Резервный пул             |
+| ----------------- | -------------------------- | ------------------------- |
+| Имя пула          | `lab-pool-primary`         | `lab-pool-backup`         |
+| Тип пула          | `dir`                      | `dir`                     |
+| Путь на хосте     | `~/vm-lab/storage-primary` | `~/vm-lab/storage-backup` |
+| Состояние пула    | running / inactive         | running / inactive        |
+| Количество томов  | значение из `vol-list`     | значение из `vol-list`    |
+| Свободное место   | значение из `pool-info`    | значение из `pool-info`   |
+| Используемые тома | список                     | список                    |
+
+## 18.23. Типовые задачи Storage pool redundancy and multiplication
+
+### Задача 1. Создать резервный пул хранения
+
+```bash
+mkdir -p ~/vm-lab/storage-backup
+
+virsh pool-define-as \
+  lab-pool-backup \
+  dir \
+  --target "$HOME/vm-lab/storage-backup"
+
+virsh pool-start lab-pool-backup
+virsh pool-autostart lab-pool-backup
+```
+
+### Задача 2. Скопировать том из одного пула в другой
+
+```bash
+SRC_VOL=$(virsh vol-path primary-data.qcow2 --pool lab-pool-primary)
+DST_POOL_PATH=$(virsh pool-dumpxml lab-pool-backup | awk -F"[<>]" '/<path>/ {print $3}')
+
+cp "$SRC_VOL" "$DST_POOL_PATH/primary-data-backup.qcow2"
+virsh pool-refresh lab-pool-backup
+```
+
+### Задача 3. Проверить наличие копии в резервном пуле
+
+```bash
+virsh vol-list lab-pool-backup
+virsh vol-info primary-data-backup.qcow2 --pool lab-pool-backup
+```
+
+### Задача 4. Проверить целостность копии
+
+```bash
+sha256sum \
+  "$(virsh vol-path primary-data.qcow2 --pool lab-pool-primary)" \
+  "$(virsh vol-path primary-data-backup.qcow2 --pool lab-pool-backup)"
+```
+
+### Задача 5. Переключить ВМ на диск из резервного пула
+
+```bash
+BACKUP_VOL=$(virsh vol-path primary-data-backup.qcow2 --pool lab-pool-backup)
+
+virsh detach-disk student-vm vdb --config
+
+virsh attach-disk student-vm \
+  "$BACKUP_VOL" \
+  vdb \
+  --driver qemu \
+  --subdriver qcow2 \
+  --targetbus virtio \
+  --config
+```
+
+### Задача 6. Создать несколько копий одного тома
+
+```bash
+BACKUP_VOL=$(virsh vol-path primary-data-backup.qcow2 --pool lab-pool-backup)
+BACKUP_POOL_PATH=$(virsh pool-dumpxml lab-pool-backup | awk -F"[<>]" '/<path>/ {print $3}')
+
+cp "$BACKUP_VOL" "$BACKUP_POOL_PATH/data-copy-01.qcow2"
+cp "$BACKUP_VOL" "$BACKUP_POOL_PATH/data-copy-02.qcow2"
+cp "$BACKUP_VOL" "$BACKUP_POOL_PATH/data-copy-03.qcow2"
+
+virsh pool-refresh lab-pool-backup
+```
+
+### Задача 7. Удалить лишние копии томов
+
+```bash
+virsh vol-delete data-copy-01.qcow2 --pool lab-pool-backup
+virsh vol-delete data-copy-02.qcow2 --pool lab-pool-backup
+virsh vol-delete data-copy-03.qcow2 --pool lab-pool-backup
+```
+
+## 18.24. Что студент должен отразить в отчете
+
+В раздел отчета **«Управление хранилищами и томами libvirt»** добавить подраздел **«Storage pool redundancy and multiplication»**.
+
+В нем необходимо указать:
+
+1. Имена основного и резервного пулов хранения.
+2. Пути к каталогам обоих пулов.
+3. Список томов в основном пуле.
+4. Список томов в резервном пуле.
+5. Какой том был скопирован из основного пула в резервный.
+6. Как проверялась целостность копии.
+7. Как ВМ была переключена на резервный том.
+8. Сколько дополнительных копий тома было создано.
+9. Чем резервная копия отличается от рабочей копии для тестирования.
+10. Что произойдет, если основной пул станет недоступен.
+11. Какие действия нужны для восстановления работы ВМ через резервный пул.
+
+## 18.25. Контрольные вопросы
+
+1. Зачем создавать несколько storage pool?
+2. Чем основной storage pool отличается от резервного?
+3. Что означает redundancy применительно к хранилищу виртуальных машин?
+4. Что означает multiplication применительно к volume management?
+5. Почему после ручного копирования qcow2-файла нужно выполнять обновление пула?
+6. Как проверить, что скопированный volume появился в libvirt?
+7. Как убедиться, что резервная копия volume не повреждена?
+8. Почему ВМ желательно выключать перед копированием ее диска?
+9. Как переключить ВМ с одного volume на другой?
+10. Чем отличается `vol-clone` от копирования файла между разными пулами?
+11. Почему нельзя бездумно запускать две ВМ с одним и тем же qcow2-диском?
+12. Какие риски возникают, если основной и резервный пулы расположены на одном физическом диске?
+
+## 18.26. Критерии оценивания дополнения
+
+| Критерий                                            |   Баллы |
+| --------------------------------------------------- | ------: |
+| Созданы основной и резервный storage pool           |      15 |
+| Создан volume в основном пуле                       |      10 |
+| Volume подключен к ВМ и проверен внутри гостевой ОС |      15 |
+| Volume скопирован в резервный пул                   |      15 |
+| Выполнена проверка целостности копии                |      10 |
+| ВМ успешно переключена на volume из резервного пула |      15 |
+| Создано несколько дополнительных копий volume       |      10 |
+| Выполнена имитация отказа основного пула            |      10 |
+| **Итого**                                           | **100** |
+
+### Важное замечание для студентов
+
+В рамках этой лабораторной работы резервирование выполняется на уровне копирования томов между двумя каталогами. Это учебная модель. В реальной инфраструктуре резервный пул должен находиться на другом физическом диске, другом сервере или сетевом хранилище. Если основной и резервный пулы расположены на одном физическом диске, такая схема защищает только от ошибок конфигурации или случайного удаления отдельного файла, но не защищает от отказа самого диска.
+
+

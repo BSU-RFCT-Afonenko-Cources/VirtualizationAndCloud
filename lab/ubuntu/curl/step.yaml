@@ -1,0 +1,13 @@
+curl:
+    title: "Средство загрузки curl"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
+      pre-step:
+        exec:
+          - prepare.sh
+      check:
+        exec:
+          - check/header.fish
+          - check/download.fish
+

@@ -1,0 +1,30 @@
+## Этап 10. Система инициализации OpenRC
+
+Alpine использует OpenRC как систему инициализации; службы управляются командой `rc-service`, включение в уровни запуска выполняется через `rc-update`, а состояние системы можно смотреть через `rc-status`. ([docs.alpinelinux.org][4])
+
+### Задание 1. Посмотреть состояние служб
+
+**Требуется:** вывести активные службы, службы автозапуска и список init-скриптов.
+
+**Решение:**
+
+```sh
+#!/bin/sh
+rc-status
+rc-update show -v | head
+ls /etc/init.d | head
+```
+
+### Задание 2. Перезапустить сетевую службу и добавить её в автозагрузку
+
+**Требуется:** управлять службой `networking`.
+
+**Решение:**
+
+```sh
+#!/bin/sh
+rc-service networking status
+rc-service networking restart
+rc-update add networking boot
+rc-update show boot | grep networking
+```

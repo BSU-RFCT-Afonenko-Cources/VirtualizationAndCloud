@@ -1,0 +1,14 @@
+Решение:
+
+```bash
+mkdir -p /tmp/lab-ubuntu/nano
+nano /tmp/lab-ubuntu/nano/notes.txt
+```
+
+Решение:
+
+```bash
+printf "server=ubuntu\nenabled=no\nport=8080\n" > /tmp/lab-ubuntu/nano/app.conf
+nano /tmp/lab-ubuntu/nano/app.conf
+grep "enabled=yes" /tmp/lab-ubuntu/nano/app.conf
+```

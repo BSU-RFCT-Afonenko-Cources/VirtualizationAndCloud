@@ -1,0 +1,59 @@
+#!/usr/bin/expect -f
+
+proc send_command { command } {
+    send "$command\r"
+    expect "# "
+}
+
+proc login {} {
+    expect "Connected to domain 'testvm'"
+    expect "(Ctrl + ])"
+    send "\r"
+    expect "login:"
+    send "root\r"
+    expect "#"
+}
+
+proc setup_disk {} {
+    send "setup-disk -m sys /dev/vda\r"
+    expect "WARNING: Erase the above disk(s) and continue? (y/n) "
+    send "y\r"
+    expect "Installation is complete. Please reboot."
+}
+
+proc setup_apk {} {
+    send_command "sed '/community/ {s/^#//; q;}' /etc/apk/repositories > tempfile && mv tempfile /etc/apk/repositories"
+    send_command "setup-apkrepos -o"
+    send_command "apk update"
+}
+
+proc setup_network {} {
+    send_command "setup-alpine -q"
+}
+
+proc setup_guest_agent {} {
+    send_command "apk add qemu-guest-agent"
+    send_command "rc-update add qemu-guest-agent"
+    send_command "service qemu-guest-agent start"
+}
+
+proc user_exit {} {
+    send "exit\r"
+    expect "login:"
+}
+
+proc user_disconnect {} {
+    # Send the escape character ^] (ASCII 29) to close the console
+    send "\x1d"
+    expect eof
+}
+
+spawn virsh console testvm --devname serial1
+
+login
+setup_network
+setup_apk
+setup_guest_agent
+setup_disk
+user_exit
+user_disconnect

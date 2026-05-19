@@ -1,0 +1,33 @@
+# Этап 8. Управление системой через systemd
+
+`systemctl` используется для просмотра и управления состоянием systemd и системных сервисов. С его помощью можно смотреть запущенные службы, запускать, останавливать и перезапускать сервисы. ([Ubuntu Manpages][5])
+
+## Задание 1
+
+Посмотрите общее состояние системы и список запущенных сервисов. Сохраните все запущенные сервисы в файл
+
+Решение:
+
+```bash
+systemctl is-system-running || true
+systemctl list-units --type=service --state=running --no-pager | head
+```
+
+## Задание 2
+
+Подумать над возможным простым запуском и остановкой сервисов
+
+Создайте простой `oneshot`-сервис, который записывает дату в файл, запустите его и проверьте результат.
+
+Решение:
+
+```bash
+printf '%s\n' '[Unit]' 'Description=Lab hello service' '[Service]' 'Type=oneshot' "ExecStart=/bin/sh -c 'date >> /tmp/lab-systemd.log'" | sudo tee /etc/systemd/system/lab-hello.service
+sudo systemctl daemon-reload
+sudo systemctl start lab-hello.service
+cat /tmp/lab-systemd.log
+```
+
+## Перезапуск
+
+Перезупустите компьютер и дождитесь возвращения консоли.

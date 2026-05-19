@@ -1,0 +1,34 @@
+## Этап 9. Управление пакетами `apk`
+
+`apk` — пакетный менеджер Alpine Linux; он устанавливает, удаляет и обновляет пакеты, а репозитории настраиваются в `/etc/apk/repositories`. Команда `apk upgrade` фактически использует обновление индекса и затем обновляет установленные пакеты. ([docs.alpinelinux.org][3])
+
+### Задание 1. Настроить репозитории и обновить индекс
+
+**Требуется:** прописать основные репозитории текущей версии Alpine.
+
+**Решение:**
+
+```sh
+#!/bin/sh
+rel=v$(cut -d. -f1,2 /etc/alpine-release)
+cat > /etc/apk/repositories <<EOF
+https://dl-cdn.alpinelinux.org/alpine/$rel/main
+https://dl-cdn.alpinelinux.org/alpine/$rel/community
+EOF
+apk update
+```
+
+### Задание 2. Установить и удалить пакет
+
+**Требуется:** установить `nano` и `curl`, проверить наличие, удалить `nano`.
+
+**Решение:**
+
+```sh
+#!/bin/sh
+apk add --no-cache nano curl
+apk info | grep -E '^(nano|curl)$'
+apk del nano
+apk info | grep -E '^(nano|curl)$' || true
+```
+

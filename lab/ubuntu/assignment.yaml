@@ -1,0 +1,11 @@
+title: "Работа в Ubuntu"
+description: _assignment-description.qmd
+time-limit-minutes: 120
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+    - mock/step.yaml
+    - nano/step.yaml
+    - bash/step.yaml
+    - filesystem/step.yaml
+    - package/step.yaml
+    - curl/step.yaml

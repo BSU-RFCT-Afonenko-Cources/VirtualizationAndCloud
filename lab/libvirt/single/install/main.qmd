@@ -1,0 +1,11 @@
+# Это отдельная глава
+
+{{< include _assigment-description.md >}}
+
+:::{#exr-exr1}
+{{< include install/_description.md >}}
+:::
+
+:::{#sol-sol1}
+{{< include install/_solution.qmd >}}
+:::

@@ -1,0 +1,8 @@
+title: "Virtualization and Cloud Security"
+description: _description.md
+book-url: http://10.135.250.210/theory/
+start_date: "2026-05-01"
+end_date: "2026-06-30"
+assignments:
+    - ubuntu/assignment.yaml
+

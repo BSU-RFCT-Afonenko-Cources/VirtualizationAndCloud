@@ -1,0 +1,12 @@
+Решение:
+
+```bash
+sudo apt install -y tree
+```
+
+Решение:
+
+```bash
+sudo apt update
+apt show curl
+```

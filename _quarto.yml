@@ -1,0 +1,18 @@
+profile:
+  group:
+    - [student, full]
+    - [html, pdf]
+
+bibliography: references.bib
+
+book:
+  title: "Virtualization and Cloud Security"
+  author: "Анатолий Афоненко"
+  date: today
+  date-format: long
+
+lang: ru
+
+engine: knitr
+
+# изучить babel-quarto

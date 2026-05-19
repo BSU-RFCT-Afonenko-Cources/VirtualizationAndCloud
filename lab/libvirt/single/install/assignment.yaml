@@ -1,0 +1,10 @@
+title: "Установка и запуск nginx"
+description: _assigment-description.md
+time-limit-minutes: 45
+hints: hints.md
+virtual-machines:
+  - host:
+      template: Ubuntu 26.04 LTS — KVM/QEMU Lab
+
+steps:
+    - prepare/step.yml

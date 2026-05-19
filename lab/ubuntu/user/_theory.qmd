@@ -1,0 +1,9 @@
+Решение:
+
+```bash
+sudo mkdir -p /srv/lab-share
+sudo chown root:labteam /srv/lab-share
+sudo chmod 2775 /srv/lab-share
+sudo -u labuser touch /srv/lab-share/from-labuser.txt
+ls -l /srv/lab-share
+```

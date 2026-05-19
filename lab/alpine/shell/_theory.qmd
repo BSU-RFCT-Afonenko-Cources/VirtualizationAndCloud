@@ -1,0 +1,191 @@
+Для знакомства приводятся основные команды оболочки `sh`, полное руководство приводится в @sec-shell-sh. Для создания скриптов используйте текстовый редактор nano @sec-tools-nano.
+
+:::{#exm-lab-alpine-shell-variables}
+#### Переменные
+
+
+``` sh
+name="Анатолий"
+echo "Привет, $name"
+```
+
+Важно: вокруг `=` не должно быть пробелов.
+
+``` sh
+x=10
+echo "$x"
+```
+:::
+
+
+:::{#exm-lab-alpine-shell-enviroment}
+#### Переменные окружения
+
+``` sh
+echo "$HOME"
+echo "$PATH"
+echo "$USER"
+```
+
+Чтобы дочерние процессы имели доступ к новой переменной применяется `export`
+
+``` sh
+export APP_ENV=production
+echo "$APP_ENV"
+```
+:::
+
+
+:::{#exm-lab-alpine-shell-subshell}
+#### Подстановка команд
+
+Результат команды можно сохранить в переменную:
+
+``` sh
+today=$(date)
+echo "Сегодня: $today"
+```
+:::
+
+:::{#exm-lab-alpine-shell-io}
+#### Перенаправление ввода и вывода
+
+Записать вывод в файл:
+
+``` sh
+echo "Hello" > file.txt
+```
+
+Добавить строку в конец файла:
+
+``` sh
+echo "World" >> file.txt
+```
+
+Прочитать файл:
+
+``` sh
+cat file.txt
+```
+
+Перенаправить ошибки:
+
+``` sh
+ls /not-found 2> errors.txt
+```
+
+Перенаправить обычный вывод и ошибки вместе:
+
+``` sh
+ls /not-found > output.txt 2>&1
+```
+:::
+
+
+:::{#exm-lab-alpine-shell-pipe}
+#### Конвейеры
+
+Конвейер `|` передаёт вывод одной команды на вход другой.
+
+``` sh
+ls | wc -l
+```
+:::
+
+:::{#exm-lab-alpine-shell-test}
+#### Условия
+
+``` sh
+x=10
+
+if [ "$x" -gt 5 ]; then
+  echo "x больше 5"
+else
+  echo "x не больше 5"
+fi
+```
+
+Проверка файла:
+
+``` sh
+if [ -f "file.txt" ]; then
+  echo "Файл существует"
+else
+  echo "Файла нет"
+fi
+```
+
+Частые проверки:
+
+``` sh
+[ -f file.txt ]   # существует обычный файл
+[ -d dir ]        # существует директория
+[ -z "$var" ]     # строка пустая
+[ -n "$var" ]     # строка не пустая
+[ "$a" = "$b" ]   # строки равны
+```
+:::
+
+
+:::{#exm-lab-alpine-shell-cycle}
+#### Циклы
+
+##### `for`
+
+``` sh
+for name in Alice Bob Charlie
+do
+  echo "Hello, $name"
+done
+```
+
+По файлам:
+
+``` sh
+for file in *.txt
+do
+  echo "Файл: $file"
+done
+```
+
+##### `while`
+
+``` sh
+i=1
+
+while [ "$i" -le 5 ]
+do
+  echo "$i"
+  i=$((i + 1))
+done
+```
+:::
+
+:::{#exm-lab-alpine-shell-script-args}
+#### Аргументы скрипта
+
+Файл `script.sh`:
+
+``` sh
+#!/bin/sh
+
+echo "Имя скрипта: $0"
+echo "Первый аргумент: $1"
+echo "Второй аргумент: $2"
+echo "Все аргументы: $@"
+echo "Количество аргументов: $#"
+```
+
+Запуск:
+
+``` sh
+sh script.sh one two
+```
+
+Или сделать исполняемым:
+
+``` sh
+chmod +x script.sh
+./script.sh one two
+```
+:::

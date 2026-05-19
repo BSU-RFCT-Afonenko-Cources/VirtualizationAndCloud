@@ -1,0 +1,14 @@
+filesystem:
+    title: "Файловая система"
+    task: _task.qmd
+    theory: _solution.qmd
+    actions:
+      pre-step:
+        exec:
+          - prepare.sh
+      check:
+        exec:
+              - check/structure.fish
+              - check/archive.fish
+              - check/execute.fish
+              - check/read.fish

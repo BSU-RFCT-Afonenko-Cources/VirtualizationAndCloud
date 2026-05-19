@@ -1,0 +1,1423 @@
+# Первоначальная установка
+
+Здесь привести только основные тезисы по установке системы, что система грузится с диска и т.д. Привести здесь гайд и последовательной установки Arch Linux
+
+## Alpine Linux на новый компьютер Назначение и исходные предпосылки
+
+Alpine Linux — минималистичная Linux-система, в которой установка обычно строится вокруг набора сценариев `setup-*`. Главный из них — `setup-alpine`; он последовательно вызывает вспомогательные сценарии настройки клавиатуры, имени узла, сети, DNS, часового пояса, репозиториев, пользователя, SSH, NTP и диска. Такой подход полезен для обучения, поскольку установка представляется не как «магическая программа», а как цепочка явно различимых административных операций. ([wiki.alpinelinux.org][1])
+
+В этой статье предполагается следующая учебная ситуация: новый персональный компьютер с UEFI, один целевой диск, проводная сеть с DHCP, установка Alpine Linux как единственной операционной системы. Для более сложных случаев — двойная загрузка, RAID, LVM, ручная разметка, шифрование — лучше рассматривать `setup-disk` и ручную подготовку томов отдельно, поскольку Alpine прямо указывает, что `setup-disk` применим для установки на раздел, dual boot, RAID, encryption и LVM. ([wiki.alpinelinux.org][2])
+
+## 2. Подготовка установочного носителя
+
+Перед установкой необходимо скачать установочный образ Alpine Linux, контрольную сумму `sha256` и GPG-подпись. Документация Alpine рекомендует брать контрольные суммы и подписи именно с официального сайта, а не с зеркал. ([wiki.alpinelinux.org][2])
+
+На современном ПК чаще всего используется режим UEFI. Для UEFI рекомендуется схема UEFI-GPT; Alpine указывает, что на UEFI-системах нужна EFI System Partition в дополнение к корневому разделу. Также официальная wiki советует отключить Secure Boot на время установки, поскольку Alpine Linux не имеет такого предустановленного сертификата, как некоторые корпоративные дистрибутивы. ([wiki.alpinelinux.org][3])
+
+После загрузки с USB-носителя пользователь попадает в live-среду Alpine. В ней можно войти как `root` без пароля и запустить основной сценарий установки `setup-alpine`. ([docs.alpinelinux.org][4])
+
+```sh
+# Войти в live-среду под пользователем root.
+# В установочном окружении Alpine пароль root обычно не требуется.
+
+login: root
+```
+
+## 3. Три режима установки: diskless, data и sys
+
+Перед запуском установки важно понимать, что Alpine может работать по-разному.
+
+**Diskless mode** загружает систему и приложения в оперативную память; именно так работают установочные ISO-образы Alpine. Если при установке указать `disk=none`, установленная система продолжит работать по этой модели. **Data disk mode** также исполняет ОС из RAM, но хранит `/var` и swap на постоянном носителе. **System disk mode**, или `sys`, — это традиционная установка на диск, когда корневая файловая система хранится на постоянном накопителе. ([wiki.alpinelinux.org][2])
+
+Для нового домашнего или учебного компьютера обычно выбирают `sys`.
+
+## 4. Базовая установка через один сценарий `setup-alpine`
+
+Сценарий `setup-alpine` имеет быстрый режим `-q`, но он предназначен главным образом для временного приведения системы в рабочее состояние: он настраивает клавиатуру, hostname, DHCP-сеть, службы, `/etc/hosts` и репозиторий, но пропускает пароль root, часовой пояс, SSH, NTP, диск, `lbu` и кэш `apk`. ([docs.alpinelinux.org][4])
+
+Для обычной установки на новый компьютер следует запускать полный интерактивный режим:
+
+```sh
+# Запускаем основной сценарий установки Alpine Linux.
+# Он последовательно задаст вопросы о клавиатуре, сети, пароле root,
+# часовом поясе, зеркале пакетов, пользователе, SSH, NTP и диске.
+
+setup-alpine
+```
+
+Ниже приведён учебный пример ответов. Он не является «слепой инструкцией»: имена интерфейсов и дисков на вашем компьютере могут отличаться.
+
+```text
+Select keyboard layout: ru
+Select variant: ru
+
+# Комментарий:
+# Выбираем раскладку клавиатуры. Для английской раскладки обычно вводят us us,
+# для русской — ru ru или подходящий вариант, предлагаемый сценарием.
+
+Enter system hostname: alpine-pc
+
+# Комментарий:
+# Hostname — сетевое имя машины. Оно будет записано в /etc/hostname.
+# Лучше использовать короткое имя без пробелов.
+
+Available interfaces are: eth0
+Which one do you want to initialize? [eth0]: eth0
+Ip address for eth0? [dhcp]: dhcp
+Do you want to do any manual network configuration? [n]: n
+
+# Комментарий:
+# Для домашнего роутера почти всегда подходит DHCP.
+# При статической адресации надо будет указать IP-адрес, маску, шлюз и DNS.
+
+New password:
+Retype password:
+
+# Комментарий:
+# Это пароль суперпользователя root. Его нельзя оставлять пустым
+# на установленной системе общего назначения.
+
+Which timezone are you in? [UTC]: Europe/Paris
+
+# Комментарий:
+# Часовой пояс выбирается относительно /usr/share/zoneinfo.
+# Для Франции и многих пользователей CET/CEST подходит Europe/Paris.
+
+HTTP/FTP proxy URL? [none]: none
+
+# Комментарий:
+# Прокси нужен в корпоративных или университетских сетях.
+# В домашней сети обычно указывают none.
+
+Enter mirror number or URL: 1
+
+# Комментарий:
+# Выбираем зеркало репозиториев. В учебном примере можно взять CDN/первое зеркало.
+
+Setup a user? [enter username or 'no']: student
+Full name for user student: Student User
+Allow user to use doas? [y]: y
+
+# Комментарий:
+# Создаём обычного пользователя для повседневной работы.
+# Административные команды затем выполняются через doas, а не постоянно от root.
+
+Which SSH server? ['openssh', 'dropbear', 'none'] [openssh]: openssh
+
+# Комментарий:
+# OpenSSH удобен и привычен. На ноутбуке без удалённого доступа можно выбрать none.
+
+Which NTP client to run? ['busybox', 'openntpd', 'chrony', 'none'] [chrony]: chrony
+
+# Комментарий:
+# NTP нужен для синхронизации времени, что важно для TLS, журналов и обновлений.
+
+Available disks are:
+  sda   ...
+Which disk(s) would you like to use? [none]: sda
+
+# ВНИМАНИЕ:
+# Здесь нужно указать именно целевой диск.
+# Если выбрать не тот диск, данные на нём могут быть потеряны.
+
+How would you like to use it? ['sys', 'data', 'lvm', 'lvmsys', 'none'] [sys]: sys
+
+# Комментарий:
+# sys — традиционная установка Alpine Linux на диск.
+# После подтверждения сценарий выполнит установку на выбранный накопитель.
+```
+
+Полный `setup-alpine` рекомендуется для «тривиального» сценария: один физический диск, проводная DHCP-сеть и отсутствие особых требований к загрузчику или файловой системе. ([docs.alpinelinux.org][4])
+
+После завершения установки:
+
+```sh
+# Перезагружаем компьютер.
+# Перед новой загрузкой извлекаем USB-носитель, чтобы система стартовала с диска.
+
+reboot
+```
+
+## 5. Быстрый режим `setup-alpine -q`: когда он уместен
+
+Быстрый режим нужен не столько для полной установки, сколько для первичного приведения live-системы в сетевое состояние. Например, если администратор хочет быстро получить DHCP-сеть и затем продолжить настройку вручную или по SSH:
+
+```sh
+# Быстро настраивает базовые параметры:
+# - клавиатуру;
+# - hostname alpine;
+# - DHCP на первом найденном интерфейсе;
+# - базовые службы;
+# - /etc/hosts;
+# - стандартный репозиторий.
+#
+# Не выполняет полноценную установку на диск.
+
+setup-alpine -q
+```
+
+Документация подчёркивает, что `setup-alpine -q` пропускает настройку пароля root, часового пояса, SSH, NTP, диска, `lbu` и кэша `apk`; кроме того, Wi-Fi сам по себе этим режимом не настраивается. ([docs.alpinelinux.org][4])
+
+## 6. Автоматизация через answerfile
+
+Для учебных лабораторий полезно показать, что `setup-alpine` может работать не только интерактивно. Можно создать файл ответов:
+
+```sh
+# Создаём шаблон файла ответов.
+# Сценарий запишет в него переменные, соответствующие ответам
+# для отдельных setup-* сценариев.
+
+setup-alpine -c /root/answerfile
+```
+
+После редактирования файл можно использовать так:
+
+```sh
+# Запускаем установку с заранее подготовленными ответами.
+# Некоторые защитные запросы, например подтверждение стирания диска,
+# специально сохраняются и не должны отключаться в обычной практике.
+
+setup-alpine -f /root/answerfile
+```
+
+Alpine описывает `answerfile` как способ приблизиться к неинтерактивной установке, но также предупреждает, что полное подавление запросов пароля root и подтверждения стирания диска не рекомендуется в обычной эксплуатации, поскольку эти запросы являются защитными. ([wiki.alpinelinux.org][5])
+
+Пример фрагмента `answerfile`:
+
+```sh
+# /root/answerfile
+# Учебный пример. Перед применением обязательно проверьте имя диска.
+
+# Раскладка клавиатуры.
+KEYMAPOPTS="us us"
+
+# Имя компьютера.
+HOSTNAMEOPTS="alpine-pc"
+
+# Содержимое будущего /etc/network/interfaces.
+# Здесь настраивается loopback и проводной интерфейс eth0 через DHCP.
+INTERFACESOPTS="
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+"
+
+# Часовой пояс.
+TIMEZONEOPTS="Europe/Paris"
+
+# Прокси не используется.
+PROXYOPTS=none
+
+# Включить первое зеркало из списка, обычно CDN, и community-репозиторий.
+APKREPOSOPTS="-1 -c"
+
+# Создать административного пользователя student.
+# -a: добавить в wheel и настроить doas;
+# -u: разблокировать пользователя автоматически;
+# -g: добавить в группы, полезные для настольной системы.
+USEROPTS="-a -u -g audio,input,video,netdev student"
+
+# Установить OpenSSH.
+SSHDOPTS=openssh
+
+# Включить chrony для синхронизации времени.
+NTPOPTS=chrony
+
+# Традиционная установка на диск.
+# ВНИМАНИЕ: /dev/sda — только пример.
+DISKOPTS="-m sys /dev/sda"
+```
+
+## 7. Вспомогательные сценарии `setup-*`
+
+### 7.1. `setup-hostname`: имя узла
+
+`setup-hostname` записывает имя системы в `/etc/hostname` и проверяет его корректность: например, имя не должно начинаться с дефиса, быть слишком длинным или содержать недопустимые символы. ([wiki.alpinelinux.org][1])
+
+```sh
+# Задаём имя компьютера.
+# Ключ -n передаёт hostname без интерактивного диалога.
+
+setup-hostname -n alpine-pc
+
+# Применяем изменение в текущем сеансе.
+rc-service hostname restart
+```
+
+### 7.2. `setup-interfaces`: сеть
+
+Сеть в Alpine по умолчанию управляется через ifupdown-ng; для базовой настройки предусмотрен `setup-interfaces`. Он умеет настраивать Ethernet, Wi-Fi, bridge, bond и VLAN и запускает/добавляет networking service в загрузку при типовой конфигурации. ([wiki.alpinelinux.org][6])
+
+Быстрый DHCP на первом проводном интерфейсе:
+
+```sh
+# -a означает автоматическую настройку DHCP на первом найденном
+# проводном интерфейсе.
+# -r перезапускает networking service после изменения конфигурации.
+
+setup-interfaces -a -r
+```
+
+Ручной пример через файл:
+
+```sh
+# Создаём временный файл с конфигурацией интерфейсов.
+# В Alpine формат похож на Debian-style /etc/network/interfaces.
+
+cat > /root/interfaces.new <<'EOF'
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 192.168.1.20
+    netmask 255.255.255.0
+    gateway 192.168.1.1
+EOF
+
+# Передаём содержимое файла в setup-interfaces.
+# Важно: документация указывает, что содержимое файла передаётся через stdin.
+
+setup-interfaces -i < /root/interfaces.new
+
+# Перезапускаем сеть, чтобы применить параметры.
+rc-service networking restart
+```
+
+Пример статической адресации соответствует общей модели: адрес, шлюз и маска сети должны быть известны заранее; документация Alpine показывает аналогичную структуру `/etc/network/interfaces` для статического IP. ([docs.alpinelinux.org][7])
+
+### 7.3. `setup-dns`: DNS и домен поиска
+
+`setup-dns` записывает DNS-настройки в `/etc/resolv.conf`; он принимает домен поиска через `-d` и IP-адрес DNS-сервера через `-n`. ([wiki.alpinelinux.org][1])
+
+```sh
+# example.org — учебный домен поиска.
+# 192.168.1.1 — локальный роутер, работающий как DNS-forwarder.
+
+setup-dns -d example.org -n 192.168.1.1
+```
+
+Результат будет концептуально близок к следующему:
+
+```conf
+# /etc/resolv.conf
+
+search example.org
+nameserver 192.168.1.1
+```
+
+### 7.4. `setup-timezone`: часовой пояс
+
+`setup-timezone` принимает либо зону из `/usr/share/zoneinfo`, либо POSIX-формат через `-p`. ([wiki.alpinelinux.org][1])
+
+```sh
+# Устанавливаем часовой пояс Парижа.
+# Это подходит для CET/CEST.
+
+setup-timezone -z Europe/Paris
+```
+
+Для UTC-сервера:
+
+```sh
+# На серверах часто используют UTC,
+# чтобы журналы разных машин было легче сопоставлять.
+
+setup-timezone -z UTC
+```
+
+### 7.5. `setup-proxy`: системный прокси
+
+`setup-proxy` задаёт системные переменные `http_proxy`, `https_proxy` и `ftp_proxy`; если прокси не нужен, следует указать `none`. ([wiki.alpinelinux.org][1])
+
+```sh
+# Пример для корпоративной сети.
+# Адрес и порт должны быть получены у администратора сети.
+
+setup-proxy http://10.0.0.1:8080
+
+# Отключение прокси.
+
+setup-proxy none
+```
+
+### 7.6. `setup-apkrepos`: репозитории пакетов
+
+`setup-apkrepos` настраивает репозитории `apk`. Среди полезных ключей: `-c` включает community-репозиторий, `-f` выбирает fastest mirror, `-r` добавляет случайное зеркало без запроса, `-1` добавляет первое зеркало, обычно CDN. ([wiki.alpinelinux.org][1])
+
+```sh
+# Включить community и попытаться выбрать быстрое зеркало.
+
+setup-apkrepos -cf
+
+# Обновить индекс пакетов после изменения репозиториев.
+
+apk update
+```
+
+### 7.7. `setup-user`: обычный пользователь
+
+`setup-user` создаёт учётные записи; ключ `-a` создаёт административного пользователя, добавляя его в `wheel` и настраивая `doas`, `-g` задаёт группы, `-k` может принять SSH-ключ или URL ключа. ([wiki.alpinelinux.org][1])
+
+```sh
+# Создаём администратора student.
+# -a: административный пользователь с doas;
+# -g: дополнительные группы для звука, ввода, видео и сети.
+
+setup-user -a -g audio,input,video,netdev student
+```
+
+После входа под `student` административные команды выполняются так:
+
+```sh
+# Пример установки пакета от обычного пользователя.
+
+doas apk add vim
+```
+
+### 7.8. `setup-sshd`: SSH-сервер
+
+`setup-sshd` может установить OpenSSH, Dropbear или не устанавливать SSH-сервер вовсе. OpenSSH удобен для обычного администрирования, Dropbear легче и часто используется в минимальных системах. ([wiki.alpinelinux.org][1])
+
+```sh
+# Установить и настроить OpenSSH.
+
+setup-sshd -c openssh
+
+# Добавить sshd в стандартный уровень запуска.
+# rc-update отвечает за включение служб при загрузке.
+
+rc-update add sshd default
+
+# Запустить службу сейчас.
+# rc-service управляет уже работающей системой.
+
+rc-service sshd start
+```
+
+Команды `rc-service` и `rc-update` являются каноническими средствами OpenRC: первая запускает, останавливает и проверяет службы, а вторая добавляет или удаляет службы из runlevel. ([docs.alpinelinux.org][8])
+
+### 7.9. `setup-ntp`: синхронизация времени
+
+`setup-ntp` настраивает клиент времени; в документации среди вариантов упоминаются `busybox`, `openntpd`, `chrony` и `none`. ([wiki.alpinelinux.org][1])
+
+```sh
+# Настраиваем chrony как NTP-клиент.
+
+setup-ntp chrony
+
+# Проверяем состояние службы.
+rc-service chronyd status
+```
+
+### 7.10. `setup-disk`: установка на диск
+
+`setup-disk` — наиболее опасный сценарий, потому что он работает с накопителями. Для традиционной установки используется режим `sys`. Alpine отдельно предупреждает, что при неинтерактивном использовании `setup-disk` с `ERASE_DISKS` носитель будет немедленно стёрт, поэтому перед запуском следует проверять целевой путь, например через `fdisk -l`. ([wiki.alpinelinux.org][1])
+
+```sh
+# Просматриваем диски перед установкой.
+# Нужно отличить системный диск от USB-носителя.
+
+fdisk -l
+
+# Учебный пример традиционной установки на /dev/sda.
+# ВНИМАНИЕ: команда уничтожит прежнее содержимое выбранного диска
+# после подтверждения сценария.
+
+setup-disk -m sys /dev/sda
+```
+
+Если нужна сложная схема разделов, можно вручную создать, отформатировать и смонтировать тома, а затем передать `setup-disk` точку монтирования корня; Alpine указывает, что такой способ неявно ведёт себя как `-m sys`. ([wiki.alpinelinux.org][1])
+
+```sh
+# Схематический пример, не готовая универсальная команда:
+# 1. Администратор вручную размечает диск.
+# 2. Форматирует разделы.
+# 3. Монтирует будущий корень в /mnt.
+# 4. Передаёт /mnt сценарию setup-disk.
+
+setup-disk -m sys /mnt
+```
+
+## 8. Первые действия после загрузки установленной системы
+
+После перезагрузки войдите под созданным пользователем или root и обновите систему. В Alpine пакетный менеджер называется `apk`; обновление состоит из получения свежего индекса `apk update` и обновления пакетов `apk upgrade`. Документация также отмечает, что `apk upgrade` фактически включает эти две логические стадии: обновление индекса и обновление пакетов world с зависимостями. ([docs.alpinelinux.org][9])
+
+```sh
+# Обновляем индекс репозиториев.
+
+apk update
+
+# Обновляем установленные пакеты.
+
+apk upgrade
+```
+
+Поставим базовые инструменты:
+
+```sh
+# Устанавливаем редактор, справочные страницы и сетевые утилиты.
+# busybox-extras добавляет ряд привычных диагностических команд.
+
+apk add vim mandoc man-pages busybox-extras
+```
+
+Проверим службы OpenRC:
+
+```sh
+# Показать службы текущего runlevel.
+
+rc-status
+
+# Показать службы во всех runlevel, включая неактивные.
+
+rc-update show -v
+```
+
+## 9. Настройка графической подсистемы
+
+Для графического стека Alpine предоставляет отдельные сценарии. `setup-xorg-base` устанавливает базовые компоненты Xorg, включая `xorg-server`, `xf86-input-libinput`, `xinit`, `eudev`, `mesa-dri-gallium`, а также настраивает `eudev`. ([wiki.alpinelinux.org][10])
+
+```sh
+# Установить базовую графическую подсистему Xorg.
+
+setup-xorg-base
+```
+
+Для установки полноценной настольной среды существует `setup-desktop`. Он предлагает выбрать GNOME, Plasma, Xfce, MATE, LXQt, Sway или none; после выбора устанавливает соответствующие пакеты, браузер Firefox по умолчанию и добавляет необходимые службы в автозагрузку. ([wiki.alpinelinux.org][11])
+
+```sh
+# Запуск мастера установки настольной среды.
+
+setup-desktop
+
+# Например, в интерактивном вопросе можно выбрать:
+# xfce
+```
+
+После завершения:
+
+```sh
+# Перезагрузка нужна, чтобы проверить запуск display manager
+# и графического сеанса с чистого старта.
+
+reboot
+```
+
+## 10. Минимальный учебный сценарий установки: сводная форма
+
+Ниже — компактная последовательность для лабораторной работы. Она предполагает Ethernet DHCP, один диск `/dev/sda` и установку в режиме `sys`.
+
+```sh
+# 1. Войти в live-среду Alpine.
+# login: root
+
+# 2. Проверить диски.
+fdisk -l
+
+# 3. Запустить основной установщик.
+setup-alpine
+
+# 4. В интерактивных вопросах выбрать примерно:
+# keymap:        us us или ru ru
+# hostname:      alpine-pc
+# interface:     eth0
+# IP:            dhcp
+# root password: задать надёжный пароль
+# timezone:      Europe/Paris или UTC
+# proxy:         none
+# mirror:        1 или ближайшее зеркало
+# user:          student
+# sshd:          openssh или none
+# ntp:           chrony
+# disk:          sda
+# mode:          sys
+
+# 5. Перезагрузиться.
+reboot
+```
+
+## 11. Методическое заключение
+
+Первоначальная установка Alpine Linux хорошо демонстрирует классическую архитектуру Unix-подобной системы. Вместо единого графического установщика студент видит отдельные уровни: клавиатура, hostname, сеть, DNS, репозитории, пользователи, службы, время, диск и графическая подсистема. `setup-alpine` объединяет эти уровни в один маршрут, а отдельные `setup-*` сценарии позволяют вернуться к каждому уровню позднее и изменить его изолированно.
+
+Практически это означает следующее: для типового нового ПК достаточно полного `setup-alpine`; для быстрой временной сетевой инициализации полезен `setup-alpine -q`; для лабораторной автоматизации применим `answerfile`; для тонкой настройки используются специализированные сценарии `setup-hostname`, `setup-interfaces`, `setup-dns`, `setup-timezone`, `setup-apkrepos`, `setup-user`, `setup-sshd`, `setup-ntp`, `setup-disk`, `setup-xorg-base` и `setup-desktop`.
+
+[1]: https://wiki.alpinelinux.org/wiki/Alpine_configuration_management_scripts "Alpine configuration management scripts - Alpine Linux"
+[2]: https://wiki.alpinelinux.org/wiki/Installation "Installation - Alpine Linux"
+[3]: https://wiki.alpinelinux.org/wiki/UEFI "UEFI - Alpine Linux"
+[4]: https://docs.alpinelinux.org/user-handbook/0.1a/Installing/setup_alpine.html "setup-alpine - Alpine Linux Documentation"
+[5]: https://wiki.alpinelinux.org/wiki/Using_an_answerfile_with_setup-alpine "Using an answerfile with setup-alpine - Alpine Linux"
+[6]: https://wiki.alpinelinux.org/wiki/Configure_Networking "Configure Networking - Alpine Linux"
+[7]: https://docs.alpinelinux.org/user-handbook/0.1a/Installing/manual.html "Semi-Automatic Installation - Alpine Linux Documentation"
+[8]: https://docs.alpinelinux.org/user-handbook/0.1a/Working/openrc.html "Working with OpenRC - Alpine Linux Documentation"
+[9]: https://docs.alpinelinux.org/user-handbook/0.1a/Working/apk.html "Working with the Alpine Package Keeper (apk) - Alpine Linux Documentation"
+[10]: https://wiki.alpinelinux.org/wiki/Xorg "Xorg - Alpine Linux"
+[11]: https://wiki.alpinelinux.org/wiki/Setup-desktop "Setup-desktop - Alpine Linux"
+
+
+# Первоначальная установка Ubuntu Server на новый компьютер: сценарный метод и сопоставление с ручной установкой Arch Linux
+
+## 1. Методологическое введение
+
+Первоначальная установка серверной ОС состоит не в «нажатии кнопок», а в последовательном приведении пустого компьютера к воспроизводимому состоянию: загрузочная среда получает сеть, выбирается диск, создаются разделы, устанавливается базовая система, задаются пользователи, SSH, загрузчик и правила первого запуска.
+
+В Ubuntu Server современный сценарный путь называется **autoinstall**: установщик получает заранее подготовленную YAML-конфигурацию и отвечает на вопросы без участия оператора. Официальная документация Canonical описывает это как unattended/hands-off installation; формат поддерживается Ubuntu Server начиная с 20.04. ([Ubuntu installation][1])
+
+Классическая ручная установка Arch Linux устроена иначе: администратор из live-среды вручную выполняет команды `pacstrap`, `genfstab`, `arch-chroot` и последующую настройку. Эти утилиты входят в пакет `arch-install-scripts`; официальный список файлов пакета содержит `arch-chroot`, `genfstab` и `pacstrap`. ([Arch Linux][2])
+
+Разница принципиальна: Ubuntu Server autoinstall — **декларативная модель**: «каким должен быть итоговый сервер»; Arch — **императивная модель**: «какие команды выполнить по порядку».
+
+---
+
+## 2. Карта стадий установки
+
+```bash
+#!/usr/bin/env bash
+# stage-map.sh
+# Назначение:
+#   Показать, какие стадии автоматической установки Ubuntu Server
+#   соответствуют стадиям классической ручной установки Arch Linux.
+#
+# Важно:
+#   Это не выполняющий установку скрипт, а учебная карта процессов.
+
+cat <<'STAGES'
++----+--------------------------------------+-------------------------------------------+---------------------------------------------+
+| №  | Ubuntu Server autoinstall            | Arch Linux manual install                  | Системный смысл                             |
++----+--------------------------------------+-------------------------------------------+---------------------------------------------+
+| 1  | Загрузка live-server ISO             | Загрузка archiso                           | Получить временную ОС для установки         |
+| 2  | Получение autoinstall user-data      | Ручной ввод команд                         | Передать установщику программу действий     |
+| 3  | network: / DHCP / static config      | ip link, iwctl, dhcpcd/systemd-networkd    | Поднять сеть                                |
+| 4  | storage: layout/config               | fdisk/sgdisk, mkfs, mount                  | Разметить и смонтировать диск               |
+| 5  | packages:                            | pacstrap /mnt base linux linux-firmware    | Установить базовую систему                  |
+| 6  | identity:, ssh:                      | passwd, useradd, pacman -S openssh         | Создать пользователя и доступ               |
+| 7  | locale:, keyboard:, timezone         | locale-gen, timedatectl, vconsole.conf     | Локализовать систему                        |
+| 8  | curtin/subiquity bootloader stage    | grub-install или bootctl install           | Сделать систему загружаемой                 |
+| 9  | user-data:, late-commands:           | arch-chroot /mnt и post-install команды    | Настроить установленную систему             |
+| 10 | Первый запуск cloud-init             | Первый вход root/user                      | Довести сервер до рабочего состояния        |
++----+--------------------------------------+-------------------------------------------+---------------------------------------------+
+STAGES
+```
+
+В Ubuntu файл autoinstall имеет верхний ключ `autoinstall`, поле `version`, а конфигурация проверяется по схеме; документация указывает, что сам файл использует YAML. ([Ubuntu installation][3]) Командные секции autoinstall выполняются от root, а ненулевой код возврата обычно считается ошибкой установки. ([Ubuntu installation][3])
+
+---
+
+## 3. Базовая терминология
+
+```bash
+#!/usr/bin/env bash
+# vocabulary.sh
+# Назначение:
+#   Объяснить основные термины через комментарии.
+#
+# autoinstall:
+#   Декларативная YAML-конфигурация установщика Ubuntu Server.
+#
+# Subiquity:
+#   Современный установщик Ubuntu Server, который читает autoinstall.
+#
+# cloud-init:
+#   Механизм начальной настройки. В контексте установки Ubuntu он может
+#   доставить autoinstall-конфигурацию установщику.
+#
+# user-data:
+#   Файл cloud-init. Для autoinstall он обычно начинается с:
+#     #cloud-config
+#     autoinstall:
+#
+# meta-data:
+#   Второй файл источника NoCloud. В минимальном случае может быть пустым.
+#
+# NoCloud:
+#   Источник данных cloud-init. Удобен для установки с локального seed.iso
+#   или через HTTP.
+#
+# late-commands:
+#   Команды, выполняемые в конце установки Ubuntu.
+#
+# В Arch Linux близкими по роли являются:
+#   pacstrap    — установка базовой системы в /mnt
+#   genfstab    — генерация /etc/fstab
+#   arch-chroot — вход в устанавливаемую систему для настройки
+```
+
+Cloud-init не обрабатывает директивы autoinstall самостоятельно: он может доставить конфигурацию установщику, а директивы autoinstall обрабатывает именно Ubuntu Installer. Дополнительный `user-data` внутри `autoinstall:` относится уже к первому запуску целевой системы. ([Ubuntu installation][4])
+
+---
+
+## 4. Подготовка переменных установки
+
+```bash
+#!/usr/bin/env bash
+# 00-install-vars.sh
+# Назначение:
+#   Единое место, где задаются параметры будущего сервера.
+#
+# Использование:
+#   source ./00-install-vars.sh
+#
+# Внимание:
+#   Значения ниже являются учебными. Перед реальной установкой замените их.
+
+set -euo pipefail
+
+# Имя будущего сервера.
+export UBUNTU_HOSTNAME="srv-ubuntu-01"
+
+# Основной пользователь.
+export UBUNTU_USERNAME="admin"
+
+# Пароль в открытом виде нужен только для генерации хеша.
+# В учебном примере он задан переменной; в реальной работе лучше вводить его
+# интерактивно через read -s.
+export UBUNTU_PLAIN_PASSWORD="ChangeMe-StrongPassword-2026"
+
+# SSH-ключ администратора. Замените на свой публичный ключ.
+export UBUNTU_SSH_KEY="ssh-ed25519 AAAA_REPLACE_WITH_YOUR_PUBLIC_KEY admin@example"
+
+# Локаль, клавиатура и часовой пояс.
+export UBUNTU_LOCALE="ru_RU.UTF-8"
+export UBUNTU_KEYBOARD_LAYOUT="us"
+export UBUNTU_TIMEZONE="Europe/Paris"
+
+# Выбор диска.
+# Для нового компьютера безопаснее указывать серийный номер диска,
+# а не /dev/sda или /dev/nvme0n1, потому что имена устройств могут изменяться.
+#
+# Для простейшего учебного сценария ниже будет использован largest disk.
+# Для производственной установки замените match: size: largest
+# на match: serial: "ВАШ_СЕРИЙНЫЙ_НОМЕР".
+export UBUNTU_DISK_MATCH_MODE="largest"
+
+# Каталог сборки seed-носителя.
+export WORKDIR="$HOME/ubuntu-autoinstall-seed"
+```
+
+---
+
+## 5. Минимальный autoinstall: первая рабочая версия
+
+```bash
+#!/usr/bin/env bash
+# 01-create-minimal-autoinstall.sh
+# Назначение:
+#   Создать минимальный user-data для автоматической установки Ubuntu Server.
+#
+# Результат:
+#   $WORKDIR/user-data
+#   $WORKDIR/meta-data
+#
+# Аналогия с Arch Linux:
+#   Этот файл заменяет первую серию ручных действий:
+#     timedatectl set-ntp true
+#     fdisk/sgdisk
+#     mkfs.*
+#     mount
+#     pacstrap
+#     arch-chroot
+#     passwd
+#     useradd
+#
+# Внимание:
+#   storage.layout.name: direct и match: size: largest означают,
+#   что установщик выберет самый большой диск и разметит его.
+#   На машине с несколькими дисками это может быть опасно.
+
+set -euo pipefail
+
+source ./00-install-vars.sh
+
+mkdir -p "$WORKDIR"
+cd "$WORKDIR"
+
+# Генерируем SHA-512 crypt-хеш пароля.
+# Ubuntu autoinstall ожидает не открытый пароль, а хеш.
+PASSWORD_HASH="$(openssl passwd -6 "$UBUNTU_PLAIN_PASSWORD")"
+
+cat > user-data <<EOF
+#cloud-config
+autoinstall:
+  version: 1
+
+  # Локаль соответствует стадии locale-gen в Arch.
+  locale: "$UBUNTU_LOCALE"
+
+  # Клавиатура соответствует /etc/vconsole.conf в Arch.
+  keyboard:
+    layout: "$UBUNTU_KEYBOARD_LAYOUT"
+
+  # Сеть:
+  # В базовой установке предполагается DHCP.
+  # В Arch аналогом была бы ручная настройка ip link / dhcpcd / iwctl.
+  network:
+    version: 2
+    ethernets:
+      all-ethernet:
+        match:
+          name: "e*"
+        dhcp4: true
+
+  # Начальный пользователь:
+  # В Arch это соответствовало бы useradd + passwd + настройке sudo.
+  identity:
+    hostname: "$UBUNTU_HOSTNAME"
+    username: "$UBUNTU_USERNAME"
+    password: "$PASSWORD_HASH"
+
+  # SSH-сервер ставится сразу во время установки.
+  ssh:
+    install-server: true
+    allow-pw: false
+    authorized-keys:
+      - "$UBUNTU_SSH_KEY"
+
+  # Простая схема диска:
+  # direct — обычные разделы без LVM.
+  # Для первого знакомства проще, чем LVM.
+  storage:
+    layout:
+      name: direct
+      match:
+        size: largest
+
+  # Пакеты, устанавливаемые на этапе установки.
+  # В Arch аналогом является расширение списка pacstrap:
+  #   pacstrap /mnt base linux linux-firmware vim curl git ...
+  packages:
+    - openssh-server
+    - vim
+    - curl
+    - git
+    - htop
+    - ufw
+    - unattended-upgrades
+
+  # user-data внутри autoinstall обрабатывается cloud-init
+  # уже в установленной системе при первом запуске.
+  user-data:
+    timezone: "$UBUNTU_TIMEZONE"
+
+    package_update: true
+    package_upgrade: true
+
+    # Команды первого запуска.
+    # Они близки к тому, что в Arch выполняется после arch-chroot.
+    runcmd:
+      - timedatectl set-timezone "$UBUNTU_TIMEZONE"
+      - systemctl enable --now ssh
+      - ufw allow OpenSSH
+      - ufw --force enable
+      - systemctl enable --now unattended-upgrades
+
+  # late-commands выполняются в конце установки.
+  # curtin in-target означает: выполнить команду внутри установленной системы.
+  late-commands:
+    - curtin in-target --target=/target -- systemctl enable ssh
+EOF
+
+# meta-data для NoCloud может быть пустым.
+: > meta-data
+
+echo "Созданы:"
+echo "  $WORKDIR/user-data"
+echo "  $WORKDIR/meta-data"
+```
+
+Официальный quick start Canonical показывает тот же принцип: создать `user-data`, начать его с `#cloud-config`, поместить внутри `autoinstall: version: 1`, создать пустой `meta-data`, а затем передать эти файлы установщику. ([Ubuntu installation][5]) При доставке через cloud-init заголовок `#cloud-config` обязателен для распознавания cloud-config файла. ([Ubuntu installation][6])
+
+---
+
+## 6. Создание seed.iso: источник NoCloud
+
+```bash
+#!/usr/bin/env bash
+# 02-build-seed-iso.sh
+# Назначение:
+#   Создать seed.iso — маленький ISO-образ с user-data и meta-data.
+#
+# Идея:
+#   Ubuntu Server ISO загружает установщик.
+#   seed.iso передает установщику ответы.
+#
+# Аналогия с Arch Linux:
+#   В Arch ответы не передаются заранее; их роль играет последовательность
+#   команд, вводимых администратором вручную.
+
+set -euo pipefail
+
+source ./00-install-vars.sh
+
+cd "$WORKDIR"
+
+if ! command -v cloud-localds >/dev/null 2>&1; then
+  echo "Требуется пакет cloud-image-utils."
+  echo "Установите его на рабочей машине:"
+  echo "  sudo apt update && sudo apt install -y cloud-image-utils"
+  exit 1
+fi
+
+cloud-localds seed.iso user-data meta-data
+
+echo "Готов seed.iso:"
+echo "  $WORKDIR/seed.iso"
+```
+
+Официальный quick start использует пакет `cloud-image-utils` и команду `cloud-localds ~/seed.iso user-data meta-data` для создания ISO-образа cloud-init datasource. ([Ubuntu installation][5])
+
+---
+
+## 7. Запись установочного и seed-носителя
+
+```bash
+#!/usr/bin/env bash
+# 03-write-usb-media.sh
+# Назначение:
+#   Записать два носителя:
+#     1. Ubuntu Server ISO
+#     2. seed.iso с autoinstall-данными
+#
+# Требования:
+#   - Первый USB: для Ubuntu Server ISO.
+#   - Второй USB: для seed.iso.
+#
+# Внимание:
+#   Скрипт полностью перезаписывает выбранные устройства.
+#   Никогда не указывайте системный диск рабочей машины.
+
+set -euo pipefail
+
+source ./00-install-vars.sh
+
+UBUNTU_ISO="${1:-}"
+INSTALL_USB="${2:-}"
+SEED_USB="${3:-}"
+
+if [[ -z "$UBUNTU_ISO" || -z "$INSTALL_USB" || -z "$SEED_USB" ]]; then
+  cat <<'USAGE'
+Использование:
+  sudo ./03-write-usb-media.sh /path/to/ubuntu-live-server.iso /dev/sdX /dev/sdY
+
+Пример:
+  sudo ./03-write-usb-media.sh ~/Downloads/ubuntu-XX.XX-live-server-amd64.iso /dev/sdb /dev/sdc
+
+Где:
+  /dev/sdb — USB под установочный ISO
+  /dev/sdc — USB под seed.iso
+USAGE
+  exit 1
+fi
+
+if [[ ! -f "$UBUNTU_ISO" ]]; then
+  echo "ISO не найден: $UBUNTU_ISO"
+  exit 1
+fi
+
+if [[ ! -f "$WORKDIR/seed.iso" ]]; then
+  echo "seed.iso не найден. Сначала выполните ./02-build-seed-iso.sh"
+  exit 1
+fi
+
+echo "Будут перезаписаны устройства:"
+echo "  install media: $INSTALL_USB"
+echo "  seed media:    $SEED_USB"
+echo
+read -r -p "Введите ERASE для продолжения: " CONFIRM
+
+if [[ "$CONFIRM" != "ERASE" ]]; then
+  echo "Операция отменена."
+  exit 1
+fi
+
+# Сбрасываем кэш записи и размонтируем возможные разделы.
+umount "${INSTALL_USB}"* 2>/dev/null || true
+umount "${SEED_USB}"* 2>/dev/null || true
+
+# Запись установочного ISO.
+dd if="$UBUNTU_ISO" of="$INSTALL_USB" bs=4M status=progress oflag=sync
+
+# Запись seed.iso.
+dd if="$WORKDIR/seed.iso" of="$SEED_USB" bs=4M status=progress oflag=sync
+
+sync
+
+echo "Носители готовы."
+echo "Дальнейший порядок:"
+echo "  1. Вставьте оба USB-носителя в новый компьютер."
+echo "  2. Загрузитесь с Ubuntu Server USB."
+echo "  3. Установщик обнаружит NoCloud seed-носитель и прочитает user-data."
+```
+
+Документация Canonical описывает два основных способа предоставить autoinstall: через cloud-config user-data или прямо на установочном носителе; также приводится вариант с «another volume» — отдельным источником данных для cloud-init. ([Ubuntu installation][6])
+
+---
+
+## 8. Более строгая разметка диска: установка по серийному номеру
+
+В учебной минимальной конфигурации использовался самый большой диск. В аудитории это допустимо, но на реальном сервере с несколькими накопителями лучше указывать серийный номер.
+
+```bash
+#!/usr/bin/env bash
+# 04-detect-disk-serials.sh
+# Назначение:
+#   Показать стабильные идентификаторы дисков перед установкой.
+#
+# Запускается на уже существующей Linux-машине или в live-среде.
+# Нужен для того, чтобы заменить match: size: largest
+# на match: serial: "..."
+#
+# Аналогия с Arch Linux:
+#   В Arch администратор сам выбирает /dev/nvme0n1 или /dev/sda
+#   перед командами sgdisk/fdisk/mkfs.
+#   В Ubuntu autoinstall выбор диска задается декларативно.
+
+set -euo pipefail
+
+lsblk -o NAME,TYPE,SIZE,MODEL,SERIAL,TRAN
+
+cat <<'NOTE'
+
+Пример более безопасного фрагмента storage:
+
+storage:
+  layout:
+    name: direct
+    match:
+      serial: "SAMSUNG_SSD_123456789"
+
+Для LVM:
+
+storage:
+  layout:
+    name: lvm
+    sizing-policy: all
+    match:
+      serial: "SAMSUNG_SSD_123456789"
+
+NOTE
+```
+
+Autoinstall поддерживает готовые схемы storage `lvm`, `direct` и `zfs`; документация также описывает `match`, включая выбор по serial, SSD-флагу и размеру. ([Ubuntu installation][3])
+
+---
+
+## 9. Продвинутая версия: LVM, первичная защита и аудит
+
+```bash
+#!/usr/bin/env bash
+# 05-create-hardened-autoinstall.sh
+# Назначение:
+#   Создать более строгий autoinstall:
+#     - LVM
+#     - SSH только по ключу
+#     - UFW
+#     - fail2ban
+#     - unattended-upgrades
+#     - отдельный файл /etc/motd.d/00-lab-policy
+#
+# Применимость:
+#   Учебный сервер, лабораторный сервер, небольшой внутренний сервер.
+#
+# Ограничения:
+#   Это не заменяет полноценное управление конфигурацией Ansible/Puppet/Salt.
+#   cloud-init выполняется в основном на первом запуске, а не постоянно.
+
+set -euo pipefail
+
+source ./00-install-vars.sh
+
+mkdir -p "$WORKDIR/hardened"
+cd "$WORKDIR/hardened"
+
+PASSWORD_HASH="$(openssl passwd -6 "$UBUNTU_PLAIN_PASSWORD")"
+
+cat > user-data <<EOF
+#cloud-config
+autoinstall:
+  version: 1
+
+  locale: "$UBUNTU_LOCALE"
+
+  keyboard:
+    layout: "$UBUNTU_KEYBOARD_LAYOUT"
+
+  network:
+    version: 2
+    ethernets:
+      all-ethernet:
+        match:
+          name: "e*"
+        dhcp4: true
+
+  identity:
+    hostname: "$UBUNTU_HOSTNAME"
+    username: "$UBUNTU_USERNAME"
+    password: "$PASSWORD_HASH"
+
+  ssh:
+    install-server: true
+    allow-pw: false
+    authorized-keys:
+      - "$UBUNTU_SSH_KEY"
+
+  storage:
+    layout:
+      name: lvm
+      sizing-policy: all
+      match:
+        size: largest
+
+  apt:
+    geoip: true
+
+  packages:
+    - openssh-server
+    - vim
+    - curl
+    - git
+    - htop
+    - ufw
+    - fail2ban
+    - unattended-upgrades
+    - needrestart
+    - chrony
+
+  user-data:
+    timezone: "$UBUNTU_TIMEZONE"
+
+    users:
+      - default
+      - name: "$UBUNTU_USERNAME"
+        groups: [adm, sudo]
+        shell: /bin/bash
+        sudo: "ALL=(ALL) NOPASSWD:ALL"
+        ssh_authorized_keys:
+          - "$UBUNTU_SSH_KEY"
+
+    write_files:
+      - path: /etc/motd.d/00-lab-policy
+        permissions: "0644"
+        owner: root:root
+        content: |
+          Учебный сервер Ubuntu Server.
+          Доступ по SSH разрешен только авторизованным администраторам.
+          Все изменения должны быть воспроизводимы через сценарии.
+
+      - path: /etc/ssh/sshd_config.d/99-hardening.conf
+        permissions: "0644"
+        owner: root:root
+        content: |
+          PasswordAuthentication no
+          PermitRootLogin no
+          PubkeyAuthentication yes
+          X11Forwarding no
+
+    package_update: true
+    package_upgrade: true
+
+    runcmd:
+      - timedatectl set-timezone "$UBUNTU_TIMEZONE"
+      - systemctl enable --now chrony
+      - systemctl enable --now ssh
+      - systemctl restart ssh
+      - ufw default deny incoming
+      - ufw default allow outgoing
+      - ufw allow OpenSSH
+      - ufw --force enable
+      - systemctl enable --now fail2ban
+      - systemctl enable --now unattended-upgrades
+      - needrestart -r a || true
+
+  late-commands:
+    - curtin in-target --target=/target -- systemctl enable ssh
+    - curtin in-target --target=/target -- systemctl enable ufw
+    - curtin in-target --target=/target -- systemctl enable fail2ban
+EOF
+
+: > meta-data
+
+cloud-localds seed.iso user-data meta-data
+
+echo "Создан усиленный seed:"
+echo "  $WORKDIR/hardened/seed.iso"
+```
+
+Здесь важно различать два уровня: `packages`, `ssh`, `storage`, `identity` относятся к установщику Ubuntu, а вложенный `user-data` выполняется cloud-init в целевой системе при первом запуске. Canonical прямо указывает, что cloud-init работает и в ephemeral-системе установщика, и в целевой системе при первом запуске, а затем становится неактивным при последующих перезагрузках. ([Ubuntu installation][4])
+
+---
+
+## 10. Ручная установка Arch Linux как методологический аналог
+
+Ниже не предлагается устанавливать Arch вместо Ubuntu Server. Скрипт нужен как учебное зеркало: он показывает, какие императивные команды в Arch соответствуют декларативным блокам Ubuntu autoinstall.
+
+```bash
+#!/usr/bin/env bash
+# arch-manual-reference.sh
+# Назначение:
+#   Учебная реконструкция ручной установки Arch Linux.
+#
+# Внимание:
+#   Не запускайте этот скрипт автоматически.
+#   Он намеренно оформлен как последовательность стадий с комментариями.
+#
+# Сопоставление:
+#   Ubuntu autoinstall storage:  -> sgdisk, mkfs, mount
+#   Ubuntu packages:            -> pacstrap
+#   Ubuntu identity/user-data:   -> arch-chroot + useradd/passwd
+#   Ubuntu late-commands:        -> команды внутри arch-chroot
+#   Ubuntu bootloader stage:     -> bootctl/grub-install
+
+set -euo pipefail
+
+TARGET_DISK="/dev/nvme0n1"
+HOSTNAME="arch-reference"
+USERNAME="admin"
+TIMEZONE="Europe/Paris"
+LOCALE="ru_RU.UTF-8"
+
+# -------------------------------------------------------------------
+# 1. Проверка режима загрузки
+# -------------------------------------------------------------------
+# Ubuntu autoinstall обычно скрывает эту проверку внутри установщика.
+# В Arch администратор явно убеждается, что система загружена в UEFI.
+
+if [[ -d /sys/firmware/efi/efivars ]]; then
+  echo "UEFI mode detected"
+else
+  echo "Not booted in UEFI mode"
+  exit 1
+fi
+
+# -------------------------------------------------------------------
+# 2. Сеть и время
+# -------------------------------------------------------------------
+# В Ubuntu это описывается блоком network:.
+# В Arch это ручные команды live-среды.
+
+timedatectl set-ntp true
+
+# -------------------------------------------------------------------
+# 3. Разметка диска
+# -------------------------------------------------------------------
+# В Ubuntu:
+#   storage:
+#     layout:
+#       name: direct
+#
+# В Arch:
+#   администратор сам создает GPT, EFI-раздел и корневой раздел.
+
+sgdisk --zap-all "$TARGET_DISK"
+sgdisk -n 1:1MiB:+512MiB -t 1:EF00 -c 1:EFI "$TARGET_DISK"
+sgdisk -n 2:0:0        -t 2:8300 -c 2:ROOT "$TARGET_DISK"
+
+EFI_PART="${TARGET_DISK}p1"
+ROOT_PART="${TARGET_DISK}p2"
+
+mkfs.fat -F32 "$EFI_PART"
+mkfs.ext4 -F "$ROOT_PART"
+
+mount "$ROOT_PART" /mnt
+mkdir -p /mnt/boot
+mount "$EFI_PART" /mnt/boot
+
+# -------------------------------------------------------------------
+# 4. Установка базовой системы
+# -------------------------------------------------------------------
+# В Ubuntu это packages: + работа установщика.
+# В Arch это pacstrap.
+#
+# Минимальный набор:
+#   base linux linux-firmware
+#
+# Дополнительно:
+#   vim sudo openssh networkmanager systemd-boot
+
+pacstrap /mnt \
+  base \
+  linux \
+  linux-firmware \
+  vim \
+  sudo \
+  openssh \
+  networkmanager
+
+# -------------------------------------------------------------------
+# 5. fstab
+# -------------------------------------------------------------------
+# В Ubuntu fstab формируется установщиком.
+# В Arch его явно генерируют.
+
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# -------------------------------------------------------------------
+# 6. Настройка целевой системы через chroot
+# -------------------------------------------------------------------
+# В Ubuntu похожую роль играют:
+#   user-data:
+#   late-commands:
+#   curtin in-target ...
+#
+# В Arch используется arch-chroot.
+
+arch-chroot /mnt /bin/bash <<ARCH_CHROOT
+set -euo pipefail
+
+ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+hwclock --systohc
+
+sed -i 's/^#\\($LOCALE UTF-8\\)/\\1/' /etc/locale.gen || true
+locale-gen
+echo "LANG=$LOCALE" > /etc/locale.conf
+
+echo "$HOSTNAME" > /etc/hostname
+
+cat > /etc/hosts <<HOSTS
+127.0.0.1 localhost
+::1       localhost
+127.0.1.1 $HOSTNAME.localdomain $HOSTNAME
+HOSTS
+
+systemctl enable NetworkManager
+systemctl enable sshd
+
+useradd -m -G wheel -s /bin/bash "$USERNAME"
+
+# В реальной установке пароль задают интерактивно:
+# passwd "$USERNAME"
+
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+bootctl install
+
+cat > /boot/loader/loader.conf <<LOADER
+default arch.conf
+timeout 3
+editor no
+LOADER
+
+ROOT_UUID="\$(blkid -s UUID -o value "$ROOT_PART")"
+
+cat > /boot/loader/entries/arch.conf <<ENTRY
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /initramfs-linux.img
+options root=UUID=\$ROOT_UUID rw
+ENTRY
+ARCH_CHROOT
+
+umount -R /mnt
+
+echo "Arch reference installation sequence completed."
+```
+
+ArchWiki Installation Guide является официальной точкой отсчета для ручной установки Arch из live-среды; даже если сам сайт может быть защищен от автоматизированного чтения, поисковый результат указывает на руководство, обновленное 29 марта 2026 года. ([ArchWiki][7]) А пакет `arch-install-scripts` официально содержит инструменты, на которых построена классическая установка: `pacstrap`, `genfstab` и `arch-chroot`. ([Arch Linux][2])
+
+---
+
+## 11. Проверка установленного Ubuntu Server после первого запуска
+
+```bash
+#!/usr/bin/env bash
+# 06-verify-ubuntu-server.sh
+# Назначение:
+#   Проверить, что установленный Ubuntu Server соответствует ожиданиям.
+#
+# Запуск:
+#   На установленном сервере от пользователя с sudo.
+
+set -euo pipefail
+
+echo "== Hostname =="
+hostnamectl
+
+echo
+echo "== Operating system =="
+cat /etc/os-release
+
+echo
+echo "== Kernel =="
+uname -a
+
+echo
+echo "== Cloud-init status =="
+if command -v cloud-init >/dev/null 2>&1; then
+  cloud-init status --long || true
+else
+  echo "cloud-init не найден"
+fi
+
+echo
+echo "== SSH service =="
+systemctl --no-pager status ssh || true
+
+echo
+echo "== Firewall =="
+sudo ufw status verbose || true
+
+echo
+echo "== Disk layout =="
+lsblk -f
+
+echo
+echo "== Users with sudo group =="
+getent group sudo
+
+echo
+echo "== Enabled important services =="
+systemctl is-enabled ssh || true
+systemctl is-enabled ufw || true
+systemctl is-enabled unattended-upgrades || true
+systemctl is-enabled fail2ban || true
+```
+
+---
+
+## 12. Учебный вывод
+
+```bash
+#!/usr/bin/env bash
+# conclusion.sh
+# Назначение:
+#   Сформулировать итог статьи в терминах системного администрирования.
+
+cat <<'CONCLUSION'
+1. Ubuntu Server autoinstall переносит основную сложность установки
+   из интерактивного интерфейса в YAML-файл.
+
+2. Ручная установка Arch Linux делает те же операции явно:
+   диск -> файловые системы -> pacstrap -> fstab -> chroot -> загрузчик.
+
+3. Поэтому autoinstall не является "магией".
+   Он лишь формализует те действия, которые в Arch администратор
+   обычно выполняет руками.
+
+4. Минимальный уровень владения темой:
+   - понимать, какой диск будет уничтожен;
+   - понимать, кто создает пользователя;
+   - различать installation-time команды и first-boot команды;
+   - проверять итог через lsblk, systemctl, cloud-init status и journalctl.
+
+5. Производственный уровень:
+   - выбирать диск по serial, а не по /dev/sdX;
+   - хранить user-data в системе контроля версий без открытых секретов;
+   - использовать SSH-ключи вместо паролей;
+   - переносить долгосрочную настройку в Ansible или другой инструмент
+     управления конфигурацией.
+CONCLUSION
+```
+
+[1]: https://canonical-subiquity.readthedocs-hosted.com/en/latest/intro-to-autoinstall.html "Introduction to autoinstall - Ubuntu installation documentation"
+[2]: https://archlinux.org/packages/extra/any/arch-install-scripts/files/ "Arch Linux - arch-install-scripts 31-1 (any) - File List"
+[3]: https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html "Autoinstall configuration reference manual - Ubuntu installation documentation"
+[4]: https://canonical-subiquity.readthedocs-hosted.com/en/latest/explanation/cloudinit-autoinstall-interaction.html "Cloud-init and autoinstall interaction - Ubuntu installation documentation"
+[5]: https://canonical-subiquity.readthedocs-hosted.com/en/latest/howto/autoinstall-quickstart.html "Autoinstall quick start - Ubuntu installation documentation"
+[6]: https://canonical-subiquity.readthedocs-hosted.com/en/latest/tutorial/providing-autoinstall.html "Providing autoinstall configuration - Ubuntu installation documentation"
+[7]: https://wiki.archlinux.org/title/Installation_guide?utm_source=chatgpt.com "Installation guide - ArchWiki"
+
+
+
+

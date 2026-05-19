@@ -1,0 +1,47 @@
+---
+metadata-files:
+    - mock/step.yaml
+    - nano/step.yaml
+    - bash/step.yaml
+    - filesystem/step.yaml
+    - package/step.yaml
+    - curl/step.yaml
+---
+
+# Ubuntu
+
+## Введение
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta nano.title >}}
+
+{{< include nano/_theory.qmd >}}
+
+{{< include nano/_task.qmd >}}
+
+### {{< meta bash.title >}}
+
+{{< include bash/_theory.qmd >}}
+
+{{< include bash/_task.qmd >}}
+
+{{< include bash/_solution.qmd >}}
+
+### {{< meta filesystem.title >}}
+
+{{< include filesystem/_task.qmd >}}
+
+### {{< meta package.title >}}
+
+{{< include package/_theory.qmd >}}
+
+{{< include package/_task.qmd >}}
+
+### {{< meta curl.title >}}
+
+{{< include curl/_theory.qmd >}}
+
+{{< include curl/_task.qmd >}}

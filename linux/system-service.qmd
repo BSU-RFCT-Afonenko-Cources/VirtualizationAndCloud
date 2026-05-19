@@ -1,0 +1,534 @@
+# Система инициализации и управления сервисами: systemd и OpenRC
+
+После загрузки ядра Linux управление передаётся первому пользовательскому процессу, традиционно называемому `init` или PID 1. Его задача — привести систему из состояния «ядро запущено» в состояние «компьютер готов к работе»: смонтировать файловые системы, подготовить устройства, запустить системные службы, сетевые демоны, журналы, планировщики, серверы и пользовательскую среду.
+
+В современных Linux-системах эту роль чаще всего выполняют **systemd** или **OpenRC**. Оба решают одну и ту же общую задачу — запуск, остановку, контроль и упорядочивание сервисов, — но используют разные модели. В systemd основная единица управления называется **unit**, а сервис описывается unit-файлом с расширением `.service`; unit-файл является текстовым INI-подобным файлом и может описывать сервис, сокет, устройство, точку монтирования, таймер и другие объекты. ([Debian Manpages][1]) В OpenRC служба обычно описывается исполняемым shell-скриптом в стиле `openrc-run`; службы группируются в именованные **runlevels**, например `boot` и `default`. ([GitHub][2])
+
+Проверить, какая система инициализации используется на конкретной машине, можно так:
+
+```sh
+# Показать имя процесса с PID 1.
+# Если вывод: systemd — используется systemd.
+# Если вывод: init, openrc-init или другое — нужно уточнить реализацию.
+ps -p 1 -o comm=
+
+# Показать, куда указывает /sbin/init.
+# На systemd-системах часто будет путь к systemd.
+# На OpenRC-системах возможны sysvinit + OpenRC или openrc-init.
+readlink -f /sbin/init
+```
+
+---
+
+## 2. Общая логика конфигурации сервиса
+
+Независимо от выбранной системы, настройка сервиса обычно проходит одинаковые концептуальные этапы.
+
+| Этап                       | Смысл                                                  | systemd                                         | OpenRC                                                  |
+| -------------------------- | ------------------------------------------------------ | ----------------------------------------------- | ------------------------------------------------------- |
+| 1. Подготовить программу   | Определить, какой процесс должен запускаться           | Исполняемый файл, скрипт, демон                 | Исполняемый файл, скрипт, демон                         |
+| 2. Описать сервис          | Задать имя, команду запуска, зависимости, пользователя | `/etc/systemd/system/name.service`              | `/etc/init.d/name`                                      |
+| 3. Подключить конфигурацию | Передать параметры запуска                             | `Environment=`, `EnvironmentFile=`              | `/etc/conf.d/name`                                      |
+| 4. Перечитать описание     | Сообщить init-системе об изменениях                    | `systemctl daemon-reload`                       | Обычно не требуется, так как скрипт читается при вызове |
+| 5. Запустить и проверить   | Старт, статус, журналы                                 | `systemctl start/status`, `journalctl`          | `rc-service start/status`, `rc-status`, логи            |
+| 6. Включить автозапуск     | Запускать при загрузке                                 | `systemctl enable`                              | `rc-update add`                                         |
+| 7. Сопровождать            | Перезапуск, остановка, отключение, диагностика         | `restart`, `disable`, `mask`, drop-in overrides | `restart`, `rc-update del`, зависимости в `depend()`    |
+
+---
+
+## 3. systemd: базовая модель
+
+В systemd управление выполняется утилитой `systemctl`, которая предназначена для интроспекции и управления состоянием systemd как системного и сервисного менеджера. ([freedesktop.org][3]) Сервисный unit-файл должен содержать секцию `[Service]`, где описываются параметры процесса: `Type=`, `ExecStart=`, `ExecStop=`, `Restart=` и другие. ([Debian Manpages][4])
+
+Минимальный systemd-сервис имеет три смысловые части:
+
+```ini
+[Unit]
+Description=Краткое описание сервиса
+
+[Service]
+ExecStart=/путь/к/программе
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Секция `[Unit]` описывает назначение и зависимости. Секция `[Service]` определяет, как запускать процесс. Секция `[Install]` говорит, к какому целевому состоянию системы привязать автозапуск. `WantedBy=multi-user.target` означает, что сервис должен запускаться в обычном многопользовательском режиме без обязательной графической среды; это типовой аналог классических runlevel 3/5. В документации systemd пример простого сервиса также использует `ExecStart=` и `WantedBy=multi-user.target`. ([Debian Manpages][4])
+
+---
+
+## 4. Пример systemd-сервиса: от нуля до автозапуска
+
+Создадим учебный демон `exampled`, который периодически печатает строку. Это безопасный пример: он не открывает сетевые порты и не изменяет системные настройки.
+
+### 4.1. Подготовка исполняемого файла
+
+```sh
+# Создаём каталог для учебного сервиса.
+sudo install -d -m 0755 /usr/local/lib/exampled
+
+# Создаём сам скрипт.
+sudo tee /usr/local/lib/exampled/exampled.sh > /dev/null <<'EOF'
+#!/bin/sh
+
+# Первый аргумент — интервал между сообщениями.
+# Если аргумент не передан, используется значение 10 секунд.
+INTERVAL="${1:-10}"
+
+# Бесконечный цикл имитирует работу фонового демона.
+# date -Is печатает дату в ISO-формате.
+while :; do
+    printf '%s exampled: service is alive\n' "$(date -Is)"
+    sleep "$INTERVAL"
+done
+EOF
+
+# Делаем скрипт исполняемым.
+sudo chmod 0755 /usr/local/lib/exampled/exampled.sh
+```
+
+### 4.2. Подготовка конфигурационного файла
+
+```sh
+# Файл /etc/default/exampled будет прочитан systemd через EnvironmentFile.
+sudo tee /etc/default/exampled > /dev/null <<'EOF'
+# Интервал между сообщениями сервиса в секундах.
+EXAMPLED_INTERVAL=5
+EOF
+```
+
+### 4.3. Создание unit-файла
+
+```sh
+sudo tee /etc/systemd/system/exampled.service > /dev/null <<'EOF'
+[Unit]
+Description=Educational Example Daemon
+Documentation=man:systemd.service(5)
+
+# After задаёт порядок: запускать этот сервис после базовой сетевой цели.
+# Это не означает, что сеть обязательно нужна; это только порядок.
+After=network.target
+
+[Service]
+# Type=simple означает: процесс из ExecStart считается основным процессом сервиса.
+# Для долгоживущих foreground-процессов это наиболее простой вариант.
+Type=simple
+
+# EnvironmentFile подключает файл с переменными окружения.
+# Знак минус перед путём означает: если файла нет, это не ошибка.
+EnvironmentFile=-/etc/default/exampled
+
+# Команда запуска.
+# ${EXAMPLED_INTERVAL} подставляется из EnvironmentFile.
+ExecStart=/usr/local/lib/exampled/exampled.sh ${EXAMPLED_INTERVAL}
+
+# Перезапускать сервис при аварийном завершении.
+Restart=on-failure
+
+# Подождать 5 секунд перед попыткой перезапуска.
+RestartSec=5s
+
+# По умолчанию stdout/stderr сервиса попадут в journal.
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+# Привязка автозапуска к обычному многопользовательскому режиму.
+WantedBy=multi-user.target
+EOF
+```
+
+После создания или изменения unit-файла systemd нужно перечитать конфигурацию. Документация прямо предупреждает, что после создания новых unit-файлов или изменения существующих следует выполнять `systemctl daemon-reload`, иначе состояние менеджера может не совпадать с файлами на диске. ([Red Hat Documentation][5])
+
+```sh
+# Перечитать unit-файлы.
+sudo systemctl daemon-reload
+
+# Проверить синтаксис и возможные ошибки.
+systemd-analyze verify /etc/systemd/system/exampled.service
+
+# Запустить сервис сейчас.
+sudo systemctl start exampled.service
+
+# Посмотреть состояние сервиса.
+systemctl status exampled.service
+
+# Посмотреть последние сообщения сервиса в журнале.
+journalctl -u exampled.service -n 20 --no-pager
+```
+
+### 4.4. Включение автозапуска
+
+Команда `systemctl enable` создаёт необходимые символические ссылки, описанные в секции `[Install]`; при этом само включение не запускает сервис немедленно, если не использовать `--now`. ([freedesktop.org][3])
+
+```sh
+# Включить автозапуск, но не запускать немедленно.
+sudo systemctl enable exampled.service
+
+# Включить автозапуск и сразу запустить.
+sudo systemctl enable --now exampled.service
+
+# Проверить, включён ли автозапуск.
+systemctl is-enabled exampled.service
+```
+
+### 4.5. Обычное управление сервисом
+
+```sh
+# Запустить сервис.
+sudo systemctl start exampled.service
+
+# Остановить сервис.
+sudo systemctl stop exampled.service
+
+# Перезапустить сервис: systemd выполнит stop, затем start.
+sudo systemctl restart exampled.service
+
+# Перечитать конфигурацию самого демона, если сервис поддерживает ExecReload.
+# В нашем учебном unit-файле ExecReload не задан, поэтому команда не нужна.
+sudo systemctl reload exampled.service
+
+# Если reload не поддерживается, выполнить restart.
+sudo systemctl reload-or-restart exampled.service
+
+# Посмотреть статус.
+systemctl status exampled.service
+
+# Отключить автозапуск.
+sudo systemctl disable exampled.service
+```
+
+`systemctl start` активирует unit, `stop` деактивирует его, а `restart` останавливает и затем снова запускает указанные units; если unit ещё не был запущен, `restart` его запустит. ([freedesktop.org][3])
+
+### 4.6. Маскирование сервиса
+
+Отключение автозапуска не запрещает ручной запуск. Для полного запрета применяется `mask`: systemd связывает unit с `/dev/null`, делая запуск невозможным до `unmask`. ([freedesktop.org][3])
+
+```sh
+# Полностью запретить запуск сервиса.
+sudo systemctl mask exampled.service
+
+# Проверить попытку запуска: она должна завершиться ошибкой.
+sudo systemctl start exampled.service
+
+# Снять запрет.
+sudo systemctl unmask exampled.service
+```
+
+---
+
+## 5. OpenRC: базовая модель
+
+OpenRC использует иной подход. В его официальном руководстве подчёркивается, что OpenRC сканирует runlevels, строит граф зависимостей и запускает нужные service scripts; после запуска скриптов OpenRC завершается, то есть постоянного центрального демона в этой модели нет. ([GitHub][2])
+
+Управление текущим состоянием службы выполняется через `rc-service`, а включение в загрузку — через `rc-update`. Документация Alpine рекомендует использовать именно канонические имена `rc-service` и `rc-update`, даже если в некоторых системах доступны совместимые команды вроде `service`. ([docs.alpinelinux.org][6])
+
+---
+
+## 6. Пример OpenRC-сервиса: тот же демон exampled
+
+Будем использовать тот же исполняемый файл:
+
+```sh
+/usr/local/lib/exampled/exampled.sh
+```
+
+Если он ещё не создан, можно повторить команды из раздела systemd.
+
+### 6.1. Конфигурация в `/etc/conf.d`
+
+В OpenRC параметры, относящиеся к запуску конкретного сервиса, часто помещаются в `/etc/conf.d/<имя_сервиса>`; документация Alpine приводит именно такую схему для параметров запуска. ([docs.alpinelinux.org][6])
+
+```sh
+sudo tee /etc/conf.d/exampled > /dev/null <<'EOF'
+# Интервал между сообщениями сервиса.
+EXAMPLED_INTERVAL=5
+EOF
+```
+
+### 6.2. Service script в `/etc/init.d`
+
+OpenRC service scripts являются shell-скриптами, а рекомендуемый интерпретатор для них — `#!/sbin/openrc-run`; руководство OpenRC подчёркивает, что отказ от этого интерпретатора ломает поддержку зависимостей. ([GitHub][7])
+
+```sh
+sudo tee /etc/init.d/exampled > /dev/null <<'EOF'
+#!/sbin/openrc-run
+
+# Человекочитаемое описание сервиса.
+description="Educational Example Daemon"
+
+# Основная команда, которую OpenRC должен запустить.
+command="/usr/local/lib/exampled/exampled.sh"
+
+# Аргументы команды.
+# EXAMPLED_INTERVAL загружается из /etc/conf.d/exampled.
+command_args="${EXAMPLED_INTERVAL:-10}"
+
+# Попросить start-stop-daemon поместить процесс в фон.
+# Это удобно для foreground-скриптов, которые сами не демонизируются.
+command_background="yes"
+
+# PID-файл нужен, когда OpenRC сам отправляет процесс в фон.
+pidfile="/run/${RC_SVCNAME}.pid"
+
+# Логи stdout и stderr.
+output_log="/var/log/exampled/exampled.log"
+error_log="/var/log/exampled/exampled.err"
+
+depend() {
+    # Жёсткая зависимость: локальные файловые системы должны быть готовы.
+    need localmount
+
+    # Мягкие зависимости: использовать logger и net, если они есть в runlevel.
+    use logger net
+
+    # Упорядочивание: запускаться после bootmisc.
+    after bootmisc
+}
+
+start_pre() {
+    # Подготовить каталог логов перед стартом.
+    # Если команда завершится ошибкой, сервис не будет запущен.
+    checkpath --directory --mode 0755 /var/log/exampled
+}
+EOF
+
+# В OpenRC init-скрипт должен быть исполняемым.
+sudo chmod 0755 /etc/init.d/exampled
+```
+
+В `openrc-run` переменные `command`, `command_args`, `pidfile`, `command_background` и другие управляют тем, как будет запущен демон; если `command_background` включён, нужно задать `pidfile`. ([Debian Manpages][8]) Функция `depend()` задаёт зависимости и порядок запуска; `need` является жёсткой зависимостью, `use` — мягкой, `after` задаёт порядок без создания жёсткой зависимости. ([Debian Manpages][8])
+
+### 6.3. Запуск, статус и остановка
+
+```sh
+# Запустить сервис.
+sudo rc-service exampled start
+
+# Посмотреть состояние.
+sudo rc-service exampled status
+
+# Перезапустить сервис.
+sudo rc-service exampled restart
+
+# Остановить сервис.
+sudo rc-service exampled stop
+
+# Посмотреть лог.
+tail -n 20 /var/log/exampled/exampled.log
+```
+
+`rc-service` предназначен для управления сервисами в уже работающей системе: start, stop, status и другие действия. ([docs.alpinelinux.org][6])
+
+### 6.4. Включение автозапуска через runlevel
+
+OpenRC включает сервис в автозагрузку путём добавления его в runlevel. Включённый сервис фактически представлен символической ссылкой из каталога runlevel на файл в `/etc/init.d`; например, добавление `sshd` в `default` создаёт ссылку в `/etc/runlevels/default`. ([docs.alpinelinux.org][6])
+
+```sh
+# Показать сервисы и runlevels.
+rc-update show -v
+
+# Добавить exampled в обычный runlevel default.
+sudo rc-update add exampled default
+
+# Удалить из runlevel default.
+sudo rc-update del exampled default
+
+# Показать состояние сервисов текущего runlevel.
+rc-status
+
+# Показать все сервисы.
+rc-status --servicelist
+
+# Показать упавшие сервисы.
+rc-status --crashed
+```
+
+---
+
+## 7. Сопоставление типовых команд
+
+| Задача                                       | systemd                                     | OpenRC                                                                            |
+| -------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------- |
+| Запустить сервис сейчас                      | `sudo systemctl start nginx.service`        | `sudo rc-service nginx start`                                                     |
+| Остановить сервис                            | `sudo systemctl stop nginx.service`         | `sudo rc-service nginx stop`                                                      |
+| Перезапустить сервис                         | `sudo systemctl restart nginx.service`      | `sudo rc-service nginx restart`                                                   |
+| Проверить статус                             | `systemctl status nginx.service`            | `rc-service nginx status`                                                         |
+| Включить автозапуск                          | `sudo systemctl enable nginx.service`       | `sudo rc-update add nginx default`                                                |
+| Включить и сразу запустить                   | `sudo systemctl enable --now nginx.service` | `sudo rc-update add nginx default && sudo rc-service nginx start`                 |
+| Отключить автозапуск                         | `sudo systemctl disable nginx.service`      | `sudo rc-update del nginx default`                                                |
+| Посмотреть активные сервисы                  | `systemctl list-units --type=service`       | `rc-status`                                                                       |
+| Посмотреть установленные unit-файлы / службы | `systemctl list-unit-files --type=service`  | `rc-update show -v`                                                               |
+| Перечитать описание сервисов                 | `sudo systemctl daemon-reload`              | Обычно не требуется                                                               |
+| Полностью запретить запуск                   | `sudo systemctl mask name.service`          | Прямого полного аналога нет; обычно удаляют из runlevel и/или меняют права/скрипт |
+
+---
+
+## 8. Управление питанием компьютера
+
+Команды управления питанием требуют особой осторожности, поскольку они завершают процессы, размонтируют файловые системы и могут прервать работу пользователей.
+
+### 8.1. systemd
+
+В systemd команды питания также выполняются через `systemctl`. `systemctl poweroff` завершает работу и выключает питание, `systemctl reboot` завершает работу и перезагружает систему, а `systemctl suspend` переводит систему в режим сна. ([freedesktop.org][3])
+
+```sh
+# Выключить компьютер.
+sudo systemctl poweroff
+
+# Перезагрузить компьютер.
+sudo systemctl reboot
+
+# Остановить ОС, но не обязательно выключить питание железа.
+# Обычно вместо halt нужен именно poweroff.
+sudo systemctl halt
+
+# Перевести в сон.
+sudo systemctl suspend
+
+# Перевести в гибернацию, если она настроена и поддерживается.
+sudo systemctl hibernate
+
+# Гибридный сон: сочетание сна и гибернации.
+sudo systemctl hybrid-sleep
+
+# Сон с последующей гибернацией.
+sudo systemctl suspend-then-hibernate
+```
+
+Важное различие: `halt` останавливает ОС, но может оставить оборудование включённым; для выключения питания нужен `poweroff`. ([freedesktop.org][3])
+
+### 8.2. OpenRC
+
+В OpenRC завершение работы зависит от того, используется ли `openrc-init`, sysvinit или совместимые утилиты дистрибутива. Но собственная команда OpenRC — `openrc-shutdown`: `-p` выключает питание, `-r` перезагружает, `-H` останавливает систему. ([Debian Manpages][9]) При переходе в runlevel 0/6 или при выполнении `reboot`, `halt` и подобных команд OpenRC останавливает запущенные службы и выполняет shutdown-runlevel. ([GitHub][2])
+
+```sh
+# Выключить питание.
+sudo openrc-shutdown -p now
+
+# Перезагрузить.
+sudo openrc-shutdown -r now
+
+# Остановить систему без обязательного выключения питания.
+sudo openrc-shutdown -H now
+
+# В некоторых дистрибутивах также доступны традиционные команды:
+sudo poweroff
+sudo reboot
+sudo halt
+```
+
+### 8.3. «Включить компьютер» командой
+
+Строго говоря, команда, выполняемая внутри ОС, не может включить уже полностью выключенный компьютер: после выключения ОС не выполняет код. Возможны только косвенные механизмы:
+
+```sh
+# Перевести компьютер в сон и автоматически разбудить через 1 час.
+sudo rtcwake -m mem -s 3600
+
+# Только поставить RTC-будильник, не усыпляя систему.
+sudo rtcwake -m no --date "2026-05-16 08:00"
+
+# Показать текущий RTC-будильник.
+sudo rtcwake -m show
+
+# Отключить ранее установленный RTC-будильник.
+sudo rtcwake -m disable
+```
+
+`rtcwake` предназначен для перевода системы в состояние сна и автоматического пробуждения в заданное время; поддержка зависит от аппаратного RTC и платформы. ([man7.org][10]) У него есть режим `off`, соответствующий ACPI S5 Poweroff, но документация прямо отмечает, что ACPI официально его не поддерживает, хотя на практике он часто работает. ([man7.org][10]) Поэтому для учебной и административной практики корректнее говорить не «включить выключенный компьютер командой», а «запланировать пробуждение до выключения/сна» или использовать внешние механизмы вроде кнопки питания, BIOS/UEFI RTC wake или Wake-on-LAN.
+
+---
+
+## 9. Более сложный пример: зависимости и параметры запуска
+
+Предположим, сервис должен запускаться только после подготовки сети и должен использовать внешний конфигурационный файл.
+
+### 9.1. systemd-вариант
+
+```ini
+[Unit]
+Description=Network-dependent Example Daemon
+
+# Wants просит systemd также активировать network-online.target.
+# After задаёт порядок: наш сервис стартует после network-online.target.
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/default/exampled
+ExecStart=/usr/local/lib/exampled/exampled.sh ${EXAMPLED_INTERVAL}
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Здесь `Wants=` задаёт слабую зависимость, а `After=` — порядок запуска. В документации systemd отмечается, что `Wants=` часто предпочтительнее `Requires=`, если нужно получить более устойчивую систему при отказе вторичных служб. ([Debian Manpages][1])
+
+Применение:
+
+```sh
+sudo systemctl daemon-reload
+sudo systemctl restart exampled.service
+sudo systemctl status exampled.service
+```
+
+### 9.2. OpenRC-вариант
+
+```sh
+#!/sbin/openrc-run
+
+description="Network-dependent Example Daemon"
+command="/usr/local/lib/exampled/exampled.sh"
+command_args="${EXAMPLED_INTERVAL:-10}"
+command_background="yes"
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/exampled/exampled.log"
+error_log="/var/log/exampled/exampled.err"
+
+depend() {
+    # Жёстко требуем сеть.
+    # Если net не запустится, сервис не должен стартовать.
+    need net
+
+    # Мягко используем logger.
+    use logger
+
+    # Запускаемся после bootmisc.
+    after bootmisc
+}
+
+start_pre() {
+    checkpath --directory --mode 0755 /var/log/exampled
+}
+```
+
+Применение:
+
+```sh
+sudo rc-service exampled restart
+sudo rc-service exampled status
+sudo rc-update add exampled default
+```
+
+---
+
+## 10. Вывод
+
+systemd и OpenRC решают одну административную задачу, но выражают её разными языками. В systemd администратор мыслит unit-файлами, targets, зависимостями и состояниями, управляемыми через `systemctl`. В OpenRC администратор мыслит service scripts, runlevels и командами `rc-service`/`rc-update`.
+
+Практический алгоритм всегда один: подготовить исполняемую программу, описать способ её запуска, задать зависимости, проверить ручной запуск, включить автозагрузку и только затем переходить к усложнению — перезапускам, правам пользователя, журналированию, drop-in-настройкам или дополнительным командам. Такой порядок снижает вероятность ошибок: сначала проверяется сам процесс, затем его интеграция в систему инициализации, и только после этого — автоматический запуск при загрузке.
+
+[1]: https://manpages.debian.org/testing/systemd/systemd.unit.5.en.html "systemd.unit(5) — systemd — Debian testing — Debian Manpages"
+[2]: https://github.com/OpenRC/openrc/blob/master/user-guide.md "openrc/user-guide.md at master · OpenRC/openrc · GitHub"
+[3]: https://www.freedesktop.org/software/systemd/man/systemctl.html "systemctl"
+[4]: https://manpages.debian.org/testing/systemd/systemd.service.5.en.html "systemd.service(5) — systemd — Debian testing — Debian Manpages"
+[5]: https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/using_systemd_unit_files_to_customize_and_optimize_your_system/assembly_working-with-systemd-unit-files_working-with-systemd "Chapter 1. Working with systemd unit files | Using systemd unit files to customize and optimize your system | Red Hat Enterprise Linux | 9 | Red Hat Documentation"
+[6]: https://docs.alpinelinux.org/user-handbook/0.1a/Working/openrc.html "Working with OpenRC - Alpine Linux Documentation"
+[7]: https://github.com/OpenRC/openrc/blob/master/service-script-guide.md "openrc/service-script-guide.md at master · OpenRC/openrc · GitHub"
+[8]: https://manpages.debian.org/testing/openrc/openrc-run.8.en.html "openrc-run(8) — openrc — Debian testing — Debian Manpages"
+[9]: https://manpages.debian.org/testing/openrc/openrc-shutdown.8.en.html "openrc-shutdown(8) — openrc — Debian testing — Debian Manpages"
+[10]: https://man7.org/linux/man-pages/man8/rtcwake.8.html "rtcwake(8) - Linux manual page"

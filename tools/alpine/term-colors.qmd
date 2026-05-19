@@ -1,0 +1,155 @@
+Для Alpine Linux лучше настраивать это через `ash`/`profile`, потому что по умолчанию там обычно **BusyBox ash**, а не Bash.
+
+### 1. Войти в VM через virsh
+
+```bash
+virsh console имя_машины
+```
+
+Внутри Alpine проверь:
+
+```sh
+echo $SHELL
+echo $TERM
+```
+
+Часто будет что-то вроде:
+
+```sh
+/bin/ash
+vt100
+```
+
+---
+
+### 2. Установить terminfo для нормальных цветов
+
+В Alpine желательно поставить `ncurses-terminfo`:
+
+```sh
+apk add ncurses-terminfo ncurses-terminfo-base
+```
+
+Можно также поставить цветные утилиты GNU, но не обязательно:
+
+```sh
+apk add coreutils grep
+```
+
+---
+
+### 3. Настроить цвета для текущего пользователя
+
+Открой файл:
+
+```sh
+vi ~/.profile
+```
+
+Добавь в конец:
+
+```sh
+export TERM=xterm-256color
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
+PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+```
+
+Затем перелогинься или выполни:
+
+```sh
+. ~/.profile
+```
+
+---
+
+### 4. Если `PS1` выглядит криво в Alpine `ash`
+
+Для BusyBox `ash` иногда лучше использовать более простой вариант без `\[` и `\]`:
+
+```sh
+export TERM=xterm-256color
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
+PS1='\033[01;32m\u@\h\033[00m:\033[01;34m\w\033[00m\$ '
+```
+
+Если после этого prompt показывает буквальные `\033`, используй вариант через `printf`:
+
+```sh
+GREEN="$(printf '\033[01;32m')"
+BLUE="$(printf '\033[01;34m')"
+RESET="$(printf '\033[00m')"
+
+PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${RESET}\$ "
+```
+
+---
+
+### 5. Сделать для всех пользователей
+
+Создай файл:
+
+```sh
+vi /etc/profile.d/colors.sh
+```
+
+Добавь:
+
+```sh
+export TERM=xterm-256color
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
+GREEN="$(printf '\033[01;32m')"
+BLUE="$(printf '\033[01;34m')"
+RESET="$(printf '\033[00m')"
+
+PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${RESET}\$ "
+```
+
+Применить:
+
+```sh
+. /etc/profile
+```
+
+Или просто выйди и зайди снова через `virsh console`.
+
+---
+
+### 6. Проверка
+
+```sh
+echo $TERM
+ls --color=auto /
+```
+
+Также можно проверить 256 цветов:
+
+```sh
+apk add ncurses
+toe | grep xterm
+```
+
+Самый практичный минимум для Alpine:
+
+```sh
+apk add ncurses-terminfo ncurses-terminfo-base
+cat >> ~/.profile <<'EOF'
+export TERM=xterm-256color
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
+GREEN="$(printf '\033[01;32m')"
+BLUE="$(printf '\033[01;34m')"
+RESET="$(printf '\033[00m')"
+PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${RESET}\$ "
+EOF
+. ~/.profile
+```

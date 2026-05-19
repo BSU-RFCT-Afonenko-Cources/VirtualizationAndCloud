@@ -1,0 +1,19 @@
+Перейдите в каталог `~/nano`. После выполнения всех заданий нажмите кнопку проверки
+
+:::{#exr-lab-ubuntu-nano-file}
+#### Файл
+
+Создайте файл `notes.txt` в редакторе `nano` и запишите в него три строки:
+
+```text
+Ubuntu Server
+Bash
+Filesystem
+```
+:::
+
+:::{#exr-lab-ubuntu-nano-config}
+#### Конфигурация
+
+Отредактируйте конфигурации `app.conf`, откройте его в `nano` и замените `enabled = no` на `enabled = yes`.
+:::

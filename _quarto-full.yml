@@ -1,0 +1,86 @@
+project:
+  type: book
+  output-dir: _full-book
+
+book:
+  chapters:
+    - index.qmd
+    - part: enviroment/overview.qmd
+      chapters:
+        - enviroment/platform.qmd
+        - enviroment/shell.qmd
+        - enviroment/virtual-box.qmd
+        - enviroment/vmware.qmd
+        - enviroment/wsl.qmd
+
+    - part: linux/overview.qmd
+      chapters:
+        - linux/install.qmd
+        - linux/package.qmd
+        - linux/system-service.qmd
+        - linux/user.qmd
+        - linux/network/user.qmd
+        - linux/filesystem/hierarchy.qmd
+        - linux/filesystem/permission.qmd
+
+    - part: virtualization/overview.qmd
+      chapters:
+        - virtualization/hypervisors.qmd
+        - virtualization/internals.qmd
+
+    - part: libvirt/overview.qmd
+      chapters:
+        - libvirt/installation.qmd
+        - libvirt/configuration.qmd
+        - libvirt/lifecycle.qmd
+        - libvirt/disk.qmd
+        - libvirt/storage.qmd
+        - libvirt/networking.qmd
+        - libvirt/templates.qmd
+        - libvirt/snapshots.qmd
+
+    - part: docker/overview.qmd
+      chapters:
+        - docker/namespaces.qmd
+        - docker/cgroups.qmd
+        - docker/basic.qmd
+        - docker/secrets.qmd
+        - docker/swarm.qmd
+
+    - part: "Задания. Лабораторные"
+      chapters:
+        - lab/ubuntu/main.qmd
+        - lab/libvirt/single/main.qmd
+
+    - part: "Задания. Практика"
+      chapters:
+        - practice/plan.qmd
+
+    - references.qmd
+
+  appendices:
+    - part: Shell
+      chapters:
+        - shell/bash.qmd
+        - shell/fish.qmd
+        - shell/sh.qmd
+        - tools/expect.qmd
+    - part: Core Utils
+      chapters:
+        - coreutils/chmod.qmd
+        - coreutils/chown.qmd
+        - coreutils/hostname.qmd
+        - coreutils/ls.qmd
+        - coreutils/mkdir.qmd
+        - coreutils/wc.qmd
+    - part: Util Linux
+        - util-linux/su.qmd
+        - util-linux/unshare.qmd
+    - part: Tools
+      chapters:
+        - tools/jq.qmd
+        - tools/xml.qmd
+    - part: Python
+      chapters:
+        - python/tools/requests.qmd
+        - python/lang.qmd
