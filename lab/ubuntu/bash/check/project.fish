@@ -8,7 +8,7 @@ if not test -f "$SOL"
 end
 
 set tmp (mktemp -d)
-cd "$tmp"
+cd $tmp
 
 function clear_tmp --on-signal fish_exit
     if set -q tmp
@@ -17,17 +17,17 @@ function clear_tmp --on-signal fish_exit
     end
 end
 
-bash "$SOL" project
+bash $SOL project
 
-for f in project{src,data,reports}
+for f in project/{src,data,reports}
     if not test -d $f
-        echo "В проекте отсутствует каталог $f"
+        echo "`project.sh` не создаёт какталог $f"
         exit 1
     end
 end
 
 if not test -f project/README.md
-    echo "В проекте отсутствует файл README.md"
+    echo "`project.sh` не создаёт файл README.md"
     exit 1
 end
 

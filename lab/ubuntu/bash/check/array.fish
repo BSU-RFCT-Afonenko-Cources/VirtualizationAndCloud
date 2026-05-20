@@ -2,12 +2,12 @@
 
 set SOL /home/ubuntu/bash/array.sh
 
-if not test (bash "$SOL" a b apple) = "apple"
+if not test (bash $SOL a b apple) = "apple"
     echo "Неверное решение array.sh"
     exit 1
 end
 
-if not test (bash "$SOL" one three elephant cat) = "elephant"
+if not test (bash $SOL one three elephant cat) = "elephant"
     echo "Неверное решение array.sh"
     exit 1
 end
