@@ -6,6 +6,7 @@ metadata-files:
     - filesystem/step.yaml
     - package/step.yaml
     - curl/step.yaml
+    - user/step.yaml
 ---
 
 # Ubuntu
@@ -45,3 +46,9 @@ metadata-files:
 {{< include curl/_theory.qmd >}}
 
 {{< include curl/_task.qmd >}}
+
+### {{< meta user.title >}}
+
+{{< include user/_theory.qmd >}}
+
+{{< include user/_task.qmd >}}

@@ -5,19 +5,25 @@ project:
 book:
   chapters:
     - index.qmd
+    - linux/filesystem/permission.qmd
+    - linux/package.qmd
 
     - part: "Задания"
       chapters:
         - lab/ubuntu/main.qmd
 
-
   appendices:
-    - part: "Shell"
+    - part: "Командные оболочки"
       chapters:
         - shell/sh.qmd
         - shell/bash.qmd
-        - part: "Tools"
-    - part: "Tools"
+    - part: "Инструменты"
       chapters:
-        - nano/main.qmd
+        - tools/nano/main.qmd
+        - tools/curl.qmd
+    - part: tools/user/overview.qmd
+      chapters:
+        - tools/user/adduser.qmd
+        - tools/user/addgroup.qmd
+        - tools/user/usermod.qmd
 

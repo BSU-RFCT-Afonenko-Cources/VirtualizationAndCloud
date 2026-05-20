@@ -1,0 +1,18 @@
+Решение:
+
+```bash
+sudo addgroup labgroup
+sudo adduser --disabled-password --gecos "" labuser
+sudo usermod -aG labgroup labuser
+```
+
+Решение:
+
+```bash
+sudo mkdir /home/lab-share
+sudo chown labuser:labgroup /home/lab-share
+sudo chmod a+r /home/lab-share
+sudo -u labuser touch /home/lab-share/new.txt
+```
+
+

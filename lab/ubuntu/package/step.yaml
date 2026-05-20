@@ -11,4 +11,3 @@ package:
         exec:
           - check/install.fish
           - check/update.fish
-

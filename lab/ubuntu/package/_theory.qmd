@@ -1,12 +1,1 @@
-Решение:
-
-```bash
-sudo apt install -y tree
-```
-
-Решение:
-
-```bash
-sudo apt update
-apt show curl
-```
+Изучить менеджер пакетов [APT @sec-linux-package]

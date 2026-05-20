@@ -1,7 +1,7 @@
 filesystem:
     title: "Файловая система"
     task: _task.qmd
-    theory: _solution.qmd
+    theory: _theory.qmd
     actions:
       pre-step:
         exec:

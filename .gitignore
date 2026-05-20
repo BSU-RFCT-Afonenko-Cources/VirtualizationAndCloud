@@ -19,3 +19,5 @@ _freeze/
 
 *.html
 /_*.local
+
+_produced.yaml

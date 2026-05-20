@@ -74,6 +74,7 @@ book:
         - coreutils/mkdir.qmd
         - coreutils/wc.qmd
     - part: Util Linux
+      chapters:
         - util-linux/su.qmd
         - util-linux/unshare.qmd
     - part: Tools

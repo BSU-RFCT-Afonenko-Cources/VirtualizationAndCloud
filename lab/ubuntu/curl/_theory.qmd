@@ -1,15 +1,1 @@
-`curl` — консольная утилита для выполнения сетевых запросов. Её часто используют для проверки HTTP-сервисов, загрузки файлов, просмотра заголовков и тестирования API.
-
-
-Сохрание заголовков
-
-```bash
-curl -I https://ubuntu.com
-```
-
-Решение:
-
-```bash
-curl -L https://ubuntu.com -o /home/ubuntu/curl/ubuntu.html
-wc -l /home/ubuntu/curl/ubuntu.html
-```
+Изучить [утилиту `curl` @sec-tools-curl]

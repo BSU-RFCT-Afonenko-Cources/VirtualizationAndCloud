@@ -1,9 +1,1 @@
-Решение:
-
-```bash
-sudo mkdir -p /srv/lab-share
-sudo chown root:labteam /srv/lab-share
-sudo chmod 2775 /srv/lab-share
-sudo -u labuser touch /srv/lab-share/from-labuser.txt
-ls -l /srv/lab-share
-```
+В Ubuntu для добавления пользователей и групп удобно использовать [`adduser` @sec-tools-user-adduser] и [`addgroup` @sec-tools-user-addgroup], для изменения пользователя [`usermod` @sec-tools-user-usermod]
