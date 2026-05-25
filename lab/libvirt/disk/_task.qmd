@@ -1,0 +1,5 @@
+::{#exr-lab-libvirt-disk}
+#### Диск
+
+Создайте диск `/home/ubuntu/disk/student-vm.qcow2` размером `1G` и сохраните вывод `qemu-img info` в `/home/ubuntu/disk/disk-info.txt`.
+:::

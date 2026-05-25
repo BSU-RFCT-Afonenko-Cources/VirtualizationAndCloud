@@ -1,13 +1,11 @@
-title: "Установка Alpine Linux 3.21.3 (XML)"
-description: _description.md
-actions:
-  - host:
+network:
+    title: "Настройка изолированной сети libvirt"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
       pre-step:
         exec:
-          - ../prepare.fish
-      pre-check:
-        exec:
-          - pre-check.fish
+          - prepare.fish
       check:
         exec:
           - check.fish

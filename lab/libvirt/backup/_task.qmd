@@ -1,0 +1,5 @@
+::{#exr-lab-libvirt-backup}
+#### Бэкап
+
+Создайте в `/home/ubuntu/backup` два файла: `student-vm-backup.qcow2` (копия диска) и `student-vm.xml` (экспорт XML домена).
+:::

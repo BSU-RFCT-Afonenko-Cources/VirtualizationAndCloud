@@ -1,0 +1,14 @@
+lifecycle:
+    title: "Управление жизненным циклом ВМ"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
+      pre-step:
+        exec:
+          - prepare.fish
+      check:
+        exec:
+          - check.fish
+      solution:
+        exec:
+          - solution.fish

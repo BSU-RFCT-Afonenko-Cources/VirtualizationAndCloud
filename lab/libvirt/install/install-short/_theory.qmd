@@ -1,0 +1,9 @@
+`virt-install` в коротком режиме быстро создаёт домен с заданными ресурсами и установочным ISO.
+
+::{#exm-lab-libvirt-install-install-short-cmd}
+#### Создание ВМ
+
+```bash
+virt-install --name alpine-short --memory 448 --disk path=/home/ubuntu/install-short/alpine-short.qcow2,format=qcow2,size=1 --cdrom /home/ubuntu/alpine.iso --os-variant alpinelinux3.21 --network network=default --graphics none --noautoconsole --import
+```
+:::

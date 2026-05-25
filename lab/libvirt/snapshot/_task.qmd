@@ -1,0 +1,5 @@
+::{#exr-lab-libvirt-snapshot}
+#### Снапшот
+
+Создайте снапшот `clean-install` у домена `student-vm` и сохраните `virsh snapshot-list student-vm` в `/home/ubuntu/snapshot/list.txt`.
+:::

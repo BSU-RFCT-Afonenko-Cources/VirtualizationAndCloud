@@ -1,0 +1,9 @@
+Бэкап домена включает минимум два артефакта: образ диска и XML-конфигурацию. Вместе они дают возможность восстановить ВМ.
+
+::{#exm-lab-libvirt-backup-cmd}
+#### Экспорт XML
+
+```bash
+virsh dumpxml student-vm > /home/ubuntu/backup/student-vm.xml
+```
+:::

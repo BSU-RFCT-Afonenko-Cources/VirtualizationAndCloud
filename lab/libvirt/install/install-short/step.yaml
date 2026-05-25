@@ -1,0 +1,14 @@
+install-short:
+    title: "Быстрая установка Alpine через virt-install"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
+      pre-step:
+        exec:
+          - prepare.fish
+      check:
+        exec:
+          - check.fish
+      solution:
+        exec:
+          - solution.fish

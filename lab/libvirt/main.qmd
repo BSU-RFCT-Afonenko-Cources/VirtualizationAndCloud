@@ -1,0 +1,69 @@
+---
+metadata-files:
+    - virt-check/step.yaml
+    - install/install-short/step.yaml
+    - install/define-xml/step.yaml
+    - disk/step.yaml
+    - domain/step.yaml
+    - resources/step.yaml
+    - lifecycle/step.yaml
+    - autostart/step.yaml
+    - snapshot/step.yaml
+    - backup/step.yaml
+    - network/step.yaml
+    - pool/step.yaml
+---
+
+# Libvirt
+
+{{< include _assigment-description.qmd >}}
+
+## Задания
+
+### {{< meta virt-check.title >}}
+{{< include virt-check/_theory.qmd >}}
+{{< include virt-check/_task.qmd >}}
+
+### {{< meta install-short.title >}}
+{{< include install/install-short/_theory.qmd >}}
+{{< include install/install-short/_task.qmd >}}
+
+### {{< meta define-xml.title >}}
+{{< include install/define-xml/_theory.qmd >}}
+{{< include install/define-xml/_task.qmd >}}
+
+### {{< meta disk.title >}}
+{{< include disk/_theory.qmd >}}
+{{< include disk/_task.qmd >}}
+
+### {{< meta domain.title >}}
+{{< include domain/_theory.qmd >}}
+{{< include domain/_task.qmd >}}
+
+### {{< meta resources.title >}}
+{{< include resources/_theory.qmd >}}
+{{< include resources/_task.qmd >}}
+
+### {{< meta lifecycle.title >}}
+{{< include lifecycle/_theory.qmd >}}
+{{< include lifecycle/_task.qmd >}}
+
+### {{< meta autostart.title >}}
+{{< include autostart/_theory.qmd >}}
+{{< include autostart/_task.qmd >}}
+
+### {{< meta snapshot.title >}}
+{{< include snapshot/_theory.qmd >}}
+{{< include snapshot/_task.qmd >}}
+
+### {{< meta backup.title >}}
+{{< include backup/_theory.qmd >}}
+{{< include backup/_task.qmd >}}
+
+### {{< meta network.title >}}
+{{< include network/_theory.qmd >}}
+{{< include network/_task.qmd >}}
+
+### {{< meta pool.title >}}
+{{< include pool/_theory.qmd >}}
+{{< include pool/_task.qmd >}}

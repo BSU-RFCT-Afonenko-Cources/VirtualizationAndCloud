@@ -1,0 +1,9 @@
+Storage pool абстрагирует директорию хранения и даёт единый интерфейс управления дисками через libvirt.
+
+::{#exm-lab-libvirt-pool-cmd}
+#### Информация о пуле
+
+```bash
+virsh pool-info lab-pool
+```
+:::

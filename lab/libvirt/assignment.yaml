@@ -1,0 +1,17 @@
+title: "Libvirt: управление виртуальными машинами"
+description: _assigment-description.qmd
+time-limit-minutes: 240
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+    - virt-check/step.yaml
+    - install/install-short/step.yaml
+    - install/define-xml/step.yaml
+    - disk/step.yaml
+    - domain/step.yaml
+    - resources/step.yaml
+    - lifecycle/step.yaml
+    - autostart/step.yaml
+    - snapshot/step.yaml
+    - backup/step.yaml
+    - network/step.yaml
+    - pool/step.yaml

@@ -1,0 +1,9 @@
+Автозапуск позволяет автоматически поднимать важные ВМ после старта хоста и libvirt без ручного `start`.
+
+::{#exm-lab-libvirt-autostart-cmd}
+#### Флаг автозапуска
+
+```bash
+virsh dominfo student-vm | grep Autostart
+```
+:::

@@ -1,0 +1,14 @@
+disk:
+    title: "Подготовка диска виртуальной машины"
+    task: _task.qmd
+    theory: _theory.qmd
+    actions:
+      pre-step:
+        exec:
+          - prepare.fish
+      check:
+        exec:
+          - check.fish
+      solution:
+        exec:
+          - solution.fish

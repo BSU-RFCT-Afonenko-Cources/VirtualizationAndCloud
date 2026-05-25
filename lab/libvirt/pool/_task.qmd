@@ -1,0 +1,5 @@
+::{#exr-lab-libvirt-pool}
+#### Пул
+
+Создайте файловый storage pool `lab-pool` на каталоге `/home/ubuntu/pool/storage` и активируйте его.
+:::

@@ -1,0 +1,5 @@
+::{#exr-lab-libvirt-autostart}
+#### Автозапуск
+
+Проверьте автозапуск `student-vm`: включите autostart и сохраните вывод `virsh dominfo student-vm` в `/home/ubuntu/autostart/dominfo.txt`.
+:::
