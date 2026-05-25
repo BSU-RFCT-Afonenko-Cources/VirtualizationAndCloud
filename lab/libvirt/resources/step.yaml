@@ -1,14 +1,14 @@
-resources:
-    title: "Изменение ресурсов ВМ через virsh"
-    task: _task.qmd
-    theory: _theory.qmd
-    actions:
-      pre-step:
-        exec:
-          - prepare.fish
-      check:
-        exec:
-          - check.fish
-      solution:
-        exec:
-          - solution.fish
+res:
+  title: "Изменение ресурсов ВМ через virsh"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - prepare.fish
+    check:
+      exec:
+        - check.fish
+    solution:
+      exec:
+        - solution.fish

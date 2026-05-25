@@ -1,4 +1,4 @@
-::{#exr-lab-libvirt-lifecycle}
+:::{#exr-lab-libvirt-lifecycle}
 #### Цикл
 
 Продемонстрируйте управление состоянием `student-vm`:

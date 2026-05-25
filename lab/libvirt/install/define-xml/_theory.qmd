@@ -1,6 +1,6 @@
 Подход через XML подходит для повторяемой инфраструктуры: конфигурация домена хранится как файл и применяется через `virsh define`.
 
-::{#exm-lab-libvirt-install-define-xml-cmd}
+:::{#exm-lab-libvirt-install-define-xml-cmd}
 #### Применение XML
 
 ```bash

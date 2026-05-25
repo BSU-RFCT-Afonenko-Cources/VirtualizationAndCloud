@@ -1,4 +1,4 @@
-::{#exr-lab-libvirt-virt-check}
+:::{#exr-lab-libvirt-virt-check}
 #### Готовность
 
 Проверьте готовность хоста к работе с KVM/libvirt и сохраните результат в `/home/ubuntu/virt-check/uri.txt`.

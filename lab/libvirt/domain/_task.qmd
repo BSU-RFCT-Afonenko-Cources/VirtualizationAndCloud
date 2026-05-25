@@ -1,4 +1,4 @@
-::{#exr-lab-libvirt-domain}
+:::{#exr-lab-libvirt-domain}
 #### Домен
 
 Создайте файл `/home/ubuntu/domain/student-vm.xml` и определите домен `student-vm` для Alpine Linux 3.21.3.

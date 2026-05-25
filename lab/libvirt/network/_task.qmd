@@ -1,4 +1,4 @@
-::{#exr-lab-libvirt-network}
+:::{#exr-lab-libvirt-network}
 #### Сеть
 
 Создайте сеть `isolated-lab` по XML `/home/ubuntu/network/isolated-net.xml`, запустите её и включите автозапуск.

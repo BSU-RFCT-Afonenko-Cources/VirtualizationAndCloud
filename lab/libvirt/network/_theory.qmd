@@ -1,6 +1,6 @@
 Сеть libvirt управляется как отдельный объект. Её можно определить, активировать и включить в автозапуск независимо от доменов.
 
-::{#exm-lab-libvirt-network-cmd}
+:::{#exm-lab-libvirt-network-cmd}
 #### Сети libvirt
 
 ```bash

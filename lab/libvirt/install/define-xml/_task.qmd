@@ -1,4 +1,4 @@
-::{#exr-lab-libvirt-install-define-xml}
+:::{#exr-lab-libvirt-install-define-xml}
 #### XML установка
 
 Подготовьте XML `/home/ubuntu/define-xml/alpine-xml.xml` и определите ВМ `alpine-xml` через `virsh define`. Используйте `/home/ubuntu/alpine.iso`, память <=500 MiB и диск <=1G.

@@ -1,2 +1,0 @@
-echo aboba
-echo biba

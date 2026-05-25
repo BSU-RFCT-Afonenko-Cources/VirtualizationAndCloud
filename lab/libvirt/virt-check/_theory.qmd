@@ -1,6 +1,6 @@
 Проверка окружения нужна, чтобы убедиться: аппаратная виртуализация активна, доступ к `/dev/kvm` есть, а `virsh` подключается к системному демону libvirt.
 
-::{#exm-lab-libvirt-virt-check-cmd}
+:::{#exm-lab-libvirt-virt-check-cmd}
 #### URI libvirt
 
 ```bash

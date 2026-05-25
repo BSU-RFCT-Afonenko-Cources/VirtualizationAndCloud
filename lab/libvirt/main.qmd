@@ -40,7 +40,7 @@ metadata-files:
 {{< include domain/_theory.qmd >}}
 {{< include domain/_task.qmd >}}
 
-### {{< meta resources.title >}}
+### {{< meta res.title >}}
 {{< include resources/_theory.qmd >}}
 {{< include resources/_task.qmd >}}
 

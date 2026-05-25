@@ -1,4 +1,4 @@
-::{#exr-lab-libvirt-install-install-short}
+:::{#exr-lab-libvirt-install-install-short}
 #### Быстрая установка
 
 Создайте ВМ `alpine-short` командой `virt-install` с ISO `/home/ubuntu/alpine.iso`, памятью не более `500 MiB` и диском не более `1G`.

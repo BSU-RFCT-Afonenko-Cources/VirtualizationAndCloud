@@ -11,6 +11,7 @@ book:
     - part: "Задания"
       chapters:
         - lab/ubuntu/main.qmd
+        - lab/libvirt/main.qmd
 
   appendices:
     - part: "Командные оболочки"

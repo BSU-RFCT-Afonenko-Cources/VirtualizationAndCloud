@@ -1,6 +1,6 @@
 `virsh define` регистрирует постоянную конфигурацию домена в libvirt. Это декларативный этап: ВМ ещё не обязана быть запущенной.
 
-::{#exm-lab-libvirt-domain-cmd}
+:::{#exm-lab-libvirt-domain-cmd}
 #### Проверка XML
 
 ```bash
