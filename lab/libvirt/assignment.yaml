@@ -1,7 +1,8 @@
 title: "Libvirt: управление виртуальными машинами"
 description: _assigment-description.qmd
-time-limit-minutes: 240
+time-limit-minutes: 180
 virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+prepare: prepare.fish
 steps:
     - virt-check/step.yaml
     - install/install-short/step.yaml

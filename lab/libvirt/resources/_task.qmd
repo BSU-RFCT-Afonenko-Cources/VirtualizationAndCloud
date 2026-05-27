@@ -3,3 +3,11 @@
 
 Измените постоянную конфигурацию `student-vm`: установите память `480 MiB` и `2 vCPU`. Сохраните вывод `virsh dominfo student-vm` в `/home/ubuntu/resources/dominfo.txt`.
 :::
+
+
+``` bash
+virsh setmaxmem student-vm 3072M --config
+virsh setmem student-vm 3072M --config
+virsh setvcpus student-vm 2 --config
+virsh edit student-vm
+```

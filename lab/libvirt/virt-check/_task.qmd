@@ -1,7 +1,7 @@
 :::{#exr-lab-libvirt-virt-check}
 #### Готовность
 
-Проверьте готовность хоста к работе с KVM/libvirt и сохраните результат в `/home/ubuntu/virt-check/uri.txt`.
+Проверьте готовность хоста к работе с KVM/libvirt и сохраните результат в `/home/ubuntu/virt-check/summary.txt`.
 
 Проверка должна включать:
 1. наличие аппаратной виртуализации CPU;

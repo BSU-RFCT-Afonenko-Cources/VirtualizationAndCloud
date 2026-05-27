@@ -3,3 +3,12 @@
 
 Создайте снапшот `clean-install` у домена `student-vm` и сохраните `virsh snapshot-list student-vm` в `/home/ubuntu/snapshot/list.txt`.
 :::
+
+
+``` bash
+virsh snapshot-list student-vm,
+virsh snapshot-info student-vm clean-install
+virsh snapshot-revert student-vm clean-install
+```
+
+Восстановление из снапшота

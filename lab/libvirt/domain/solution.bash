@@ -1,4 +1,4 @@
-#!/bin/fish
+#!/bin/bash
 cat > /home/ubuntu/domain/student-vm.xml <<'XML'
 <domain type='kvm'>
   <name>student-vm</name>

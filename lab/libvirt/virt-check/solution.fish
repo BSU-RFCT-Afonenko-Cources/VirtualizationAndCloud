@@ -1,2 +1,2 @@
 #!/bin/fish
-virsh uri > /home/ubuntu/virt-check/uri.txt 2>/dev/null; or true
+virt-host-validate qemu > /home/ubuntu/virt-check/uri.txt 2>/dev/null; or true

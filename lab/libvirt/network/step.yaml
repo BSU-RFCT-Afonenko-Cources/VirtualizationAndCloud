@@ -11,7 +11,7 @@ network:
           - check.fish
       solution:
         exec:
-          - solution.fish
+          - solution.bash
       post-step:
         exec:
           - post-step.fish

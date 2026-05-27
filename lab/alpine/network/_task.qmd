@@ -30,3 +30,5 @@ echo "iface=$iface"
 echo "ip=$addr"
 ping -c 3 1.1.1.1
 ```
+
+Обязательно `domiflist`, `domifaddr`

@@ -11,4 +11,4 @@ domain:
           - check.fish
       solution:
         exec:
-          - solution.fish
+          - solution.bash
