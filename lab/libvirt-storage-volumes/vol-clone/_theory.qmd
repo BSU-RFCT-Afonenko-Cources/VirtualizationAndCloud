@@ -1,0 +1,10 @@
+`vol-clone` создаёт новый volume на основе существующего volume в том же pool. Базовый clone переносим между backend и не требует поддержки filesystem-level copy-on-write.
+
+Reflink clone может быть быстрее и экономить место, но зависит от filesystem и storage driver. Поэтому в задании reflink используется только как XML preview или сохраняется диагностическая ошибка.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-clone}
+#### Обычный clone
+```bash
+sudo -n virsh -c qemu:///system vol-clone --pool lab-pool lab-disk.qcow2 lab-disk-clone.qcow2
+```
+:::

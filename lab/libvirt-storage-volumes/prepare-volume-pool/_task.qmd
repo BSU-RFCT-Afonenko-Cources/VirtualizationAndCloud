@@ -1,0 +1,14 @@
+Перейдите в каталог `~/prepare-volume-pool`.
+
+:::{#exr-lab-libvirt-storage-volumes-prepare-volume-pool}
+#### Подготовка lab-pool
+Создайте или переиспользуйте active pool `lab-pool` с target `/tmp/libvirt-lab-pool`, затем сохраните сведения:
+
+```bash
+sudo -n mkdir -p /tmp/libvirt-lab-pool
+sudo -n virsh -c qemu:///system pool-info lab-pool >/dev/null 2>&1 || sudo -n virsh -c qemu:///system pool-define-as lab-pool dir --target /tmp/libvirt-lab-pool
+sudo -n virsh -c qemu:///system pool-start lab-pool >/dev/null 2>&1 || true
+sudo -n virsh -c qemu:///system pool-info lab-pool > pool-info.txt
+sudo -n virsh -c qemu:///system vol-list lab-pool --details > vol-list-details.txt
+```
+:::

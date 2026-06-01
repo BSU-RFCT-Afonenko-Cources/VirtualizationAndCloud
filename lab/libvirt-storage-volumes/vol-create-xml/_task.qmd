@@ -1,0 +1,21 @@
+Перейдите в каталог `~/vol-create-xml`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-create-xml}
+#### Volume из XML
+Создайте `lab-volume.xml` и примените его:
+
+```bash
+cat > lab-volume.xml <<'XML'
+<volume>
+  <name>lab-from-xml.qcow2</name>
+  <capacity unit='MiB'>192</capacity>
+  <allocation unit='B'>0</allocation>
+  <target>
+    <format type='qcow2'/>
+  </target>
+</volume>
+XML
+sudo -n virsh -c qemu:///system vol-create lab-pool lab-volume.xml --validate
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-from-xml.qcow2 > vol-info-lab-from-xml.txt
+```
+:::

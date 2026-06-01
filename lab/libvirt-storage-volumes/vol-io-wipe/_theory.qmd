@@ -1,0 +1,11 @@
+`vol-upload` и `vol-download` позволяют записывать и читать volume через libvirt API. Для демонстрации произвольных байтов лучше использовать raw volume, потому что запись в начало qcow2 повредит его metadata.
+
+`vol-wipe` очищает содержимое существующего volume, но не удаляет сам объект. После wipe `vol-info` должен по-прежнему находить volume.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-io-wipe}
+#### Upload/download raw data
+```bash
+printf 'LIBVIRT_VOLUME_LAB_DATA' > upload.bin
+sudo -n virsh -c qemu:///system vol-upload --pool lab-pool lab-raw.img upload.bin --offset 0 --length 23
+```
+:::

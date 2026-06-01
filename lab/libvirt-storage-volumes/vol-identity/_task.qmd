@@ -1,0 +1,14 @@
+Перейдите в каталог `~/vol-identity`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-identity}
+#### Path, key, name и pool
+Получите path/key, затем по path получите name/pool:
+
+```bash
+sudo -n virsh -c qemu:///system vol-path --pool lab-pool lab-disk.qcow2 > vol-path.txt
+sudo -n virsh -c qemu:///system vol-key --pool lab-pool lab-disk.qcow2 > vol-key.txt
+VOL_PATH=$(cat vol-path.txt)
+sudo -n virsh -c qemu:///system vol-name "$VOL_PATH" > vol-name-by-path.txt
+sudo -n virsh -c qemu:///system vol-pool "$VOL_PATH" > vol-pool-by-path.txt
+```
+:::

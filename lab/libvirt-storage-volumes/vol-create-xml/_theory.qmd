@@ -1,0 +1,10 @@
+`vol-create` принимает XML-файл volume. В автоматизации это полезнее ручных CLI-флагов: XML можно формировать шаблоном, хранить в VCS и валидировать перед применением.
+
+Для file volume важны элементы `<capacity>`, `<allocation>` и `<target><format type='...'/></target>`. Флаг `--validate` просит libvirt проверить XML по schema там, где это поддерживается.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-create-xml}
+#### Создать volume из XML
+```bash
+sudo -n virsh -c qemu:///system vol-create lab-pool lab-volume.xml --validate
+```
+:::

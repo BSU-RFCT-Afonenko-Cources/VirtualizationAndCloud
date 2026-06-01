@@ -1,0 +1,14 @@
+Перейдите в каталог `~/vol-dumpxml-xpath`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-dumpxml-xpath}
+#### XML и XPath volume
+Сохраните полный XML и XPath-значения:
+
+```bash
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool lab-disk.qcow2 > lab-disk.xml
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool --xpath 'string(/volume/name)' lab-disk.qcow2 > xpath-name.txt
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool --xpath 'string(/volume/capacity)' lab-disk.qcow2 > xpath-capacity.txt
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool --xpath 'string(/volume/target/format/@type)' lab-disk.qcow2 > xpath-format.txt
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool --xpath 'string(/volume/target/path)' lab-disk.qcow2 > xpath-path.txt
+```
+:::

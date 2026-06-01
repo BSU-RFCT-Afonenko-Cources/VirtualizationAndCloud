@@ -1,0 +1,11 @@
+Перейдите в каталог `~/vol-preview-xml`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-preview-xml}
+#### Preview XML без создания volume
+Сохраните XML и убедитесь, что volume не создан:
+
+```bash
+sudo -n virsh -c qemu:///system vol-create-as lab-pool generated-by-args.qcow2 64M --format qcow2 --print-xml > generated-by-args.xml
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool generated-by-args.qcow2 > generated-by-args-vol-info.txt 2>&1 || true
+```
+:::

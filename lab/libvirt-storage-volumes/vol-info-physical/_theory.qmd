@@ -1,0 +1,10 @@
+Logical capacity, allocation и physical size могут отличаться. У sparse qcow2 logical size может быть 1 GiB, а фактически занятое место — только metadata и записанные blocks.
+
+`vol-info --bytes` удобен для машинной проверки, потому что не зависит от локали и единиц вывода. `--physical` запрашивает physical size backend, если libvirt/storage driver может его определить.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-info-physical}
+#### Информация в байтах
+```bash
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-sparse.qcow2 --bytes --physical
+```
+:::

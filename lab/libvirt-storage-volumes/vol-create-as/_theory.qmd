@@ -1,0 +1,10 @@
+`vol-create-as` создаёт storage volume из CLI-аргументов: имени, logical capacity, initial allocation и формата. Для directory-backed pool это приводит к созданию файла в target-каталоге pool.
+
+Формат `raw` прост и прозрачен для побайтовых операций, а `qcow2` поддерживает metadata, thin provisioning и backing files. Параметр `--allocation 0` показывает sparse/thin-подход: logical capacity больше, чем начально занятое место.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-create-as-qcow2}
+#### Создать qcow2 volume
+```bash
+sudo -n virsh -c qemu:///system vol-create-as lab-pool lab-disk.qcow2 256M --format qcow2
+```
+:::

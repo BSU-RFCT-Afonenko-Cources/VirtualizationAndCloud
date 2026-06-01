@@ -1,0 +1,16 @@
+Перейдите в каталог `~/vol-create-as`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-create-as}
+#### Создание volumes разных форматов
+Создайте три volume и сохраните список и `vol-info`:
+
+```bash
+sudo -n virsh -c qemu:///system vol-create-as lab-pool lab-disk.qcow2 256M --format qcow2
+sudo -n virsh -c qemu:///system vol-create-as lab-pool lab-sparse.qcow2 1G --allocation 0 --format qcow2
+sudo -n virsh -c qemu:///system vol-create-as lab-pool lab-raw.img 128M --format raw
+sudo -n virsh -c qemu:///system vol-list lab-pool --details > vol-list-details.txt
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-disk.qcow2 > vol-info-lab-disk.txt
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-sparse.qcow2 > vol-info-lab-sparse.txt
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-raw.img > vol-info-lab-raw.txt
+```
+:::

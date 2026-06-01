@@ -1,0 +1,10 @@
+`vol-create-as --print-xml` печатает XML-модель volume, которую libvirt создал бы из CLI-аргументов. Это preview: состояние pool не меняется и файл volume не появляется.
+
+Такой режим удобен для проверки шаблонов и review automation-кода до выполнения destructive или resource-consuming операций.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-preview-xml}
+#### Preview volume XML
+```bash
+sudo -n virsh -c qemu:///system vol-create-as lab-pool generated-by-args.qcow2 64M --format qcow2 --print-xml
+```
+:::

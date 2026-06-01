@@ -1,0 +1,10 @@
+`vol-delete` удаляет storage volume из pool; для directory pool это удаление соответствующего файла. Это отличается от `vol-wipe`, который очищает содержимое, но оставляет volume существующим.
+
+Очистка лабораторных ресурсов должна быть точечной: удаляйте только volume с именами `lab-*` и `manual-*` в `lab-pool`. Pool можно оставить active для следующих лабораторных работ.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-delete-cleanup}
+#### Удалить конкретный volume
+```bash
+sudo -n virsh -c qemu:///system vol-delete --pool lab-pool lab-overlay.qcow2
+```
+:::

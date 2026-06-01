@@ -1,0 +1,12 @@
+Перейдите в каталог `~/vol-clone`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-clone}
+#### Клонирование volume
+Создайте обычный clone и сохраните preview/ошибку reflink clone:
+
+```bash
+sudo -n virsh -c qemu:///system vol-clone --pool lab-pool lab-disk.qcow2 lab-disk-clone.qcow2
+sudo -n virsh -c qemu:///system vol-clone --pool lab-pool lab-disk.qcow2 lab-disk-reflink-preview.qcow2 --reflink --print-xml > reflink-preview.xml 2> reflink-preview.err || true
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-disk-clone.qcow2 > vol-info-lab-disk-clone.txt
+```
+:::

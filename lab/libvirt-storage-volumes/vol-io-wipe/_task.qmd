@@ -1,0 +1,15 @@
+Перейдите в каталог `~/vol-io-wipe`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-io-wipe}
+#### Upload, download и wipe raw volume
+Запишите строку в raw volume, скачайте первые байты, затем очистите volume:
+
+```bash
+printf 'LIBVIRT_VOLUME_LAB_DATA' > upload.bin
+sudo -n virsh -c qemu:///system vol-upload --pool lab-pool lab-raw.img upload.bin --offset 0 --length 23
+sudo -n virsh -c qemu:///system vol-download --pool lab-pool lab-raw.img downloaded-before-wipe.bin --offset 0 --length 23
+grep -a 'LIBVIRT_VOLUME_LAB_DATA' downloaded-before-wipe.bin > downloaded-string.txt
+sudo -n virsh -c qemu:///system vol-wipe --pool lab-pool lab-raw.img --algorithm zero
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-raw.img > vol-info-after-wipe.txt
+```
+:::

@@ -1,0 +1,14 @@
+Перейдите в каталог `~/manual-volume-refresh`.
+
+:::{#exr-lab-libvirt-storage-volumes-manual-volume-refresh}
+#### External changes и pool-refresh
+Создайте файл через `qemu-img`, сравните список до/после refresh и сохраните `vol-info`:
+
+```bash
+sudo -n virsh -c qemu:///system vol-list lab-pool --details > vol-list-before-refresh.txt
+sudo -n qemu-img create -f qcow2 /tmp/libvirt-lab-pool/manual-volume.qcow2 32M
+sudo -n virsh -c qemu:///system pool-refresh lab-pool
+sudo -n virsh -c qemu:///system vol-list lab-pool --details > vol-list-after-refresh.txt
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool manual-volume.qcow2 > vol-info-manual-volume.txt
+```
+:::

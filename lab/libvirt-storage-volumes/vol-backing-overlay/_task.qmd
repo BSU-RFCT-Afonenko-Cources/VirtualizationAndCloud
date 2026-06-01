@@ -1,0 +1,13 @@
+Перейдите в каталог `~/vol-backing-overlay`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-backing-overlay}
+#### Backing volume и overlay
+Создайте overlay и сохраните XML/XPath:
+
+```bash
+sudo -n virsh -c qemu:///system vol-create-as lab-pool lab-overlay.qcow2 256M --format qcow2 --backing-vol lab-disk.qcow2 --backing-vol-format qcow2
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool lab-overlay.qcow2 > lab-overlay.xml
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool --xpath 'string(/volume/backingStore/path)' lab-overlay.qcow2 > xpath-backing-path.txt
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool --xpath 'string(/volume/backingStore/format/@type)' lab-overlay.qcow2 > xpath-backing-format.txt
+```
+:::

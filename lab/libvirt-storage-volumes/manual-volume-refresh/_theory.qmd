@@ -1,0 +1,11 @@
+Если файл образа создан напрямую в target-каталоге pool, libvirt может не увидеть новый volume до `pool-refresh`. Это особенно важно для shared storage и ручных операций вне libvirt API.
+
+`pool-refresh` перечитывает backend pool и обновляет список volumes, не удаляя сам pool и не форматируя storage.
+
+:::{#exm-lab-libvirt-storage-volumes-manual-volume-refresh}
+#### Refresh metadata
+```bash
+sudo -n qemu-img create -f qcow2 /tmp/libvirt-lab-pool/manual-volume.qcow2 32M
+sudo -n virsh -c qemu:///system pool-refresh lab-pool
+```
+:::

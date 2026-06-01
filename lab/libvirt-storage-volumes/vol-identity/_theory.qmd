@@ -1,0 +1,11 @@
+Volume можно адресовать разными идентификаторами: именем внутри pool, absolute path на хосте и key. Имя само по себе не глобально, поэтому в скриптах лучше явно указывать `--pool`.
+
+Команды `vol-path`, `vol-key`, `vol-name` и `vol-pool` помогают перейти между этими формами идентичности и проверить, к какому pool относится найденный path.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-identity}
+#### Path to name and pool
+```bash
+path=$(sudo -n virsh -c qemu:///system vol-path --pool lab-pool lab-disk.qcow2)
+sudo -n virsh -c qemu:///system vol-name "$path"
+```
+:::

@@ -1,0 +1,10 @@
+Qcow2 overlay может ссылаться на backing volume: новые записи идут в overlay, а чтения неизменённых блоков обслуживаются из base. Это основа шаблонов, snapshots и быстрых тестовых окружений.
+
+В XML такая связь отображается в `<backingStore>` с path и format backing-файла. Overlay не должен использоваться одновременно с изменением base, иначе цепочка может стать неконсистентной.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-backing-overlay}
+#### Overlay с backing volume
+```bash
+sudo -n virsh -c qemu:///system vol-create-as lab-pool lab-overlay.qcow2 256M --format qcow2 --backing-vol lab-disk.qcow2 --backing-vol-format qcow2
+```
+:::

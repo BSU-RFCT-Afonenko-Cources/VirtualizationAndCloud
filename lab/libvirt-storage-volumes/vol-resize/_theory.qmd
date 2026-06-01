@@ -1,0 +1,11 @@
+`vol-resize` меняет logical capacity storage volume. Это offline storage-level операция: она не расширяет partition table или filesystem внутри гостевой ОС.
+
+Для диска работающей VM обычно используют domain-level операции live resize, а не прямое изменение volume. Уменьшение (`--shrink`) опаснее расширения и требует явного флага, поэтому в этой лабораторной выполняется только рост.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-resize}
+#### Увеличить capacity volume
+```bash
+sudo -n virsh -c qemu:///system vol-resize lab-disk.qcow2 512M --pool lab-pool
+sudo -n virsh -c qemu:///system vol-resize lab-disk.qcow2 128M --pool lab-pool --delta
+```
+:::

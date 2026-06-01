@@ -1,0 +1,3 @@
+В этой лабораторной работе вы изучите storage volumes libvirt: создание из CLI и XML, форматы `qcow2`/`raw`, идентификаторы path/key/name/pool, clone, backing volume, refresh, resize, upload/download, wipe и безопасное удаление.
+
+Все операции выполняются в persistent pool `lab-pool` типа `dir` с target `/tmp/libvirt-lab-pool`. Volume лабораторной имеют имена с префиксом `lab-` или `manual-`; не используйте реальные блочные устройства и не удаляйте чужие storage pools, networks или domains.

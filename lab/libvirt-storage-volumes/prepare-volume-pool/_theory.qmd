@@ -1,0 +1,11 @@
+Storage volume существует внутри активного storage pool. В этой лабораторной используется безопасный `dir` pool: libvirt хранит metadata pool, а сами volumes являются обычными файлами в target-каталоге.
+
+`lab-pool` должен быть persistent-объектом libvirt и active перед созданием volumes. Target `/tmp/libvirt-lab-pool` выбран специально: это временный каталог, не связанный с реальными блочными устройствами хоста.
+
+:::{#exm-lab-libvirt-storage-volumes-prepare-volume-pool-define}
+#### Define and start directory pool
+```bash
+sudo -n virsh -c qemu:///system pool-define-as lab-pool dir --target /tmp/libvirt-lab-pool
+sudo -n virsh -c qemu:///system pool-start lab-pool
+```
+:::

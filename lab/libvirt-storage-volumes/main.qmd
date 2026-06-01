@@ -1,0 +1,75 @@
+---
+metadata-files:
+  - prepare-volume-pool/step.yaml
+  - vol-create-as/step.yaml
+  - vol-preview-xml/step.yaml
+  - vol-create-xml/step.yaml
+  - vol-dumpxml-xpath/step.yaml
+  - vol-info-physical/step.yaml
+  - vol-identity/step.yaml
+  - vol-clone/step.yaml
+  - vol-backing-overlay/step.yaml
+  - manual-volume-refresh/step.yaml
+  - vol-resize/step.yaml
+  - vol-io-wipe/step.yaml
+  - vol-delete-cleanup/step.yaml
+---
+
+# Libvirt storage volumes
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta prepare-volume-pool.title >}}
+{{< include prepare-volume-pool/_theory.qmd >}}
+{{< include prepare-volume-pool/_task.qmd >}}
+
+### {{< meta vol-create-as.title >}}
+{{< include vol-create-as/_theory.qmd >}}
+{{< include vol-create-as/_task.qmd >}}
+
+### {{< meta vol-preview-xml.title >}}
+{{< include vol-preview-xml/_theory.qmd >}}
+{{< include vol-preview-xml/_task.qmd >}}
+
+### {{< meta vol-create-xml.title >}}
+{{< include vol-create-xml/_theory.qmd >}}
+{{< include vol-create-xml/_task.qmd >}}
+
+### {{< meta vol-dumpxml-xpath.title >}}
+{{< include vol-dumpxml-xpath/_theory.qmd >}}
+{{< include vol-dumpxml-xpath/_task.qmd >}}
+
+### {{< meta vol-info-physical.title >}}
+{{< include vol-info-physical/_theory.qmd >}}
+{{< include vol-info-physical/_task.qmd >}}
+
+### {{< meta vol-identity.title >}}
+{{< include vol-identity/_theory.qmd >}}
+{{< include vol-identity/_task.qmd >}}
+
+### {{< meta vol-clone.title >}}
+{{< include vol-clone/_theory.qmd >}}
+{{< include vol-clone/_task.qmd >}}
+
+### {{< meta vol-backing-overlay.title >}}
+{{< include vol-backing-overlay/_theory.qmd >}}
+{{< include vol-backing-overlay/_task.qmd >}}
+
+### {{< meta manual-volume-refresh.title >}}
+{{< include manual-volume-refresh/_theory.qmd >}}
+{{< include manual-volume-refresh/_task.qmd >}}
+
+### {{< meta vol-resize.title >}}
+{{< include vol-resize/_theory.qmd >}}
+{{< include vol-resize/_task.qmd >}}
+
+### {{< meta vol-io-wipe.title >}}
+{{< include vol-io-wipe/_theory.qmd >}}
+{{< include vol-io-wipe/_task.qmd >}}
+
+### {{< meta vol-delete-cleanup.title >}}
+{{< include vol-delete-cleanup/_theory.qmd >}}
+{{< include vol-delete-cleanup/_task.qmd >}}
+

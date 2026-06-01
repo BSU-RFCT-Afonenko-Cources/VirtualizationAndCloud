@@ -1,0 +1,18 @@
+title: "Libvirt storage volumes: lifecycle and I/O"
+description: _assignment-description.qmd
+time-limit-minutes: 180
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - prepare-volume-pool/step.yaml
+  - vol-create-as/step.yaml
+  - vol-preview-xml/step.yaml
+  - vol-create-xml/step.yaml
+  - vol-dumpxml-xpath/step.yaml
+  - vol-info-physical/step.yaml
+  - vol-identity/step.yaml
+  - vol-clone/step.yaml
+  - vol-backing-overlay/step.yaml
+  - manual-volume-refresh/step.yaml
+  - vol-resize/step.yaml
+  - vol-io-wipe/step.yaml
+  - vol-delete-cleanup/step.yaml

@@ -1,0 +1,13 @@
+Перейдите в каталог `~/vol-info-physical`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-info-physical}
+#### Capacity, allocation и physical size
+Сохраните байтовую информацию для sparse qcow2 и raw volume:
+
+```bash
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-sparse.qcow2 --bytes > sparse-info-bytes.txt
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-sparse.qcow2 --bytes --physical > sparse-info-physical.txt 2>&1 || true
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-raw.img --bytes > raw-info-bytes.txt
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-raw.img --bytes --physical > raw-info-physical.txt 2>&1 || true
+```
+:::

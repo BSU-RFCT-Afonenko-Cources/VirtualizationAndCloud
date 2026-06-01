@@ -1,0 +1,10 @@
+`vol-dumpxml` показывает XML-представление volume: `name`, `capacity`, `allocation`, target path, permissions и format. XML stable для автоматизации лучше табличного вывода, который меняется между версиями.
+
+XPath позволяет получить ровно нужное поле: например, имя, формат или абсолютный path в target-каталоге pool.
+
+:::{#exm-lab-libvirt-storage-volumes-vol-dumpxml-xpath}
+#### XPath по volume XML
+```bash
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool lab-disk.qcow2 --xpath string(/volume/target/format/@type)
+```
+:::

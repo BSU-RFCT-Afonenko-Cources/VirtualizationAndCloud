@@ -1,0 +1,14 @@
+Перейдите в каталог `~/vol-delete-cleanup`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-delete-cleanup}
+#### Удаление volumes и очистка
+Удалите volumes лабораторной и сохраните финальный список:
+
+```bash
+for vol in lab-overlay.qcow2 lab-disk-clone.qcow2 lab-from-xml.qcow2 lab-sparse.qcow2 lab-raw.img lab-disk.qcow2 manual-volume.qcow2; do
+  sudo -n virsh -c qemu:///system vol-delete --pool lab-pool "$vol" >/dev/null 2>&1 || true
+done
+sudo -n virsh -c qemu:///system pool-refresh lab-pool
+sudo -n virsh -c qemu:///system vol-list lab-pool --details > final-vol-list-details.txt
+```
+:::

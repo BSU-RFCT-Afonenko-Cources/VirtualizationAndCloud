@@ -1,0 +1,14 @@
+Перейдите в каталог `~/vol-resize`.
+
+:::{#exr-lab-libvirt-storage-volumes-vol-resize}
+#### Resize volume
+Увеличьте `lab-disk.qcow2` до 512M, затем добавьте 128M:
+
+```bash
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-disk.qcow2 --bytes > vol-info-before.txt
+sudo -n virsh -c qemu:///system vol-resize lab-disk.qcow2 512M --pool lab-pool
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-disk.qcow2 --bytes > vol-info-after-512m.txt
+sudo -n virsh -c qemu:///system vol-resize lab-disk.qcow2 128M --pool lab-pool --delta
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-disk.qcow2 --bytes > vol-info-after-delta.txt
+```
+:::
