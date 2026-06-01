@@ -6,4 +6,5 @@ end_date: "2026-06-30"
 assignments:
     - ubuntu/assignment.yaml
     - libvirt/assignment.yaml
+    - libvirt-networking/_assignment.yaml
 
