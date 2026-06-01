@@ -1,0 +1,12 @@
+Перейдите в каталог `~/dual-network-vm`.
+
+:::{#exr-lab-libvirt-networking-dual-network-vm}
+#### Две сети для lab-vm
+
+Добавьте к `lab-vm` второй интерфейс в сеть `lab-private` с MAC `52:54:00:aa:20:01` через `attach-interface --live --config`. Сохраните:
+
+- `domiflist.txt`;
+- `lab-vm-config.xml`;
+- `lab-private-leases.txt`;
+- `bridge-link.txt`.
+:::

@@ -1,0 +1,13 @@
+Перейдите в каталог `~/inspect-default-network` и сохраните диагностические выводы о сети `default`.
+
+:::{#exr-lab-libvirt-networking-inspect-default-network}
+#### Исследование сети default
+
+Создайте файлы:
+
+- `net-list.txt` — вывод `sudo -n virsh -c qemu:///system net-list --all`;
+- `net-info-default.txt` — вывод `sudo -n virsh -c qemu:///system net-info default`, либо строку `default network is absent`, если сети нет;
+- `default.xml` — вывод `sudo -n virsh -c qemu:///system net-dumpxml default`, либо XML-заглушку `<network><name>default-absent</name></network>`, если сети нет;
+- `virbr0-addr.txt` — вывод `ip addr show virbr0`, либо строку `virbr0 is absent`, если bridge отсутствует;
+- `default-leases.txt` — вывод `sudo -n virsh -c qemu:///system net-dhcp-leases default`, либо строку `no leases or default network is absent`.
+:::

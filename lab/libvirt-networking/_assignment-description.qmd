@@ -1,0 +1,3 @@
+Лабораторная работа посвящена managed networks в libvirt/QEMU/KVM: NAT-сегментам, изолированным backend-сетям, DHCP/DNS, диагностике bridge/tap, hotplug интерфейсов, QoS и базовой изоляции портов или nwfilter.
+
+В работе используются только объекты с префиксом `lab-`: сети `lab-nat` и `lab-private`, bridges `virbr10` и `virbr20`, тестовый домен `lab-vm`, MAC-адреса `52:54:00:aa:*`. Все действия рассчитаны на учебную VM и не изменяют сетевую конфигурацию хоста вне libvirt managed networks.

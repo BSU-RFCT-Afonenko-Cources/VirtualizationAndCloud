@@ -1,0 +1,12 @@
+У libvirt network, как и у domains, есть active runtime state и persistent XML. Поэтому очистка состоит из нескольких независимых операций: убрать интерфейсы из домена, остановить active networks, отключить autostart и удалить persistent definition.
+
+Безопасная очистка должна затрагивать только лабораторные объекты. В этой работе удаляются только интерфейсы с MAC `52:54:00:aa:10:01` и `52:54:00:aa:20:01`, сети `lab-nat` и `lab-private`, bridges `virbr10` и `virbr20`, созданные libvirt для этих сетей.
+
+:::{#exm-lab-libvirt-networking-network-cleanup}
+#### Остановка и undefine сети
+
+```bash
+sudo -n virsh -c qemu:///system net-destroy lab-nat
+sudo -n virsh -c qemu:///system net-undefine lab-nat
+```
+:::

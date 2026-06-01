@@ -1,0 +1,11 @@
+Диагностика libvirt-сети обычно идёт по слоям. Сначала проверяют XML и состояние network, затем host bridge/tap устройства (`ip link`, `bridge link`), затем DHCP lease и IP-адреса гостя (`net-dhcp-leases`, `domifaddr`).
+
+Если IP уже известен, полезно проверить связность между гостем и адресом bridge. Если доступа в гостя нет, сохраните команду диагностики: важно показать, какой именно следующий тест вы бы выполнили.
+
+:::{#exm-lab-libvirt-networking-bridge-tap-diagnostics}
+#### Bridge и tap на хосте
+
+```bash
+bridge link
+```
+:::

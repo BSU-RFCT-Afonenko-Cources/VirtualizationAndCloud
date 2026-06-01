@@ -1,0 +1,19 @@
+Стандартная сеть `default` в libvirt обычно является managed NAT-сетью: libvirt создаёт bridge `virbr0`, запускает для него dnsmasq и добавляет правила трансляции адресов на хосте. Для гостевых ВМ такая сеть выглядит как простой локальный cloud-like сегмент с DHCP, DNS и исходящим доступом наружу через хост.
+
+Важно отличать состояние сети в libvirt от состояния устройств Linux. `virsh net-info` показывает lifecycle libvirt-сети, `net-dumpxml` — persistent/current XML, а `ip addr show virbr0` показывает, создан ли bridge в ядре и какой адрес назначен интерфейсу.
+
+:::{#exm-lab-libvirt-networking-inspect-default-network-info}
+#### Информация о сети
+
+```bash
+sudo -n virsh -c qemu:///system net-info default
+```
+:::
+
+:::{#exm-lab-libvirt-networking-inspect-default-network-xml}
+#### XML managed network
+
+```bash
+sudo -n virsh -c qemu:///system net-dumpxml default
+```
+:::

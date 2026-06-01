@@ -1,0 +1,11 @@
+Libvirt управляет DHCP/DNS для managed networks через XML сети и отдельный процесс dnsmasq. Команда `net-dhcp-leases` читает leases выбранной сети и связывает время аренды, MAC, IP и hostname гостя.
+
+`domifaddr` дополняет эту картину со стороны домена: libvirt пытается показать адреса интерфейсов ВМ через lease-файлы, guest agent или ARP. Если активных клиентов ещё нет, корректная диагностика отсутствия leases тоже является полезным результатом.
+
+:::{#exm-lab-libvirt-networking-dhcp-dns-leases}
+#### DHCP leases сети
+
+```bash
+sudo -n virsh -c qemu:///system net-dhcp-leases lab-nat
+```
+:::

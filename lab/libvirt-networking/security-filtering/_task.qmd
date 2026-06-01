@@ -1,0 +1,12 @@
+Перейдите в каталог `~/security-filtering`.
+
+:::{#exr-lab-libvirt-networking-security-filtering}
+#### Базовая изоляция
+
+Реализуйте один механизм:
+
+- добавьте `<port isolated='yes'/>` в XML сети `lab-private`; или
+- подключите `<filterref filter='clean-traffic'/>` либо другой anti-spoofing nwfilter к интерфейсу `lab-vm`.
+
+Сохраните `before.xml` и `after.xml` для изменённого network/domain XML.
+:::

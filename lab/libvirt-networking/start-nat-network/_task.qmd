@@ -1,0 +1,15 @@
+Перейдите в каталог `~/start-nat-network`. Скопируйте или создайте в нём `lab-nat.xml` из предыдущего шага.
+
+:::{#exr-lab-libvirt-networking-start-nat-network}
+#### Запуск NAT-сети lab-nat
+
+Выполните:
+
+```bash
+sudo -n virsh -c qemu:///system net-define lab-nat.xml
+sudo -n virsh -c qemu:///system net-start lab-nat
+sudo -n virsh -c qemu:///system net-autostart lab-nat
+```
+
+Сохраните файлы `net-list.txt`, `net-info-lab-nat.txt`, `lab-nat-active.xml` и `virbr10-link.txt` с выводом соответствующих команд `net-list --all`, `net-info lab-nat`, `net-dumpxml lab-nat`, `ip link show virbr10`.
+:::

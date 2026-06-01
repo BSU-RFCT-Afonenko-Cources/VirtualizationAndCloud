@@ -1,0 +1,11 @@
+Libvirt поддерживает ограничение полосы интерфейса через элемент `<bandwidth>` в XML домена и через команду `domiftune`. Параметры `inbound` и `outbound` задают направление относительно гостя, а `average`, `peak`, `burst` описывают среднюю скорость, пик и размер burst.
+
+Такой механизм демонстрирует rate limiting для noisy neighbor и tenant policy: ограничение применяется на стороне хоста, поэтому гостевая ОС не может просто снять его изнутри.
+
+:::{#exm-lab-libvirt-networking-interface-qos-domiftune}
+#### Настройка QoS
+
+```bash
+sudo -n virsh -c qemu:///system domiftune lab-vm 52:54:00:aa:10:01 --inbound 1024,2048,512 --outbound 1024,2048,512 --config
+```
+:::

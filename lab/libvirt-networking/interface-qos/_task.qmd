@@ -1,0 +1,11 @@
+Перейдите в каталог `~/interface-qos`.
+
+:::{#exr-lab-libvirt-networking-interface-qos}
+#### Ограничение полосы интерфейса
+
+Для интерфейса `52:54:00:aa:10:01` установите inbound и outbound average limit `1024` через `virsh domiftune` или через XML `<bandwidth>`. Сохраните:
+
+- `domiftune-before.txt`;
+- `domiftune-after.txt`;
+- `lab-vm-config.xml`.
+:::

@@ -1,0 +1,11 @@
+Двухсетевая ВМ — типичная cloud-топология: один интерфейс смотрит в NAT-сеть для исходящего доступа, второй — в приватный backend-сегмент для обмена между сервисами. Разделение сетей упрощает маршрутизацию, диагностику и применение security policy.
+
+В XML домена это две отдельные секции `<interface>` с разными `<source network='...'>` и MAC-адресами. На хосте libvirt подключает каждый tap к своему bridge.
+
+:::{#exm-lab-libvirt-networking-dual-network-vm}
+#### Второй интерфейс в private network
+
+```bash
+sudo -n virsh -c qemu:///system attach-interface lab-vm --type network --source lab-private --model virtio --mac 52:54:00:aa:20:01 --live --config
+```
+:::

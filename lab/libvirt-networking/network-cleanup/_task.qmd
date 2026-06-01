@@ -1,0 +1,12 @@
+Перейдите в каталог `~/network-cleanup`.
+
+:::{#exr-lab-libvirt-networking-network-cleanup}
+#### Очистка лабораторных сетевых объектов
+
+Отключите созданные интерфейсы от `lab-vm` для live/config состояния, если они есть:
+
+- `52:54:00:aa:10:01`;
+- `52:54:00:aa:20:01`.
+
+Затем для сетей `lab-nat` и `lab-private` выполните безопасную очистку: `net-autostart --disable`, `net-destroy`, `net-undefine` только для существующих лабораторных сетей. Сохраните `net-list-final.txt`, `lab-vm-final.xml`, `links-final.txt`.
+:::

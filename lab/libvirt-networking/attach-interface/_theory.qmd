@@ -1,0 +1,11 @@
+Интерфейс домена типа `network` ссылается на managed network libvirt. При запуске или hotplug libvirt создаёт tap/vnet устройство на хосте, подключает его к bridge выбранной сети и передаёт виртуальную сетевую карту в QEMU.
+
+Hotplug может быть runtime-only (`--live`), persistent-only (`--config`) или сразу для обоих состояний. Для учебной топологии важно явно сохранять оба состояния, чтобы интерфейс не исчез после перезапуска ВМ.
+
+:::{#exm-lab-libvirt-networking-attach-interface}
+#### Hotplug интерфейса
+
+```bash
+sudo -n virsh -c qemu:///system attach-interface lab-vm --type network --source lab-nat --model virtio --mac 52:54:00:aa:10:01 --live --config
+```
+:::

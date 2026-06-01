@@ -1,0 +1,11 @@
+Network XML — декларативное описание managed network libvirt. Для NAT-сети в XML указывают имя сети, имя Linux bridge, режим forwarding `nat`, адрес bridge в подсети и DHCP-диапазон, который libvirt передаёт dnsmasq.
+
+Статическая DHCP-запись в секции `<host>` связывает MAC-адрес гостя с постоянным IP внутри managed network. Это удобно для лабораторных топологий: адрес интерфейса ВМ можно проверять через `net-dhcp-leases` и `domifaddr` без ручной настройки гостя.
+
+:::{#exm-lab-libvirt-networking-nat-network-xml-validate}
+#### Проверка имени сети через XPath
+
+```bash
+xmllint --xpath 'string(/network/name)' lab-nat.xml
+```
+:::

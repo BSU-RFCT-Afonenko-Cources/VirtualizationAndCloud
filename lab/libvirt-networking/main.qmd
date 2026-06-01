@@ -1,0 +1,64 @@
+---
+metadata-files:
+  - inspect-default-network/step.yaml
+  - nat-network-xml/step.yaml
+  - start-nat-network/step.yaml
+  - isolated-network/step.yaml
+  - dhcp-dns-leases/step.yaml
+  - attach-interface/step.yaml
+  - dual-network-vm/step.yaml
+  - bridge-tap-diagnostics/step.yaml
+  - interface-qos/step.yaml
+  - security-filtering/step.yaml
+  - network-cleanup/step.yaml
+---
+
+# Libvirt networking
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta inspect-default-network.title >}}
+{{< include inspect-default-network/_theory.qmd >}}
+{{< include inspect-default-network/_task.qmd >}}
+
+### {{< meta nat-network-xml.title >}}
+{{< include nat-network-xml/_theory.qmd >}}
+{{< include nat-network-xml/_task.qmd >}}
+
+### {{< meta start-nat-network.title >}}
+{{< include start-nat-network/_theory.qmd >}}
+{{< include start-nat-network/_task.qmd >}}
+
+### {{< meta isolated-network.title >}}
+{{< include isolated-network/_theory.qmd >}}
+{{< include isolated-network/_task.qmd >}}
+
+### {{< meta dhcp-dns-leases.title >}}
+{{< include dhcp-dns-leases/_theory.qmd >}}
+{{< include dhcp-dns-leases/_task.qmd >}}
+
+### {{< meta attach-interface.title >}}
+{{< include attach-interface/_theory.qmd >}}
+{{< include attach-interface/_task.qmd >}}
+
+### {{< meta dual-network-vm.title >}}
+{{< include dual-network-vm/_theory.qmd >}}
+{{< include dual-network-vm/_task.qmd >}}
+
+### {{< meta bridge-tap-diagnostics.title >}}
+{{< include bridge-tap-diagnostics/_theory.qmd >}}
+{{< include bridge-tap-diagnostics/_task.qmd >}}
+
+### {{< meta interface-qos.title >}}
+{{< include interface-qos/_theory.qmd >}}
+{{< include interface-qos/_task.qmd >}}
+
+### {{< meta security-filtering.title >}}
+{{< include security-filtering/_theory.qmd >}}
+{{< include security-filtering/_task.qmd >}}
+
+### {{< meta network-cleanup.title >}}
+{{< include network-cleanup/_theory.qmd >}}
+{{< include network-cleanup/_task.qmd >}}

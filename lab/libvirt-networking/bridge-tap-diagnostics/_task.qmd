@@ -1,0 +1,13 @@
+Перейдите в каталог `~/bridge-tap-diagnostics`.
+
+:::{#exr-lab-libvirt-networking-bridge-tap-diagnostics}
+#### Диагностический снимок bridge/tap
+
+Сохраните:
+
+- `bridges.txt` — `ip link show type bridge`;
+- `bridge-link.txt` — `bridge link`;
+- `domiflist.txt` — `sudo -n virsh -c qemu:///system domiflist lab-vm`;
+- `domifaddr.txt` — `sudo -n virsh -c qemu:///system domifaddr lab-vm`;
+- `connectivity.txt` — результат ping bridge-адреса из гостя, если он доступен, либо строку с командой диагностики, например `would run: ping 192.168.100.1 from lab-vm`.
+:::

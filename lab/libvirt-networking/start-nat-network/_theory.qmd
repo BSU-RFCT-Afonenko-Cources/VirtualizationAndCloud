@@ -1,0 +1,12 @@
+`virsh net-define` создаёт persistent network из XML, но не включает её. `virsh net-start` переводит сеть в active runtime-состояние: libvirt создаёт bridge, запускает dnsmasq и применяет правила forwarding. `virsh net-autostart` добавляет сеть в набор объектов, которые libvirt поднимает после запуска daemon.
+
+Этот lifecycle-паттерн похож на domains и storage pools: persistent-конфигурация хранится отдельно от текущего active-состояния. В диагностике всегда проверяйте оба уровня: `net-info` и наличие bridge в `ip link`.
+
+:::{#exm-lab-libvirt-networking-start-nat-network-lifecycle}
+#### Определить и запустить сеть
+
+```bash
+sudo -n virsh -c qemu:///system net-define lab-nat.xml
+sudo -n virsh -c qemu:///system net-start lab-nat
+```
+:::

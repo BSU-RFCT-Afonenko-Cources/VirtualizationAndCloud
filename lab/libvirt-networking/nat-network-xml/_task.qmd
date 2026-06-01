@@ -1,0 +1,14 @@
+Перейдите в каталог `~/nat-network-xml` и создайте файл `lab-nat.xml`.
+
+:::{#exr-lab-libvirt-networking-nat-network-xml}
+#### XML NAT-сети lab-nat
+
+Опишите network XML со следующими параметрами:
+
+- имя сети: `lab-nat`;
+- bridge: `virbr10`;
+- forwarding: `<forward mode='nat'/>`;
+- адрес bridge: `192.168.100.1`, маска `255.255.255.0`;
+- DHCP range: `192.168.100.100` — `192.168.100.200`;
+- статическая запись DHCP для MAC `52:54:00:aa:10:01`, имя `lab-vm-nat`, IP `192.168.100.10`.
+:::

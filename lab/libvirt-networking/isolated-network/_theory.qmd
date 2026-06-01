@@ -1,0 +1,11 @@
+Isolated network в libvirt — это managed network без элемента `<forward>`. Libvirt создаёт bridge и DHCP/DNS внутри сегмента, но не настраивает NAT или маршрутизацию наружу. Гости могут общаться между собой и с IP-адресом bridge на хосте, однако эта сеть не становится путём в Интернет.
+
+Такая модель часто используется для backend или tenant-private сегментов: сервисные ВМ получают отдельную сеть для внутреннего обмена, а внешний доступ организуется другим интерфейсом или не предоставляется вовсе.
+
+:::{#exm-lab-libvirt-networking-isolated-network-xml}
+#### Минимальная isolated network
+
+```bash
+sudo -n virsh -c qemu:///system net-define lab-private.xml
+```
+:::

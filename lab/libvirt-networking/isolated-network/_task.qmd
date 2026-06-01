@@ -1,0 +1,14 @@
+Перейдите в каталог `~/isolated-network`.
+
+:::{#exr-lab-libvirt-networking-isolated-network}
+#### Изолированная сеть lab-private
+
+Создайте `lab-private.xml` для сети `lab-private`:
+
+- bridge `virbr20`;
+- IP bridge `10.20.0.1`, маска `255.255.255.0`;
+- DHCP range `10.20.0.100` — `10.20.0.200`;
+- без элемента `<forward>`.
+
+Определите и запустите сеть через `sudo -n virsh -c qemu:///system net-define lab-private.xml` и `net-start lab-private`. Сохраните `net-info-lab-private.txt`, `lab-private-active.xml` и `virbr20-addr.txt`.
+:::

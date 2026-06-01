@@ -1,0 +1,11 @@
+Port isolation и nwfilter — два способа показать security policy на стороне хоста. Port isolation запрещает прямой обмен между изолированными портами одной libvirt network, а nwfilter подключает готовые или пользовательские фильтры к интерфейсу домена.
+
+Для базовой лаборатории достаточно безопасного изменения: добавить `<port isolated='yes'/>` в isolated-сеть `lab-private` или подключить `clean-traffic` к тестовому интерфейсу. Оба варианта не меняют глобальную сеть хоста и остаются внутри объектов libvirt.
+
+:::{#exm-lab-libvirt-networking-security-filtering-port}
+#### Port isolation в network XML
+
+```bash
+sudo -n virsh -c qemu:///system net-edit lab-private
+```
+:::

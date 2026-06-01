@@ -1,0 +1,13 @@
+Перейдите в каталог `~/attach-interface`. Убедитесь, что сеть `lab-nat` active, а домен `lab-vm` существует и запущен.
+
+:::{#exr-lab-libvirt-networking-attach-interface}
+#### Подключение интерфейса к lab-nat
+
+Подключите к `lab-vm` интерфейс:
+
+```bash
+sudo -n virsh -c qemu:///system attach-interface lab-vm --type network --source lab-nat --model virtio --mac 52:54:00:aa:10:01 --live --config
+```
+
+Сохраните `domiflist.txt`, `lab-vm-live.xml` и `lab-vm-config.xml` с выводом `domiflist lab-vm`, `dumpxml lab-vm --live`, `dumpxml lab-vm --config`.
+:::

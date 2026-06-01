@@ -1,0 +1,11 @@
+Перейдите в каталог `~/dhcp-dns-leases`. Используйте подготовленный домен `lab-vm`, если он есть.
+
+:::{#exr-lab-libvirt-networking-dhcp-dns-leases}
+#### Сохранение leases и адресов домена
+
+Сохраните:
+
+- `lab-nat-leases.txt` — вывод `sudo -n virsh -c qemu:///system net-dhcp-leases lab-nat` или строку `no active clients on lab-nat`;
+- `lab-private-leases.txt` — вывод `sudo -n virsh -c qemu:///system net-dhcp-leases lab-private` или строку `no active clients on lab-private`;
+- `lab-vm-domifaddr.txt` — вывод `sudo -n virsh -c qemu:///system domifaddr lab-vm` или строку `lab-vm is absent or has no reported addresses`.
+:::
