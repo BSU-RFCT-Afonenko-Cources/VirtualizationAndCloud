@@ -1,0 +1,13 @@
+Перейдите в каталог `~/pool-build`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-build}
+#### Build target path
+
+Удалите только лабораторный каталог, выполните build и сохраните права:
+
+```bash
+sudo -n rm -rf /tmp/libvirt-lab-pool
+sudo -n virsh -c qemu:///system pool-build lab-pool
+ls -ld /tmp/libvirt-lab-pool > target-ls.txt
+```
+:::

@@ -1,0 +1,14 @@
+Перейдите в каталог `~/pool-dumpxml-xpath`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-dumpxml-xpath}
+#### XML и XPath storage pool
+
+Сохраните XML и результаты XPath:
+
+```bash
+sudo -n virsh -c qemu:///system pool-dumpxml lab-pool > lab-pool.xml
+xmllint --xpath 'string(/pool/name)' lab-pool.xml > xpath-name.txt
+xmllint --xpath 'string(/pool/@type)' lab-pool.xml > xpath-type.txt
+xmllint --xpath 'string(/pool/target/path)' lab-pool.xml > xpath-target-path.txt
+```
+:::

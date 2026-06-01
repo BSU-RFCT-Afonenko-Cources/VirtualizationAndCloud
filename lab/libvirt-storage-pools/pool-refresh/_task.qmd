@@ -1,0 +1,15 @@
+Перейдите в каталог `~/pool-refresh`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-refresh}
+#### Refresh metadata после внешнего изменения
+
+Выполните:
+
+```bash
+sudo -n virsh -c qemu:///system vol-list lab-pool > vol-list-before.txt
+sudo -n qemu-img create -f qcow2 /tmp/libvirt-lab-pool/manual.qcow2 64M
+sudo -n virsh -c qemu:///system pool-refresh lab-pool
+sudo -n virsh -c qemu:///system vol-list lab-pool > vol-list-after.txt
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool manual.qcow2 > vol-info-manual.txt
+```
+:::

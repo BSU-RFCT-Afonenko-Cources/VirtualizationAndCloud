@@ -1,0 +1,11 @@
+`pool-dumpxml` раскрывает фактическую XML-конфигурацию pool. XPath удобен для автоматической проверки конкретных полей: имени, типа и target path.
+
+Тип pool хранится как атрибут корневого элемента `/pool/@type`, имя — в `/pool/name`, а каталог назначения — в `/pool/target/path`.
+
+:::{#exm-lab-libvirt-storage-pools-pool-dumpxml-xpath}
+#### XPath для target path
+
+```bash
+xmllint --xpath 'string(/pool/target/path)' lab-pool.xml
+```
+:::

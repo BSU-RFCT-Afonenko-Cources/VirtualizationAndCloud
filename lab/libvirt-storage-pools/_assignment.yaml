@@ -1,0 +1,16 @@
+title: "Libvirt storage pools: lifecycle, XML, volumes"
+description: _assignment-description.qmd
+time-limit-minutes: 180
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - pool-inventory/step.yaml
+  - pool-preview-xml/step.yaml
+  - pool-define/step.yaml
+  - pool-dumpxml-xpath/step.yaml
+  - pool-build/step.yaml
+  - pool-start-autostart/step.yaml
+  - pool-refresh/step.yaml
+  - pool-volume-create/step.yaml
+  - pool-volume-attach/step.yaml
+  - pool-destroy/step.yaml
+  - pool-xml-cleanup/step.yaml

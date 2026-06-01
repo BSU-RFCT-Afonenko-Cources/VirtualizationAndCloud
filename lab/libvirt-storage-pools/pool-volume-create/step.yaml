@@ -1,0 +1,14 @@
+pool-volume-create:
+  title: "Создание volume внутри pool"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - pre-step.bash
+    check:
+      exec:
+        - check.bash
+    solution:
+      exec:
+        - solution.bash

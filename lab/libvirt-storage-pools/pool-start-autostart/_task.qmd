@@ -1,0 +1,14 @@
+Перейдите в каталог `~/pool-start-autostart`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-start-autostart}
+#### Запуск и autostart pool
+
+Выполните:
+
+```bash
+sudo -n virsh -c qemu:///system pool-start lab-pool
+sudo -n virsh -c qemu:///system pool-autostart lab-pool
+sudo -n virsh -c qemu:///system pool-info lab-pool > pool-info-lab-pool.txt
+sudo -n virsh -c qemu:///system pool-list --autostart > pool-list-autostart.txt
+```
+:::

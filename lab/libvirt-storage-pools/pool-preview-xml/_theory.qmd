@@ -1,0 +1,11 @@
+`pool-define-as --print-xml` переводит CLI-аргументы в XML и печатает результат, не создавая объект. Это безопасный способ увидеть модель `<pool type='dir'>`, имя pool и target path до изменения metadata libvirt.
+
+Для directory-backed pool важна секция `<target><path>...</path></target>`: этот каталог станет namespace для volumes после build/start/refresh.
+
+:::{#exm-lab-libvirt-storage-pools-pool-preview-xml-print}
+#### Preview XML без создания объекта
+
+```bash
+sudo -n virsh -c qemu:///system pool-define-as lab-pool dir --target /tmp/libvirt-lab-pool --print-xml
+```
+:::

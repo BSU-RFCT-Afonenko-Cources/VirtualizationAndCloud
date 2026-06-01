@@ -1,0 +1,15 @@
+Перейдите в каталог `~/pool-volume-attach`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-volume-attach}
+#### Подключение volume к ВМ
+
+Если есть `lab-vm`, выполните:
+
+```bash
+VOL_PATH=$(sudo -n virsh -c qemu:///system vol-path --pool lab-pool lab-disk.qcow2)
+sudo -n virsh -c qemu:///system attach-disk lab-vm "$VOL_PATH" vdb --driver qemu --subdriver qcow2 --targetbus virtio --live --config
+sudo -n virsh -c qemu:///system domblklist lab-vm > domblklist-lab-vm.txt
+```
+
+Если `lab-vm` отсутствует, сохраните `lab-disk-volume-fragment.xml` с `<source pool='lab-pool' volume='lab-disk.qcow2'/>` и target `vdb`.
+:::

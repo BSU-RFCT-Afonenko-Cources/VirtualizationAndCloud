@@ -1,0 +1,17 @@
+Domain XML может ссылаться на диск прямым path или через source pool/volume. На практике `vol-path` часто передают в `attach-disk` как путь data disk.
+
+Если `lab-vm` существует, используйте live+config подключение, чтобы изменение попало и в текущий запущенный domain, и в persistent XML. Если `lab-vm` отсутствует, сохраните XML-фрагмент `<disk type='volume'>` для проверки модели.
+
+:::{#exm-lab-libvirt-storage-pools-pool-volume-attach}
+#### Фрагмент volume disk
+
+```bash
+cat > lab-disk-volume-fragment.xml <<'XML'
+<disk type='volume' device='disk'>
+  <driver name='qemu' type='qcow2'/>
+  <source pool='lab-pool' volume='lab-disk.qcow2'/>
+  <target dev='vdb' bus='virtio'/>
+</disk>
+XML
+```
+:::

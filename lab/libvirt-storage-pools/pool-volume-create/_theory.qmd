@@ -1,0 +1,11 @@
+Storage volume — объект внутри namespace pool. Для directory-backed pool volume обычно является файлом в target directory, например `qcow2`-образом.
+
+`vol-create-as` создаёт volume через API libvirt. После этого можно получить список, свойства, XML и абсолютный путь volume, который затем используется доменом как диск.
+
+:::{#exm-lab-libvirt-storage-pools-pool-volume-create}
+#### Создать volume
+
+```bash
+sudo -n virsh -c qemu:///system vol-create-as lab-pool lab-disk.qcow2 128M --format qcow2
+```
+:::

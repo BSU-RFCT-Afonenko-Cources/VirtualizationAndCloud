@@ -1,0 +1,3 @@
+В этой лабораторной работе вы изучите storage pools libvirt на безопасном backend типа `dir`: directory-backed pool, XML-модель, lifecycle, autostart, refresh metadata и связь pool/volume/domain.
+
+Основной объект лабораторной — persistent pool `lab-pool` с target `/tmp/libvirt-lab-pool`. Не используйте реальные блочные устройства и внешние backend-хранилища: все диски создаются как файлы `qcow2` во временных каталогах с префиксом `libvirt-lab-pool`.

@@ -1,0 +1,11 @@
+`pool-define` из XML-файла ближе к IaC-подходу: XML можно хранить, генерировать и применять повторяемо. Такой pool является persistent definition, как и объект после `pool-define-as`.
+
+Полная очистка persistent pool требует остановить активный pool, выполнить `pool-undefine`, а target directory удалить отдельно. В лаборатории удаляются только объекты и каталоги с именами `lab-pool*`.
+
+:::{#exm-lab-libvirt-storage-pools-pool-xml-cleanup}
+#### Define из XML
+
+```bash
+sudo -n virsh -c qemu:///system pool-define lab-pool-xml.xml
+```
+:::

@@ -1,0 +1,20 @@
+Перейдите в каталог `~/pool-inventory`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-inventory}
+#### Инвентаризация storage pools
+
+Создайте `env.sh`:
+
+```bash
+POOL_NAME=lab-pool
+POOL_DIR=/tmp/libvirt-lab-pool
+```
+
+Сохраните вывод:
+
+```bash
+sudo -n virsh -c qemu:///system pool-list --all > pool-list-all.txt
+sudo -n virsh -c qemu:///system pool-list --all --details > pool-list-details.txt
+sudo -n virsh -c qemu:///system pool-info default > pool-info-default.txt 2>&1 || echo 'default pool is absent' > pool-info-default.txt
+```
+:::

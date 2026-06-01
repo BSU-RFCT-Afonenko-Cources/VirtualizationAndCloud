@@ -1,0 +1,15 @@
+Перейдите в каталог `~/pool-destroy`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-destroy}
+#### Остановка pool без удаления данных
+
+Выполните:
+
+```bash
+sudo -n virsh -c qemu:///system pool-destroy lab-pool
+sudo -n virsh -c qemu:///system pool-info lab-pool > pool-info-after-destroy.txt
+sudo -n virsh -c qemu:///system pool-start lab-pool
+sudo -n virsh -c qemu:///system pool-info lab-pool > pool-info-after-restart.txt
+sudo -n virsh -c qemu:///system vol-list lab-pool > vol-list-after-restart.txt
+```
+:::

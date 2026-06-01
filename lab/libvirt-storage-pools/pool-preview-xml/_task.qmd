@@ -1,0 +1,11 @@
+Перейдите в каталог `~/pool-preview-xml`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-preview-xml}
+#### Preview XML для lab-pool
+
+Сохраните XML:
+
+```bash
+sudo -n virsh -c qemu:///system pool-define-as lab-pool dir --target /tmp/libvirt-lab-pool --print-xml > lab-pool-preview.xml
+```
+:::

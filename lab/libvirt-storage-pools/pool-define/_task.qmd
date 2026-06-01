@@ -1,0 +1,13 @@
+Перейдите в каталог `~/pool-define`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-define}
+#### Persistent definition lab-pool
+
+Выполните:
+
+```bash
+sudo -n virsh -c qemu:///system pool-define-as lab-pool dir --target /tmp/libvirt-lab-pool
+sudo -n virsh -c qemu:///system pool-list --all > pool-list-all.txt
+sudo -n virsh -c qemu:///system pool-info lab-pool > pool-info-lab-pool.txt
+```
+:::

@@ -1,0 +1,12 @@
+Active pool синхронизирован с backend и готов выдавать volumes. Persistent definition не равна активному состоянию: запуск выполняется командой `pool-start`.
+
+Autostart — отдельная настройка persistent pool. Она говорит libvirt запускать pool при старте службы/хоста и не заменяет проверку текущего состояния `active`.
+
+:::{#exm-lab-libvirt-storage-pools-pool-start-autostart}
+#### Запуск и autostart
+
+```bash
+sudo -n virsh -c qemu:///system pool-start lab-pool
+sudo -n virsh -c qemu:///system pool-autostart lab-pool
+```
+:::

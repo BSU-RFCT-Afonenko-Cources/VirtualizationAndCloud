@@ -1,0 +1,11 @@
+Для `dir` pool команда `pool-build` может создать target directory. Для других backend такая операция может иметь опасный смысл, поэтому здесь используется только безопасный каталог во временной области `/tmp`.
+
+После build каталог должен существовать и быть пригодным для libvirt/qemu: он должен быть директорией с правами на проход и запись для процессов, создающих volumes.
+
+:::{#exm-lab-libvirt-storage-pools-pool-build}
+#### Build directory-backed pool
+
+```bash
+sudo -n virsh -c qemu:///system pool-build lab-pool
+```
+:::

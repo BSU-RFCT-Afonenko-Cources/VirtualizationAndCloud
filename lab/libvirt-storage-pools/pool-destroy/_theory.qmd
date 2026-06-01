@@ -1,0 +1,12 @@
+`pool-destroy` останавливает управление storage pool в libvirt, но не стирает данные backend. Файлы volumes остаются в target directory.
+
+Это lifecycle-операция: persistent definition остаётся, pool можно снова запустить через `pool-start`. Удаление volumes и `rm -rf` target path — отдельные действия.
+
+:::{#exm-lab-libvirt-storage-pools-pool-destroy}
+#### Destroy и restart
+
+```bash
+sudo -n virsh -c qemu:///system pool-destroy lab-pool
+sudo -n virsh -c qemu:///system pool-start lab-pool
+```
+:::

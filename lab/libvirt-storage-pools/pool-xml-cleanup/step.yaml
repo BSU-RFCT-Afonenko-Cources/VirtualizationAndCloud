@@ -1,0 +1,14 @@
+pool-xml-cleanup:
+  title: "Pool через XML-файл и полная очистка"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - pre-step.bash
+    check:
+      exec:
+        - check.bash
+    solution:
+      exec:
+        - solution.bash

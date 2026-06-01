@@ -1,0 +1,9 @@
+Перейдите в каталог `~/pool-xml-cleanup`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-xml-cleanup}
+#### Pool через XML-файл и полная очистка
+
+Создайте `lab-pool-xml.xml` для pool `lab-pool-xml` типа `dir` с target `/tmp/libvirt-lab-pool-xml`, определите его, выполните build/start и сохраните `pool-info-lab-pool-xml.txt`.
+
+Затем удалите только `lab-pool` и `lab-pool-xml`: остановите active pools, выполните `pool-undefine`, удалите `/tmp/libvirt-lab-pool` и `/tmp/libvirt-lab-pool-xml`, сохраните итоговый `pool-list-final.txt`.
+:::

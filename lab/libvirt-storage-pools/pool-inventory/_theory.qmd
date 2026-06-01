@@ -1,0 +1,11 @@
+Storage pool в libvirt — абстракция источника хранения: каталог, filesystem, LVM, iSCSI, RBD и другие backend-типы. Pool не обязателен для запуска ВМ, но даёт единый API для обнаружения, capacity и управления volumes.
+
+В лаборатории используется только безопасный `dir` pool с target `/tmp/libvirt-lab-pool`. Инвентаризация нужна, чтобы увидеть текущее состояние стенда и убедиться, что имя `lab-pool` не занято активным объектом.
+
+:::{#exm-lab-libvirt-storage-pools-pool-inventory-list}
+#### Список storage pools
+
+```bash
+sudo -n virsh -c qemu:///system pool-list --all --details
+```
+:::

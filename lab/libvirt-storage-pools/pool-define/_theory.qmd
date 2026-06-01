@@ -1,0 +1,11 @@
+`pool-define-as` создаёт persistent definition storage pool, но не запускает backend. Поэтому объект появляется в metadata libvirt как inactive до отдельной команды `pool-start`.
+
+Это отличие важно для lifecycle: persistent pool можно build/start/destroy/undefine независимо от данных в target directory. Transient pool, созданный через create, исчезает после остановки.
+
+:::{#exm-lab-libvirt-storage-pools-pool-define-as}
+#### Определить persistent pool
+
+```bash
+sudo -n virsh -c qemu:///system pool-define-as lab-pool dir --target /tmp/libvirt-lab-pool
+```
+:::

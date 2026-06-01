@@ -1,0 +1,15 @@
+Перейдите в каталог `~/pool-volume-create`.
+
+:::{#exr-lab-libvirt-storage-pools-pool-volume-create}
+#### Создание volume внутри pool
+
+Выполните:
+
+```bash
+sudo -n virsh -c qemu:///system vol-create-as lab-pool lab-disk.qcow2 128M --format qcow2
+sudo -n virsh -c qemu:///system vol-list lab-pool > vol-list.txt
+sudo -n virsh -c qemu:///system vol-info --pool lab-pool lab-disk.qcow2 > vol-info-lab-disk.txt
+sudo -n virsh -c qemu:///system vol-path --pool lab-pool lab-disk.qcow2 > vol-path-lab-disk.txt
+sudo -n virsh -c qemu:///system vol-dumpxml --pool lab-pool lab-disk.qcow2 > vol-lab-disk.xml
+```
+:::

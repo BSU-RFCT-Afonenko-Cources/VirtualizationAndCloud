@@ -1,0 +1,65 @@
+---
+metadata-files:
+  - pool-inventory/step.yaml
+  - pool-preview-xml/step.yaml
+  - pool-define/step.yaml
+  - pool-dumpxml-xpath/step.yaml
+  - pool-build/step.yaml
+  - pool-start-autostart/step.yaml
+  - pool-refresh/step.yaml
+  - pool-volume-create/step.yaml
+  - pool-volume-attach/step.yaml
+  - pool-destroy/step.yaml
+  - pool-xml-cleanup/step.yaml
+---
+
+# Libvirt storage pools
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta pool-inventory.title >}}
+{{< include pool-inventory/_theory.qmd >}}
+{{< include pool-inventory/_task.qmd >}}
+
+### {{< meta pool-preview-xml.title >}}
+{{< include pool-preview-xml/_theory.qmd >}}
+{{< include pool-preview-xml/_task.qmd >}}
+
+### {{< meta pool-define.title >}}
+{{< include pool-define/_theory.qmd >}}
+{{< include pool-define/_task.qmd >}}
+
+### {{< meta pool-dumpxml-xpath.title >}}
+{{< include pool-dumpxml-xpath/_theory.qmd >}}
+{{< include pool-dumpxml-xpath/_task.qmd >}}
+
+### {{< meta pool-build.title >}}
+{{< include pool-build/_theory.qmd >}}
+{{< include pool-build/_task.qmd >}}
+
+### {{< meta pool-start-autostart.title >}}
+{{< include pool-start-autostart/_theory.qmd >}}
+{{< include pool-start-autostart/_task.qmd >}}
+
+### {{< meta pool-refresh.title >}}
+{{< include pool-refresh/_theory.qmd >}}
+{{< include pool-refresh/_task.qmd >}}
+
+### {{< meta pool-volume-create.title >}}
+{{< include pool-volume-create/_theory.qmd >}}
+{{< include pool-volume-create/_task.qmd >}}
+
+### {{< meta pool-volume-attach.title >}}
+{{< include pool-volume-attach/_theory.qmd >}}
+{{< include pool-volume-attach/_task.qmd >}}
+
+### {{< meta pool-destroy.title >}}
+{{< include pool-destroy/_theory.qmd >}}
+{{< include pool-destroy/_task.qmd >}}
+
+### {{< meta pool-xml-cleanup.title >}}
+{{< include pool-xml-cleanup/_theory.qmd >}}
+{{< include pool-xml-cleanup/_task.qmd >}}
+

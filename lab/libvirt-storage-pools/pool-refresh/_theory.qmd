@@ -1,0 +1,11 @@
+Libvirt может кэшировать metadata pool. Если файл создан в каталоге pool вне libvirt, `pool-refresh` перечитывает backend и обнаруживает volume.
+
+В этом шаге файл `manual.qcow2` создаётся через `qemu-img`, а затем становится видимым для `vol-list` после refresh. Это демонстрирует границу между обычным файлом и volume, известным libvirt.
+
+:::{#exm-lab-libvirt-storage-pools-pool-refresh}
+#### Обновить metadata
+
+```bash
+sudo -n virsh -c qemu:///system pool-refresh lab-pool
+```
+:::
