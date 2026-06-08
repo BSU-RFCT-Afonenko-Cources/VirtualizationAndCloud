@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ---
 metadata-files:
     - virt-check/step.yaml
@@ -68,9 +67,6 @@ metadata-files:
 ### {{< meta pool.title >}}
 {{< include pool/_theory.qmd >}}
 {{< include pool/_task.qmd >}}
-||||||| f589c88
-=======
-
 
 **QEMU** — эмулятор и виртуализатор, который может запускать гостевые ОС.
 
@@ -83,4 +79,3 @@ metadata-files:
 **Домен libvirt** — виртуальная машина в терминологии libvirt.
 
 **XML-конфигурация ВМ** — описание параметров виртуальной машины: CPU, RAM, диск, сеть, устройства, загрузка и другие параметры. Формат XML доменов libvirt официально описывает структуру конфигурации виртуальной машины. ([libvirt.org][2])
->>>>>>> remotes/origin/codex/create-capstone-lab-on-process-hibernation

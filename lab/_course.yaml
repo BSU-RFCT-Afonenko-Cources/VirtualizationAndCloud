@@ -10,3 +10,4 @@ assignments:
     - libvirt-storage-pools/_assignment.yaml
     - libvirt-storage-volumes/_assignment.yaml
     - docker/lowlevel-security-primitives/assignment.yaml
+    - docker/compose-debugging/assignment.yaml

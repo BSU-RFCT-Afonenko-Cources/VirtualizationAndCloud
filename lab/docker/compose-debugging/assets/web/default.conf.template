@@ -1,0 +1,11 @@
+log_format diagnostic '$remote_addr request-id=$http_x_request_id endpoint=$uri status=$status upstream=$upstream_addr';
+server {
+    listen 80;
+    access_log /var/log/nginx/access.log diagnostic;
+
+    location / {
+        proxy_set_header X-Request-ID $http_x_request_id;
+        proxy_set_header Host $host;
+        proxy_pass http://${WEB_UPSTREAM};
+    }
+}

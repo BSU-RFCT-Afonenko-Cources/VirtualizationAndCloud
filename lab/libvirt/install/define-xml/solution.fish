@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/bin/fish
 qemu-img create -f qcow2 /home/ubuntu/define-xml/alpine-xml.qcow2 1G >/dev/null 2>/dev/null; or true
 cat > /home/ubuntu/define-xml/alpine-xml.xml <<'XML'
@@ -10,3 +11,8 @@ virsh define /home/ubuntu/define-xml/alpine-xml.xml >/dev/null 2>/dev/null; or t
 echo aboba
 echo biba
 >>>>>>> remotes/origin/codex/create-capstone-lab-on-process-hibernation
+||||||| f589c88
+=======
+echo aboba
+echo biba
+>>>>>>> remotes/origin/codex/create-debugging-lab-for-compose-applications

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/bin/fish
 # remove generated qcow2, xml remains for review
 rm -f /home/ubuntu/define-xml/alpine-xml.qcow2
@@ -6,3 +7,7 @@ rm -f /home/ubuntu/define-xml/alpine-xml.qcow2
 =======
 rm ~/guest.sh
 >>>>>>> remotes/origin/codex/create-capstone-lab-on-process-hibernation
+||||||| f589c88
+=======
+rm ~/guest.sh
+>>>>>>> remotes/origin/codex/create-debugging-lab-for-compose-applications

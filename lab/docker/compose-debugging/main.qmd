@@ -1,0 +1,49 @@
+---
+metadata-files:
+  - 01-baseline/step.yaml
+  - 02-logs/step.yaml
+  - 03-events/step.yaml
+  - 04-stats/step.yaml
+  - 05-dns/step.yaml
+  - 06-health/step.yaml
+  - 07-resources/step.yaml
+  - 08-incident/step.yaml
+---
+
+# Диагностика Compose-приложений
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta baseline.title >}}
+{{< include 01-baseline/_theory.qmd >}}
+{{< include 01-baseline/_task.qmd >}}
+
+### {{< meta logs.title >}}
+{{< include 02-logs/_theory.qmd >}}
+{{< include 02-logs/_task.qmd >}}
+
+### {{< meta events.title >}}
+{{< include 03-events/_theory.qmd >}}
+{{< include 03-events/_task.qmd >}}
+
+### {{< meta stats.title >}}
+{{< include 04-stats/_theory.qmd >}}
+{{< include 04-stats/_task.qmd >}}
+
+### {{< meta dns.title >}}
+{{< include 05-dns/_theory.qmd >}}
+{{< include 05-dns/_task.qmd >}}
+
+### {{< meta health.title >}}
+{{< include 06-health/_theory.qmd >}}
+{{< include 06-health/_task.qmd >}}
+
+### {{< meta resources.title >}}
+{{< include 07-resources/_theory.qmd >}}
+{{< include 07-resources/_task.qmd >}}
+
+### {{< meta incident.title >}}
+{{< include 08-incident/_theory.qmd >}}
+{{< include 08-incident/_task.qmd >}}

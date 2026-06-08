@@ -1,10 +1,8 @@
 #!/bin/fish
-<<<<<<< HEAD
+
 test -f /home/ubuntu/define-xml/alpine-xml.xml; or exit 1
 virsh dumpxml alpine-xml >/tmp/alpine-xml.xml 2>/dev/null; or exit 1
 grep -q '/home/ubuntu/alpine.iso' /tmp/alpine-xml.xml; or exit 1
-||||||| f589c88
-=======
 
 set GUEST_SCRIPT (cat guest.sh | jq -Rrs 'tojson')
 
@@ -22,4 +20,3 @@ set RETURN (virsh qemu-agent-command testvm '{
 }')
 
 echo $RETURN | jq -r '.return."out-data"' | base64 -d
->>>>>>> remotes/origin/codex/create-capstone-lab-on-process-hibernation

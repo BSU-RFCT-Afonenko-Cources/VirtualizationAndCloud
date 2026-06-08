@@ -11,7 +11,12 @@ book:
     - part: "Задания"
       chapters:
         - lab/ubuntu/main.qmd
+<<<<<<< HEAD
         - lab/libvirt/main.qmd
+||||||| f589c88
+=======
+        - lab/docker/compose-debugging/main.qmd
+>>>>>>> remotes/origin/codex/create-debugging-lab-for-compose-applications
 
   appendices:
     - part: "Командные оболочки"
