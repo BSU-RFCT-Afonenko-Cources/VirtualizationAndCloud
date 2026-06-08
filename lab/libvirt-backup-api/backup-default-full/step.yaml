@@ -1,0 +1,14 @@
+backup-default-full:
+  title: "Full backup с настройками по умолчанию"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - pre-step.bash
+    check:
+      exec:
+        - check.bash
+    solution:
+      exec:
+        - solution.bash

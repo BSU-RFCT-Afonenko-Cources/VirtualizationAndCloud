@@ -1,0 +1,7 @@
+Перейдите в `~/backup-restore`.
+
+:::{#exr-lab-libvirt-backup-api-backup-restore}
+#### Подготовка отдельного restore-домена
+
+Если `/tmp/libvirt-backups/lab-vm-vda-full.qcow2` существует, скопируйте его в `/tmp/libvirt-backups/lab-vm-restore.qcow2`; иначе создайте только marker `/tmp/libvirt-backups/lab-vm-restore.missing`. На основе сохранённого `/tmp/libvirt-backups/lab-vm.xml` создайте `lab-vm-restore.xml`: имя `lab-vm-restore`, без исходного UUID, source основного disk — `/tmp/libvirt-backups/lab-vm-restore.qcow2`. Не определяйте и не запускайте новый домен.
+:::

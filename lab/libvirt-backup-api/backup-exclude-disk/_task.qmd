@@ -1,0 +1,7 @@
+Перейдите в `~/backup-exclude-disk`.
+
+:::{#exr-lab-libvirt-backup-api-backup-exclude-disk}
+#### Policy для двух дисков
+
+Создайте `exclude-disk.xml`, где `vda` имеет `backup='yes'`, а `vdb` — `backup='no'`. Если `domblklist` действительно показывает `vdb`, разрешается запустить backup и сохранить `backup-begin.txt`. Если второго диска нет, не запускайте job и запишите `vdb is absent; template only` в `diagnostics.txt`.
+:::

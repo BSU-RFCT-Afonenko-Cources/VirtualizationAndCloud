@@ -1,0 +1,10 @@
+Restore — отдельный workflow: нужны domain XML и восстановленный disk image. Чтобы не повредить источник, новый домен получает имя `lab-vm-restore`, новый UUID и disk source в `/tmp/libvirt-backups`; исходный `lab-vm` не переопределяется и его активный диск не заменяется.
+
+Если full backup не был создан из-за unsupported API, всё равно можно подготовить skeleton XML. Такой XML документирует необходимые изменения, но его не следует `define` до появления валидного restore-диска.
+
+:::{#exm-lab-libvirt-backup-api-backup-restore-define}
+#### Проверка XML без определения домена
+```bash
+virt-xml-validate /home/ubuntu/backup-restore/lab-vm-restore.xml domain
+```
+:::

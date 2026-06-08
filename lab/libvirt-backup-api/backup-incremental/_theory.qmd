@@ -1,0 +1,10 @@
+Incremental backup содержит только блоки, изменившиеся после выбранного checkpoint. Имя базовой точки задаётся элементом `<incremental>`, а новый checkpoint, созданный одновременно, становится следующей границей цепочки.
+
+Incremental data не заменяет full backup: для восстановления нужна корректная цепочка full + increments и сохранённая конфигурация домена. В этой работе проверяется описание job и metadata, а отсутствие API считается диагностическим результатом.
+
+:::{#exm-lab-libvirt-backup-api-backup-incremental-field}
+#### Базовый checkpoint
+```xml
+<incremental>lab-full-001</incremental>
+```
+:::

@@ -1,0 +1,7 @@
+Перейдите в `~/backup-cleanup`.
+
+:::{#exr-lab-libvirt-backup-api-backup-cleanup}
+#### Контролируемая очистка
+
+Удалите checkpoints `lab-inc-001`, `lab-manual-001` и `lab-full-001` через `checkpoint-delete --metadata`, только если они существуют. Удалите содержимое `/tmp/libvirt-backups`, но не сам каталог. Сохраните итоговые `checkpoint-list.txt`, `backup-files.txt` и `domain-list.txt`; `lab-vm` удалять или переопределять нельзя.
+:::

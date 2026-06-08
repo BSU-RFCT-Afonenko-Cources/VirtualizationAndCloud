@@ -1,0 +1,14 @@
+backup-xml-full:
+  title: "Full backup с domainbackup XML"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - pre-step.bash
+    check:
+      exec:
+        - check.bash
+    solution:
+      exec:
+        - solution.bash

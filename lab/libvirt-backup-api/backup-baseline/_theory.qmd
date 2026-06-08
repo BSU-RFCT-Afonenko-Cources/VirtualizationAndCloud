@@ -1,0 +1,17 @@
+Backup API libvirt копирует содержимое выбранных дисков домена, но не сохраняет оперативную память гостя. Поэтому пригодный для восстановления набор должен включать не только disk backup, но и XML-конфигурацию домена с устройствами, firmware и параметрами запуска.
+
+Перед backup важно определить disk target и тип источника. `domblklist --details` отличает file-backed диск от block-устройства; в этой работе дальнейшие примеры используют file-backed `vda` и не изменяют его источник.
+
+:::{#exm-lab-libvirt-backup-api-backup-baseline-disks}
+#### Диски домена
+```bash
+sudo -n virsh -c qemu:///system domblklist lab-vm --details
+```
+:::
+
+:::{#exm-lab-libvirt-backup-api-backup-baseline-xml}
+#### XML домена
+```bash
+sudo -n virsh -c qemu:///system dumpxml lab-vm
+```
+:::

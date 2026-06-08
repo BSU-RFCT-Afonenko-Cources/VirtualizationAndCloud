@@ -1,0 +1,7 @@
+Перейдите в `~/backup-pull-mode`.
+
+:::{#exr-lab-libvirt-backup-api-backup-pull-mode}
+#### Pull-mode XML
+
+Создайте `pull-backup.xml` с `<domainbackup mode='pull'>`, Unix server socket `/tmp/libvirt-backups/lab-vm-backup.sock`, диском `vda`, qcow2 scratch file `/tmp/libvirt-backups/lab-vm-vda-pull-scratch.qcow2`. Скопируйте XML в `backup-dumpxml.xml` как ожидаемую конфигурацию. Запускать NBD export без клиента не обязательно; если запускаете, сохраните `backup-begin.txt` и фактический dump или диагностику.
+:::

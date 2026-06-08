@@ -1,0 +1,7 @@
+Перейдите в `~/backup-consistency`.
+
+:::{#exr-lab-libvirt-backup-api-backup-consistency}
+#### Диагностика согласованности
+
+Сохраните вывод `domfsinfo lab-vm` в `domfsinfo.txt` и `qemu-agent-command ... guest-ping` в `guest-agent.txt`; ошибки также должны быть записаны. Создайте `consistency.txt` со значением `agent-available` либо `crash-consistent-only`. Не выполняйте `domfsfreeze`; в `freeze-state.txt` запишите `not frozen by this lab`.
+:::

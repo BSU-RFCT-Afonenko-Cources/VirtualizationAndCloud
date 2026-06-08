@@ -1,0 +1,7 @@
+Перейдите в `~/backup-job-status`.
+
+:::{#exr-lab-libvirt-backup-api-backup-job-status}
+#### Диагностика backup job
+
+Сохраните результат `backup-dumpxml lab-vm` в `backup-dumpxml.xml` или ошибку в `backup-dumpxml.txt`. Сохраните `domjobinfo lab-vm` в `domjobinfo.txt`. В `status.txt` укажите `active`, `completed-or-absent` либо `unsupported`. Не вызывайте `domjobabort`, если job не подтверждена как зависшая подготовительной средой.
+:::

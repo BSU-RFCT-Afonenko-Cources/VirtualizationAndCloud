@@ -1,0 +1,17 @@
+title: "Libvirt Backup API: full, incremental, checkpoints и restore"
+description: _assignment-description.qmd
+time-limit-minutes: 240
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - backup-baseline/step.yaml
+  - backup-default-full/step.yaml
+  - backup-xml-full/step.yaml
+  - backup-job-status/step.yaml
+  - backup-exclude-disk/step.yaml
+  - backup-checkpoint-full/step.yaml
+  - checkpoint-create/step.yaml
+  - backup-incremental/step.yaml
+  - backup-pull-mode/step.yaml
+  - backup-consistency/step.yaml
+  - backup-restore/step.yaml
+  - backup-cleanup/step.yaml

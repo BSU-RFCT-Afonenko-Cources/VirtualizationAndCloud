@@ -1,0 +1,10 @@
+Backup-файлы и checkpoints имеют разный lifecycle. `checkpoint-delete --metadata` удаляет только metadata/bitmap выбранной точки и не удаляет backup image; файлы очищаются отдельными командами после проверки, что они принадлежат лаборатории.
+
+Cleanup должен быть ограничен префиксом `lab-` и каталогом `/tmp/libvirt-backups`. Нельзя удалять чужие checkpoints, domains, storage pools или произвольные файлы `/var/lib/libvirt/images`.
+
+:::{#exm-lab-libvirt-backup-api-backup-cleanup-checkpoint}
+#### Удаление только metadata
+```bash
+sudo -n virsh -c qemu:///system checkpoint-delete lab-vm lab-inc-001 --metadata
+```
+:::

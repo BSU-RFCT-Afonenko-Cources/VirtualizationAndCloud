@@ -1,0 +1,69 @@
+---
+metadata-files:
+  - backup-baseline/step.yaml
+  - backup-default-full/step.yaml
+  - backup-xml-full/step.yaml
+  - backup-job-status/step.yaml
+  - backup-exclude-disk/step.yaml
+  - backup-checkpoint-full/step.yaml
+  - checkpoint-create/step.yaml
+  - backup-incremental/step.yaml
+  - backup-pull-mode/step.yaml
+  - backup-consistency/step.yaml
+  - backup-restore/step.yaml
+  - backup-cleanup/step.yaml
+---
+
+# Libvirt Backup API
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta backup-baseline.title >}}
+{{< include backup-baseline/_theory.qmd >}}
+{{< include backup-baseline/_task.qmd >}}
+
+### {{< meta backup-default-full.title >}}
+{{< include backup-default-full/_theory.qmd >}}
+{{< include backup-default-full/_task.qmd >}}
+
+### {{< meta backup-xml-full.title >}}
+{{< include backup-xml-full/_theory.qmd >}}
+{{< include backup-xml-full/_task.qmd >}}
+
+### {{< meta backup-job-status.title >}}
+{{< include backup-job-status/_theory.qmd >}}
+{{< include backup-job-status/_task.qmd >}}
+
+### {{< meta backup-exclude-disk.title >}}
+{{< include backup-exclude-disk/_theory.qmd >}}
+{{< include backup-exclude-disk/_task.qmd >}}
+
+### {{< meta backup-checkpoint-full.title >}}
+{{< include backup-checkpoint-full/_theory.qmd >}}
+{{< include backup-checkpoint-full/_task.qmd >}}
+
+### {{< meta checkpoint-create.title >}}
+{{< include checkpoint-create/_theory.qmd >}}
+{{< include checkpoint-create/_task.qmd >}}
+
+### {{< meta backup-incremental.title >}}
+{{< include backup-incremental/_theory.qmd >}}
+{{< include backup-incremental/_task.qmd >}}
+
+### {{< meta backup-pull-mode.title >}}
+{{< include backup-pull-mode/_theory.qmd >}}
+{{< include backup-pull-mode/_task.qmd >}}
+
+### {{< meta backup-consistency.title >}}
+{{< include backup-consistency/_theory.qmd >}}
+{{< include backup-consistency/_task.qmd >}}
+
+### {{< meta backup-restore.title >}}
+{{< include backup-restore/_theory.qmd >}}
+{{< include backup-restore/_task.qmd >}}
+
+### {{< meta backup-cleanup.title >}}
+{{< include backup-cleanup/_theory.qmd >}}
+{{< include backup-cleanup/_task.qmd >}}

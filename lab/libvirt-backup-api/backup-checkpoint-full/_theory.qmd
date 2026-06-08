@@ -1,0 +1,10 @@
+Checkpoint — это metadata о точке времени и dirty bitmap диска, а не копия данных. Передача checkpoint XML вместе с backup XML позволяет создать backup и новую точку отсчёта согласованно, чтобы последующая incremental job знала, какие блоки изменились.
+
+Для checkpoint используется отдельный документ с root `<domaincheckpoint>`. Успех проверяется через `checkpoint-list` и `checkpoint-dumpxml`; неподдерживаемые qcow2 bitmaps или Backup API должны быть зафиксированы диагностикой.
+
+:::{#exm-lab-libvirt-backup-api-backup-checkpoint-full-xml}
+#### Checkpoint XML
+```xml
+<domaincheckpoint><name>lab-full-001</name></domaincheckpoint>
+```
+:::
