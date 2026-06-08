@@ -1,0 +1,463 @@
+---
+title: "Laboratory Work 2. VM Interaction"
+---
+
+# Introduction
+
+In this laboratory work, the approach to using virtualization to application isolation and resource management will be considered. For this purpose, two services that interact via REST API will be used as an example. The first service emulates the logic of a server application that requests data from the second service (database) via HTTP. Both services run on separate virtual machines, which allows flexible configuration of resource allocation policies and snapshots. The lab work contains the following tasks:
+
+- Creating and configuring a network bridge to provide communication between the host system and guset virtual machines.
+- Configuring virtual machines and deploying a REST API written in Python using the FastAPI framework
+- Combining separately operating services into a single application using manual configuration.
+
+# Homework
+
+If you are doing this as homework, you will first need to install a hypervisor and create a virtual machine with the ubuntu system. As a hypervisor, you can use one of the following options for the Windows operating system
+
+-   [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
+-   [VMWare](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion)
+-   [HyperV](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-overview?pivots=windows)
+
+After installing the hypervisor, download the operating system image `.iso`
+
+-   [Desktop Ubuntu with GUI](https://ubuntu.com/download/desktop)
+-   [Server Ubuntu without GUI](https://ubuntu.com/download/server)
+
+And create a virtual machine from this image
+
+# Network bridge setup
+
+To interact with the host system and virtual guest machines, it is necessary to set up a common network for them. To do this, a network bridge will be created, to which guest virtual machines and the host will subsequently be connected.
+
+## Install packages
+
+First, make sure you have the necessary packages installed:
+
+``` bash
+sudo apt update
+sudo apt upgrade
+sudo apt install iproute2 network-manager nano
+```
+
+## Create the Bridge Setup Script
+
+Because the connection will be lost during the network setup process, we configure the service in a special way using the siss manager. In this way, we create a network setup task that will automatically start when the system starts.
+
+Create a script to set up the bridge br0 and add **eth0** to it. Please note that you should get the network interface name using the command
+
+``` bash
+ip -o link show | awk -F': ' '{print $2}'
+```
+
+Your port name will be something like **enp6s0** or **eth0**.
+
+::: callout-important
+In the following, replace **eth0** with your interface obtained from the output of the previous command.
+:::
+
+IP address attached to eth0 `` `ip` ``. Ip in format (for example) `192.168.122.43/24` we get from the command output
+
+``` bash
+ip address show eth0
+```
+
+Default gateway `` `dgw` `` can be obtained from the command
+
+``` bash
+ip route show dev eth0
+```
+
+It will look something like this `192.168.122.1`
+
+::: callout-important
+In the following commands, **be sure** to replace the `` `ip` `` and `` `dgw` `` templates with your values.
+:::
+
+``` bash
+sudo nano /usr/local/bin/setup-bridge.sh
+```
+
+Add the following content to the script:
+
+``` bash
+#!/bin/bash
+ip link add name br0 type bridge                # <1>
+ip link set dev br0 up                          # <2>
+ip address add `ip` dev br0                     # <3>
+ip route add `dgw` dev br0                      # <4>
+ip route append default via `dgw` dev br0       # <5>
+ip link set eth0 master br0                     # <6>
+ip address del `ip` dev eth0                    # <7>
+iptables -A FORWARD -i br0 -o br0 -j ACCEPT     # <8>
+```
+
+1.  Create a new network bridge device
+2.  And activate it
+3.  Specify that the IP address will be associated with the bridge device
+4.  Add a gateway to direct traffic
+5.  And set this gateway as the default
+6.  Connect the "physical" interface `eth0` to the bridge
+7.  Since the IP address can only be associated with one device, remove its definition from the `eth0` interface
+8.  Add a network rule that allows traffic exchange for devices using the bridge in both directions
+
+Make the script executable:
+
+``` bash
+sudo chmod +x /usr/local/bin/setup-bridge.sh
+```
+
+## Create the Bridge Teardown Script
+
+Create a script to tear down the bridge and restore the original network configuration.
+
+``` bash
+sudo nano /usr/local/bin/teardown-bridge.sh
+```
+
+Add the following content to the script:
+
+``` bash
+#!/bin/bash
+ip link set eth0 down
+ip link delete br0 type bridge
+ip link set eth0 up
+```
+
+Make the script executable:
+
+``` bash
+sudo chmod +x /usr/local/bin/teardown-bridge.sh
+```
+
+## Create the Systemd Service File
+
+Create a systemd service file that uses these scripts.
+
+``` bash
+sudo nano /etc/systemd/system/bridge-setup.service
+```
+
+Add the following content to the service file:
+
+``` text
+[Unit]
+Description=Set up network bridge br0 with enp6s0
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/setup-bridge.sh
+ExecStop=/usr/local/bin/teardown-bridge.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Enable and Use the Service
+
+Reload the systemd configuration to apply the changes:
+
+``` bash
+sudo systemctl daemon-reload
+```
+
+Enable the service so it is available but not started at boot:
+
+``` bash
+sudo systemctl enable bridge-setup.service
+```
+
+Now you must restart your vm
+
+``` bash
+sudo reboot
+```
+
+::: callout-caution
+After executing the command, you will be disconnected from the session. If the scripts are configured correctly, you will be able to reconnect in 30 seconds.
+:::
+
+## Verify the Configuration
+
+After starting the service, verify that the bridge is correctly configured and that **eth0** is part of it:
+
+``` bash
+ip addr show br0
+```
+
+Ensure that the br0 interface is up and has the correct IP configuration.
+
+# Preparing for Web Services Deployment
+
+Don't forget to install the necessary packages, which are given in the instructions for the first lab.
+
+::: callout-important
+Using commands **from Lab1** delete all current running virtual machines
+:::
+
+## Download vm image
+
+``` bash
+curl https://dl-cdn.alpinelinux.org/alpine/v3.21/releases/x86_64/\
+alpine-standard-3.21.3-x86_64.iso \
+--output x
+cp x /tmp/alpine-standard-3.21.3-x86_64.iso
+chmod 777 /tmp/alpine-standard-3.21.3-x86_64.iso
+```
+
+## WebAPI configuration
+
+The first service we'll run will emulate the behavior of a database server. We'll create a dedicated virtual machine for it, set up a network connection, and create a simple Python application using the FastAPI framework.
+
+### Create virtual machine
+
+Create a virtual machine named **api**
+
+``` bash
+sudo virt-install \
+--name api \
+--ram 512 \
+--disk size=2 \
+--vcpus 1 \
+--cdrom /tmp/alpine-standard-3.21.3-x86_64.iso \
+--graphics none \
+--os-variant alpinelinux3.19 \
+--network bridge=br0
+```
+
+### Setup {#sec-deployment-webapi-setup}
+
+After creating the virtual machine, start configuring it with the command
+
+``` bash
+setup-alpine
+```
+
+Next, you need to enter the correct data for setup.
+
+#### Hostname
+
+On command:
+
+``` text
+Enter system hostname (fully qualified form, e.g. 'foo.example.org') [localhost]
+```
+
+you should answer `api`.
+
+#### Network
+
+For network settings, enter the values ​​as in the table below.
+
+| Option               | Value |
+|----------------------|-------|
+| Initialize interface | eth0  |
+| Ip address for eth0  | dhcp  |
+| Manual configuration | n     |
+
+#### Timezone
+
+Select default `UTC` timezone
+
+#### Proxy
+
+Do not use proxy. Type `none` option.
+
+#### APK Mirror
+
+Select the first option `[1]`: find fastest mirror.
+
+#### System storage
+
+| Option                       | Value |
+|------------------------------|-------|
+| Using drive                  | vda   |
+| How would you like to use it | sys   |
+| Erase the above disk(s)      | y     |
+
+#### Finalize {#sec-deployment-webapi-setup-finalize}
+
+Installation is complete. Please reboot.
+
+``` bash
+reboot
+```
+
+::: callout-important
+And save the command output to further configure the connection.
+
+``` bash
+ip addr
+```
+:::
+
+### Create API Instance
+
+After reconnecting to the system, enter the `/home` directory
+
+``` bash
+cd /home
+```
+
+#### Python setup
+
+Install python
+
+``` bash
+apk add python3
+apk add nano
+```
+
+Next, you need to prepare the virtual environment
+
+``` bash
+python -m venv service
+source service/bin/activate
+```
+
+#### API setup
+
+Now let's install the `fastapi` framework to create a simple service
+
+``` bash
+pip install fastapi[standard]
+```
+
+Next, copy this code into the newly created `main.py` file.
+
+``` bash
+nano main.py
+```
+
+``` python
+from fastapi import FastAPI
+from starlette.responses import JSONResponse
+
+app = FastAPI()
+
+@app.get("/")
+async def homepage():
+    return JSONResponse({'hello': 'world'})
+```
+
+Now you can start this service
+
+``` bash
+uvicorn main:app --port 8000 --host 0.0.0.0  --reload
+```
+
+#### Check
+
+Now exit the virtual machine using the key combination `^]` and use the `ping` command to check the availability of the service using the IP address of the virtual machine obtained in the previous step.
+
+## API Consumer configuration
+
+Now let's create a service that will use the API we created in the previous step. The configuration process is very similar, only the names of the virtual machines differ.
+
+### Create virtual machine
+
+Create a virtual machine named **consumer**.
+
+``` bash
+sudo virt-install \
+--name consumer \
+--ram 512 \
+--disk size=2 \
+--vcpus 1 \
+--cdrom /tmp/alpine-standard-3.21.3-x86_64.iso \
+--graphics none \
+--os-variant alpinelinux3.19 \
+--network bridge=br0
+```
+
+### Setup
+
+Repeat the configuration steps from the previous @sec-deployment-webapi-setup api-setup step starting with the system setup command
+
+``` bash
+setup-alpine
+```
+
+::: callout-important
+For this virtual machine, set `hostname` to **consumer**
+:::
+
+::: callout-important
+And save the command output to further configure the connection.
+
+``` bash
+ip addr
+```
+:::
+
+### Create consumer service
+
+After reconnecting to the system, enter the `/home` directory
+
+``` bash
+cd /home
+```
+
+#### Python setup
+
+Install python
+
+``` bash
+apk add python3
+apk add nano
+```
+
+Next, you need to prepare the virtual environment
+
+``` bash
+python -m venv service
+source service/bin/activate
+```
+
+#### Consumer setup
+
+Now let's install the `requests` library to perform http requests
+
+``` bash
+pip install requests
+```
+
+Next, copy this code into the newly created `main.py` file
+
+``` bash
+nano main.py
+```
+::: callout-important
+Please note that the specified IP address `'http://10.135.1.82:8000/'` must be replaced with the IP address of the first virtual machine **api** from section @sec-deployment-webapi-setup-finalize
+:::
+
+``` python
+from requests import get
+from time import sleep
+
+for i in range(5):
+    msg = get('http://10.135.1.82:8000/')
+    print(msg.text)
+    sleep(1)
+```
+
+Now you can start this service
+
+``` bash
+python main.py
+```
+
+You should get the following output
+
+``` text
+{"hello":"world"}
+{"hello":"world"}
+{"hello":"world"}
+{"hello":"world"}
+{"hello":"world"}
+```
+
+# Summary
+
+Thus, in this laboratory work we considered the approach to creating web applications interacting via the http protocol. To control the states and manage the resources of these applications, an approach was chosen in which we create a separate virtual machine for each connection. Network interaction of applications was carried out using the created network bridge.

@@ -7,4 +7,6 @@ assignments:
     - ubuntu/assignment.yaml
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
+    - libvirt-storage-pools/_assignment.yaml
+    - libvirt-storage-volumes/_assignment.yaml
 
