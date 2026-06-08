@@ -1,0 +1,7 @@
+:::{#exr-swarm-resources-cleanup}
+#### Очистка состояния Swarm
+
+Удалите services `lab-api`, `lab-worker`, `lab-worker-job` и `lab-overcommit`. Затем удалите label `swarm_resources` с manager-узла.
+
+Файлы результатов и evidence оставьте в `/home/ubuntu/swarm-resources`: они не участвуют в scheduling и позволяют проверить выполненные эксперименты.
+:::

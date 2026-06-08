@@ -1,0 +1,44 @@
+---
+metadata-files:
+  - 01-node-labels/step.yaml
+  - 02-placement-constraints/step.yaml
+  - 03-resource-reservations/step.yaml
+  - 04-resource-limits/step.yaml
+  - 05-replicated-job/step.yaml
+  - 06-overcommit/step.yaml
+  - 07-cleanup/step.yaml
+---
+
+# Swarm placement constraints, reservations и ресурсное управление
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta 01-node-labels.title >}}
+{{< include 01-node-labels/_theory.qmd >}}
+{{< include 01-node-labels/_task.qmd >}}
+
+### {{< meta 02-placement-constraints.title >}}
+{{< include 02-placement-constraints/_theory.qmd >}}
+{{< include 02-placement-constraints/_task.qmd >}}
+
+### {{< meta 03-resource-reservations.title >}}
+{{< include 03-resource-reservations/_theory.qmd >}}
+{{< include 03-resource-reservations/_task.qmd >}}
+
+### {{< meta 04-resource-limits.title >}}
+{{< include 04-resource-limits/_theory.qmd >}}
+{{< include 04-resource-limits/_task.qmd >}}
+
+### {{< meta 05-replicated-job.title >}}
+{{< include 05-replicated-job/_theory.qmd >}}
+{{< include 05-replicated-job/_task.qmd >}}
+
+### {{< meta 06-overcommit.title >}}
+{{< include 06-overcommit/_theory.qmd >}}
+{{< include 06-overcommit/_task.qmd >}}
+
+### {{< meta 07-cleanup.title >}}
+{{< include 07-cleanup/_theory.qmd >}}
+{{< include 07-cleanup/_task.qmd >}}

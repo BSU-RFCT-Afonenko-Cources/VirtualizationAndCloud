@@ -1,0 +1,7 @@
+:::{#exr-swarm-resources-job}
+#### Конечная worker-нагрузка
+
+Создайте service `lab-worker-job` в режиме replicated job из образа `swarm-resources-worker:lab`. Запустите три задачи, но не более одной одновременно. Передайте worker режим `job`, примените constraint `swarm_resources=true` и подключите каталог `/home/ubuntu/swarm-resources/results` как `/results`.
+
+Передайте каждой задаче её slot и идентификатор через поддерживаемые Swarm шаблоны переменных `TASK_SLOT` и `TASK_ID`. Итогом должны стать три JSON-файла `worker-1.json` … `worker-3.json`, три успешно завершённые задачи и JSON-сообщения в логах сервиса.
+:::

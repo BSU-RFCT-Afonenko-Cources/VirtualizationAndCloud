@@ -1,0 +1,7 @@
+:::{#exr-swarm-resources-reservations}
+#### Резервирование ресурсов worker
+
+Создайте replicated service `lab-worker` из образа `swarm-resources-worker:lab` с одной репликой и тем же constraint по лабораторному label. Объявите reservation в размере `0.25` CPU и `128 MiB` памяти.
+
+Проверьте, что значения записаны в `Resources.Reservations`, а worker имеет работающую задачу и создаёт записи о пакетной обработке в логах сервиса.
+:::

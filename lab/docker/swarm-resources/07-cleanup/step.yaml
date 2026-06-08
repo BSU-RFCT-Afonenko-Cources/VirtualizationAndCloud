@@ -1,0 +1,11 @@
+07-cleanup:
+  title: "Cleanup labels"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    check:
+      exec:
+        - check.sh
+    solution:
+      exec:
+        - solution.sh
