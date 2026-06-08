@@ -1,0 +1,11 @@
+capstone-swarm-13:
+  title: "13. Final acceptance"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

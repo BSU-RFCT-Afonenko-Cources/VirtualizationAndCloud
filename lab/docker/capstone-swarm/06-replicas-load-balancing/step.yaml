@@ -1,0 +1,11 @@
+capstone-swarm-06:
+  title: "06. Replicas и load balancing"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

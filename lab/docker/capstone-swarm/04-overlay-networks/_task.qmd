@@ -1,0 +1,13 @@
+---
+title: "Overlay networks"
+---
+
+:::{#exr-capstone-swarm-04-overlay-networks}
+## Задание
+
+Разделите трафик stack по attachable overlay-сетям `market_frontend`, `market_backend` и `market_data`. Наружу должен быть опубликован только `market_edge` на порту `8080`.
+
+### Критерии готовности
+
+Проверка сопоставляет подключения сервисов к сегментам, driver и scope сетей, а также published ports всех сервисов.
+:::

@@ -1,0 +1,11 @@
+capstone-swarm-11:
+  title: "11. Resource и placement policy"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

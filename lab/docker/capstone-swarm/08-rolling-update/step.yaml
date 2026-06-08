@@ -1,0 +1,11 @@
+capstone-swarm-08:
+  title: "08. Rolling update"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

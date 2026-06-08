@@ -1,0 +1,11 @@
+capstone-swarm-05:
+  title: "05. Secrets и configs"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

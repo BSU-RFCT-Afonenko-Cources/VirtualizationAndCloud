@@ -1,0 +1,98 @@
+---
+metadata-files:
+  - 01-swarm-inventory/step.yaml
+  - 02-registry-images/step.yaml
+  - 03-stack-declaration/step.yaml
+  - 04-overlay-networks/step.yaml
+  - 05-secrets-configs/step.yaml
+  - 06-replicas-load-balancing/step.yaml
+  - 07-persistent-state/step.yaml
+  - 08-rolling-update/step.yaml
+  - 09-rollback-drill/step.yaml
+  - 10-failure-recovery/step.yaml
+  - 11-resource-placement/step.yaml
+  - 12-backup-artifacts/step.yaml
+  - 13-final-acceptance/step.yaml
+---
+
+# Итоговое задание Docker Swarm: отказоустойчивая оркестрация сервиса
+
+{{< include _assignment-description.qmd >}}
+
+## {{< meta capstone-swarm-01.title >}}
+
+{{< include 01-swarm-inventory/_theory.qmd >}}
+
+{{< include 01-swarm-inventory/_task.qmd >}}
+
+## {{< meta capstone-swarm-02.title >}}
+
+{{< include 02-registry-images/_theory.qmd >}}
+
+{{< include 02-registry-images/_task.qmd >}}
+
+## {{< meta capstone-swarm-03.title >}}
+
+{{< include 03-stack-declaration/_theory.qmd >}}
+
+{{< include 03-stack-declaration/_task.qmd >}}
+
+## {{< meta capstone-swarm-04.title >}}
+
+{{< include 04-overlay-networks/_theory.qmd >}}
+
+{{< include 04-overlay-networks/_task.qmd >}}
+
+## {{< meta capstone-swarm-05.title >}}
+
+{{< include 05-secrets-configs/_theory.qmd >}}
+
+{{< include 05-secrets-configs/_task.qmd >}}
+
+## {{< meta capstone-swarm-06.title >}}
+
+{{< include 06-replicas-load-balancing/_theory.qmd >}}
+
+{{< include 06-replicas-load-balancing/_task.qmd >}}
+
+## {{< meta capstone-swarm-07.title >}}
+
+{{< include 07-persistent-state/_theory.qmd >}}
+
+{{< include 07-persistent-state/_task.qmd >}}
+
+## {{< meta capstone-swarm-08.title >}}
+
+{{< include 08-rolling-update/_theory.qmd >}}
+
+{{< include 08-rolling-update/_task.qmd >}}
+
+## {{< meta capstone-swarm-09.title >}}
+
+{{< include 09-rollback-drill/_theory.qmd >}}
+
+{{< include 09-rollback-drill/_task.qmd >}}
+
+## {{< meta capstone-swarm-10.title >}}
+
+{{< include 10-failure-recovery/_theory.qmd >}}
+
+{{< include 10-failure-recovery/_task.qmd >}}
+
+## {{< meta capstone-swarm-11.title >}}
+
+{{< include 11-resource-placement/_theory.qmd >}}
+
+{{< include 11-resource-placement/_task.qmd >}}
+
+## {{< meta capstone-swarm-12.title >}}
+
+{{< include 12-backup-artifacts/_theory.qmd >}}
+
+{{< include 12-backup-artifacts/_task.qmd >}}
+
+## {{< meta capstone-swarm-13.title >}}
+
+{{< include 13-final-acceptance/_theory.qmd >}}
+
+{{< include 13-final-acceptance/_task.qmd >}}

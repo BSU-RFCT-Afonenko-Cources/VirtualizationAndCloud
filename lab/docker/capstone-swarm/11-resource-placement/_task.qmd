@@ -1,0 +1,13 @@
+---
+title: "Resource и placement policy"
+---
+
+:::{#exr-capstone-swarm-11-resource-placement}
+## Задание
+
+Задайте worker placement constraint на manager-узел. Для worker и API объявите проверяемые CPU/memory reservations и limits, не нарушающие работу single-node стенда.
+
+### Критерии готовности
+
+Проверка читает service specs и сопоставляет constraint, reservations и limits с минимальными критериями задания.
+:::

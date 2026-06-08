@@ -1,0 +1,11 @@
+capstone-swarm-02:
+  title: "02. Registry и images"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

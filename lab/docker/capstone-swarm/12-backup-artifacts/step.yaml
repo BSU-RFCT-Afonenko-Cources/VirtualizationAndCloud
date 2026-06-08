@@ -1,0 +1,11 @@
+capstone-swarm-12:
+  title: "12. Backup artifacts"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

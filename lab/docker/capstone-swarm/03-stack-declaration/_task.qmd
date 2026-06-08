@@ -1,0 +1,13 @@
+---
+title: "Stack declaration"
+---
+
+:::{#exr-capstone-swarm-03-stack-declaration}
+## Задание
+
+Создайте файл декларации `/home/ubuntu/capstone-swarm/market-stack.yml` и разверните stack `market` из пяти сервисов: `edge`, `orders-api`, `catalog-api`, `db`, `worker`.
+
+### Критерии готовности
+
+Проверка валидирует stack-файл средствами Docker и требует существования всех пяти Swarm services с label принадлежности stack `market`.
+:::

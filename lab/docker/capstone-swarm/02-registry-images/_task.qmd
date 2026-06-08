@@ -1,0 +1,13 @@
+---
+title: "Registry и images"
+---
+
+:::{#exr-capstone-swarm-02-registry-images}
+## Задание
+
+Подготовьте локальный registry и опубликуйте в нём собственные образы `market-edge`, `market-orders`, `market-catalog` и `market-worker` с тегом `1.0`.
+
+### Критерии готовности
+
+Проверка обращается к Registry HTTP API, сверяет теги, digest-манифесты и наличие локального контейнера registry.
+:::

@@ -1,0 +1,14 @@
+capstone-swarm-01:
+  title: "01. Swarm-инвентаризация"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      pre-step:
+        exec:
+          - prepare.sh
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

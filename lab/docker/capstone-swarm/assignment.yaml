@@ -1,0 +1,18 @@
+title: "Итоговое задание Docker Swarm: отказоустойчивая оркестрация сервиса"
+description: _assignment-description.qmd
+time-limit-minutes: 360
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-swarm-inventory/step.yaml
+  - 02-registry-images/step.yaml
+  - 03-stack-declaration/step.yaml
+  - 04-overlay-networks/step.yaml
+  - 05-secrets-configs/step.yaml
+  - 06-replicas-load-balancing/step.yaml
+  - 07-persistent-state/step.yaml
+  - 08-rolling-update/step.yaml
+  - 09-rollback-drill/step.yaml
+  - 10-failure-recovery/step.yaml
+  - 11-resource-placement/step.yaml
+  - 12-backup-artifacts/step.yaml
+  - 13-final-acceptance/step.yaml

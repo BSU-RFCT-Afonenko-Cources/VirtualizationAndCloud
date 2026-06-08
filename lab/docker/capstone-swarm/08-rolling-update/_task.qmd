@@ -1,0 +1,13 @@
+---
+title: "Rolling update"
+---
+
+:::{#exr-capstone-swarm-08-rolling-update}
+## Задание
+
+Подготовьте и опубликуйте `market-orders:2.0`, затем обновите `market_orders-api` по rolling policy: по одной task, с контролем здоровья, задержкой и сохранением доступности. Синхронизируйте image в stack-файле.
+
+### Критерии готовности
+
+Проверка ожидает версию `2.0`, завершённый update state, параметры update_config, историю заменённых tasks и доступный endpoint.
+:::

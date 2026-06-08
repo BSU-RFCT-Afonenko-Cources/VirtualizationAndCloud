@@ -1,0 +1,13 @@
+---
+title: "Failure recovery"
+---
+
+:::{#exr-capstone-swarm-10-failure-recovery}
+## Задание
+
+Удалите контейнер одной running task `market_catalog-api` и зафиксируйте идентификаторы старой и автоматически созданной task в `evidence/recovery.json`.
+
+### Критерии готовности
+
+Проверка требует разные task ID, восстановленное desired количество реплик и доступность каталога через edge.
+:::

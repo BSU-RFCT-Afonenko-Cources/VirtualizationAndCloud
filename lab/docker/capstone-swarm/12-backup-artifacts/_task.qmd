@@ -1,0 +1,13 @@
+---
+title: "Backup artifacts"
+---
+
+:::{#exr-capstone-swarm-12-backup-artifacts}
+## Задание
+
+Создайте `/home/ubuntu/capstone-swarm/backup`: копию stack declaration, inventory secrets без значений, экспорт configs, логический dump PostgreSQL и файл SHA-256 checksums.
+
+### Критерии готовности
+
+Проверка проверяет состав, формат inventory, отсутствие значения секрета, непустой SQL dump и соответствие всех checksum.
+:::

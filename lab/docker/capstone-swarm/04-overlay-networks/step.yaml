@@ -1,0 +1,11 @@
+capstone-swarm-04:
+  title: "04. Overlay networks"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

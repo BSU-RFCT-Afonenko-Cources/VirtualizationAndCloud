@@ -1,0 +1,13 @@
+---
+title: "Swarm-инвентаризация"
+---
+
+:::{#exr-capstone-swarm-01-swarm-inventory}
+## Задание
+
+Зафиксируйте исходное состояние Swarm и метаданные единственного узла в структурированном evidence-файле.
+
+### Критерии готовности
+
+Проверка ожидает активный Swarm, manager-роль, доступность узла `active` и файл `evidence/swarm-inventory.json` с идентификатором, hostname, ролью, availability и состоянием manager.
+:::
