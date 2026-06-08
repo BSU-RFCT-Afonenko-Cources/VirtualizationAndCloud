@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-08}
+## Read-only root filesystem и writable paths
+
+Запустите контейнер с read-only rootfs и отдельными writable путями для runtime state. Evidence должен показать ReadonlyRootfs, mounts/tmpfs и работоспособность приложения.
+:::

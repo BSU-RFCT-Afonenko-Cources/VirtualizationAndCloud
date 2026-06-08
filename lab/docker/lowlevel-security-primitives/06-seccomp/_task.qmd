@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-06}
+## seccomp profile
+
+Запустите `sec-demo` с default seccomp и с учебным seccomp-профилем. Сохраните Seccomp state, Docker SecurityOpt и controlled failure для операции, запрещённой учебным профилем.
+:::

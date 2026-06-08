@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-02}
+## Linux capabilities
+
+Сравните контейнер с default capabilities и контейнер, где набор capabilities явно изменён. Сохраните inspect-данные Docker и `/proc` evidence так, чтобы было видно отличие effective и bounding наборов.
+:::

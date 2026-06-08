@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-09}
+## Privileged mode как антипример
+
+Создайте evidence, показывающее разницу между обычным и privileged контейнером, затем удалите privileged-контейнер. Проверяемое состояние: evidence существует, а running privileged containers отсутствуют.
+:::

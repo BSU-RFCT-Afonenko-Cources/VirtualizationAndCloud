@@ -1,0 +1,7 @@
+{
+  "defaultAction": "SCMP_ACT_ALLOW",
+  "architectures": ["SCMP_ARCH_X86_64", "SCMP_ARCH_X86", "SCMP_ARCH_X32", "SCMP_ARCH_AARCH64"],
+  "syscalls": [
+    {"names": ["uname"], "action": "SCMP_ACT_ERRNO", "errnoRet": 1}
+  ]
+}
