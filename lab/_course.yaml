@@ -14,6 +14,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -57,3 +58,8 @@ assignments:
 =======
     - docker/lowlevel-security-primitives/assignment.yaml
 >>>>>>> remotes/origin/codex/create-lab-on-container-privilege-minimization
+||||||| 6df1dcb
+
+=======
+    - docker/lowlevel-rootfs-overlay/assignment.yaml
+>>>>>>> remotes/origin/codex/create-lab-on-container-root-filesystem

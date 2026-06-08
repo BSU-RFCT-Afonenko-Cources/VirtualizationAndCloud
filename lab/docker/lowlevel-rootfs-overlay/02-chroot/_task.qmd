@@ -1,0 +1,7 @@
+:::{#exr-rootfs-02_chroot}
+#### Проверяемое состояние
+
+Проведите controlled chroot-experiment над подготовленным rootfs с помощью действия `chroot`. Сохраните структурированное evidence в JSON.
+
+Evidence должен показывать namespace хоста и процесса в chroot, доступность `/proc/1`, факт отсутствия отдельного network namespace и итоговый вывод о недостаточности одного `chroot`.
+:::

@@ -1,0 +1,11 @@
+step-03:
+  title: "Mount namespace для rootfs"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check/check.sh
+      solution:
+        exec:
+          - solution/solve.sh

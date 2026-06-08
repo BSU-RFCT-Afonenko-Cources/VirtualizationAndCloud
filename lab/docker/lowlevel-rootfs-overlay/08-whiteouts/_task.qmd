@@ -1,0 +1,7 @@
+:::{#exr-rootfs-08_whiteouts}
+#### Проверяемое состояние
+
+Удалите lower-only HTTP-файл через merged view действием `whiteout`. Не удаляйте его напрямую из base rootfs.
+
+Сохраните JSON и inventory upper layer. Проверка должна подтвердить наличие lower-файла, отсутствие merged-файла и marker либо иное upper-state, которым OverlayFS реализовал скрытие.
+:::

@@ -19,6 +19,7 @@ book:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/libvirt/main.qmd
 ||||||| f589c88
 =======
@@ -52,6 +53,10 @@ book:
 =======
         - lab/docker/lowlevel-checkpoint-restore/main.qmd
 >>>>>>> remotes/origin/codex/create-lab-on-checkpoint/restore-in-docker
+||||||| 6df1dcb
+=======
+        - lab/docker/lowlevel-rootfs-overlay/main.qmd
+>>>>>>> remotes/origin/codex/create-lab-on-container-root-filesystem
 
   appendices:
     - part: "Командные оболочки"

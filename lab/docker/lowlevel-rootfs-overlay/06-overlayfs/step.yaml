@@ -1,0 +1,11 @@
+step-06:
+  title: "OverlayFS: lower, upper, work и merged"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check/check.sh
+      solution:
+        exec:
+          - solution/solve.sh

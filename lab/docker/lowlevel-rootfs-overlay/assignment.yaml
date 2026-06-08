@@ -1,0 +1,15 @@
+title: "Root filesystem контейнера: mount namespace, bind mount и OverlayFS"
+description: _assignment-description.qmd
+time-limit-minutes: 180
+virtual-machine: "Ubuntu — Docker/namespace Lab"
+steps:
+  - 01-base-tree/step.yaml
+  - 02-chroot/step.yaml
+  - 03-mount-namespace/step.yaml
+  - 04-bind-mounts/step.yaml
+  - 05-tmpfs/step.yaml
+  - 06-overlayfs/step.yaml
+  - 07-docker-layers/step.yaml
+  - 08-whiteouts/step.yaml
+  - 09-http-rootfs/step.yaml
+  - 10-cleanup/step.yaml

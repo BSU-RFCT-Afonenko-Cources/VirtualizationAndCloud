@@ -1,0 +1,81 @@
+---
+metadata-files:
+    - 01-base-tree/step.yaml
+    - 02-chroot/step.yaml
+    - 03-mount-namespace/step.yaml
+    - 04-bind-mounts/step.yaml
+    - 05-tmpfs/step.yaml
+    - 06-overlayfs/step.yaml
+    - 07-docker-layers/step.yaml
+    - 08-whiteouts/step.yaml
+    - 09-http-rootfs/step.yaml
+    - 10-cleanup/step.yaml
+---
+
+# Root filesystem контейнера: mount namespace, bind mount и OverlayFS
+
+## Цель
+
+{{< include _assignment-description.qmd >}}
+
+## Шаги
+
+### 01. Исходное дерево rootfs
+
+{{< include 01-base-tree/_theory.qmd >}}
+
+{{< include 01-base-tree/_task.qmd >}}
+
+### 02. chroot как неполная изоляция
+
+{{< include 02-chroot/_theory.qmd >}}
+
+{{< include 02-chroot/_task.qmd >}}
+
+### 03. Mount namespace для rootfs
+
+{{< include 03-mount-namespace/_theory.qmd >}}
+
+{{< include 03-mount-namespace/_task.qmd >}}
+
+### 04. Bind mounts
+
+{{< include 04-bind-mounts/_theory.qmd >}}
+
+{{< include 04-bind-mounts/_task.qmd >}}
+
+### 05. tmpfs для runtime state
+
+{{< include 05-tmpfs/_theory.qmd >}}
+
+{{< include 05-tmpfs/_task.qmd >}}
+
+### 06. OverlayFS: lower, upper, work и merged
+
+{{< include 06-overlayfs/_theory.qmd >}}
+
+{{< include 06-overlayfs/_task.qmd >}}
+
+### 07. Связь OverlayFS с Docker layers
+
+{{< include 07-docker-layers/_theory.qmd >}}
+
+{{< include 07-docker-layers/_task.qmd >}}
+
+### 08. Whiteouts и удаление файлов
+
+{{< include 08-whiteouts/_theory.qmd >}}
+
+{{< include 08-whiteouts/_task.qmd >}}
+
+### 09. Контейнерный rootfs для полезной нагрузки
+
+{{< include 09-http-rootfs/_theory.qmd >}}
+
+{{< include 09-http-rootfs/_task.qmd >}}
+
+### 10. Очистка mounts
+
+{{< include 10-cleanup/_theory.qmd >}}
+
+{{< include 10-cleanup/_task.qmd >}}

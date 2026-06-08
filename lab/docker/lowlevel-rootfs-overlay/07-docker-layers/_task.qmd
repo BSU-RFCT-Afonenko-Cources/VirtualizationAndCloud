@@ -1,0 +1,7 @@
+:::{#exr-rootfs-07_docker_layers}
+#### Проверяемое состояние
+
+Создайте остановленный служебный контейнер Alpine и соберите evidence действием `docker-evidence`. Не меняйте daemon configuration и storage driver.
+
+Сохраните `docker info`, inspect образа и контейнера, а также краткий JSON с названием driver/snapshotter-контекста и указанием writable container layer. Evidence должно учитывать, что host paths могут быть скрыты containerd image store.
+:::
