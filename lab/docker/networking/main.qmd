@@ -1,0 +1,70 @@
+---
+metadata-files:
+    - 01-inventory/step.yaml
+    - 02-api/step.yaml
+    - 03-client/step.yaml
+    - 04-publish/step.yaml
+    - 05-isolation/step.yaml
+    - 06-aliases/step.yaml
+    - 07-dual-network/step.yaml
+    - 08-dns-failure/step.yaml
+    - 09-cleanup/step.yaml
+---
+
+# Сети Docker, DNS service discovery и публикация портов
+
+{{< include _assignment-description.qmd >}}
+
+## {{< meta inventory.title >}}
+
+{{< include 01-inventory/_theory.qmd >}}
+
+{{< include 01-inventory/_task.qmd >}}
+
+## {{< meta api.title >}}
+
+{{< include 02-api/_theory.qmd >}}
+
+{{< include 02-api/_task.qmd >}}
+
+## {{< meta client.title >}}
+
+{{< include 03-client/_theory.qmd >}}
+
+{{< include 03-client/_task.qmd >}}
+
+## {{< meta publish.title >}}
+
+{{< include 04-publish/_theory.qmd >}}
+
+{{< include 04-publish/_task.qmd >}}
+
+## {{< meta isolation.title >}}
+
+{{< include 05-isolation/_theory.qmd >}}
+
+{{< include 05-isolation/_task.qmd >}}
+
+## {{< meta aliases.title >}}
+
+{{< include 06-aliases/_theory.qmd >}}
+
+{{< include 06-aliases/_task.qmd >}}
+
+## {{< meta dual_network.title >}}
+
+{{< include 07-dual-network/_theory.qmd >}}
+
+{{< include 07-dual-network/_task.qmd >}}
+
+## {{< meta dns_failure.title >}}
+
+{{< include 08-dns-failure/_theory.qmd >}}
+
+{{< include 08-dns-failure/_task.qmd >}}
+
+## {{< meta cleanup.title >}}
+
+{{< include 09-cleanup/_theory.qmd >}}
+
+{{< include 09-cleanup/_task.qmd >}}

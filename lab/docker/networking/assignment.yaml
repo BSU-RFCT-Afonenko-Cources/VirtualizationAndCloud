@@ -1,0 +1,14 @@
+title: "Сети Docker, DNS service discovery и публикация портов"
+description: _assignment-description.qmd
+time-limit-minutes: 120
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-inventory/step.yaml
+  - 02-api/step.yaml
+  - 03-client/step.yaml
+  - 04-publish/step.yaml
+  - 05-isolation/step.yaml
+  - 06-aliases/step.yaml
+  - 07-dual-network/step.yaml
+  - 08-dns-failure/step.yaml
+  - 09-cleanup/step.yaml

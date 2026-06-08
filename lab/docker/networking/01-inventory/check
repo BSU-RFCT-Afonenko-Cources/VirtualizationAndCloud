@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/lab/docker/networking/evidence/networks-initial.txt
+[ -s "$EVIDENCE" ] || { echo "Не найден исходный список сетей"; exit 1; }
+head -n 1 "$EVIDENCE" | grep -q NETWORK || { echo "В evidence нет заголовка docker network ls"; exit 1; }
+[ "$(docker network inspect -f '{{.Driver}}' lab-net 2>/dev/null)" = bridge ] || { echo "lab-net не является bridge-сетью"; exit 1; }
+[ "$(docker network inspect -f '{{index .Labels "course.lab"}}' lab-net)" = docker-networking ] || { echo "Нет label course.lab"; exit 1; }
+[ "$(docker network inspect -f '{{index .Labels "course.role"}}' lab-net)" = shared ] || { echo "Нет label course.role"; exit 1; }
+echo "lab-net и inventory проверены"

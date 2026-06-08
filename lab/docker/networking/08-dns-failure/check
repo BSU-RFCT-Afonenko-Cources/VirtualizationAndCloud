@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+jq -e '.exit_code > 0 and (.error | length > 0) and (.url | contains("missing-api.internal"))' /home/ubuntu/lab/docker/networking/evidence/dns-error.json >/dev/null || { echo "Нет корректного evidence DNS failure"; exit 1; }
+[ "$(docker inspect -f '{{.State.ExitCode}}' net-client-dns-fail 2>/dev/null)" != 0 ] || { echo "Failure-контейнер не зафиксировал ошибку"; exit 1; }
+jq -e '.http_code == 200 and .body.service == "net-api" and (.url | contains("api.internal"))' /home/ubuntu/lab/docker/networking/evidence/dns-recovery.json >/dev/null || { echo "Recovery через alias не подтверждён"; exit 1; }
+curl --fail --silent http://127.0.0.1:18080/ | jq -e '.status == "ok"' >/dev/null || { echo "После drill proxy недоступен"; exit 1; }
+echo "DNS failure и recovery проверены"

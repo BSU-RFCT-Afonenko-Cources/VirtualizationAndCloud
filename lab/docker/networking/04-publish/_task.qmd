@@ -1,0 +1,5 @@
+Запустите контейнер `net-proxy` из образа `course/net-proxy:1.0` в `lab-net`. Настройте его на передачу запросов к `net-api` и опубликуйте порт proxy как `127.0.0.1:18080` на host.
+
+::: {#exr-network-published-port}
+Контейнер `net-proxy` должен быть running и healthy, иметь роль proxy и единственный binding внутреннего порта 8080 к `127.0.0.1:18080`. У `net-api` по-прежнему не должно быть published ports.
+:::

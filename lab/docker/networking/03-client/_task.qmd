@@ -1,0 +1,5 @@
+Запустите `net-client` из образа `course/net-client:1.0` в `lab-net` и обратитесь к API по DNS-имени контейнера `net-api`. Сохраните результат клиента в evidence-файл `client-response.json`.
+
+::: {#exr-network-client}
+Evidence должен быть корректным JSON, содержать HTTP-код 200 и тело ответа API со значениями `service: net-api` и `status: ok`. Сохраните диагностический контейнер с именем `net-client`, чтобы его сетевую конфигурацию можно было инспектировать.
+:::

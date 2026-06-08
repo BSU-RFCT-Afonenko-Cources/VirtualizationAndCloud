@@ -51,11 +51,16 @@ book:
       chapters:
         - lab/ubuntu/main.qmd
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/docker/compose/main.qmd
 ||||||| 6df1dcb
 =======
         - lab/docker/images/main.qmd
 >>>>>>> remotes/origin/codex/create-docker-lab-for-reproducible-builds
+||||||| 6df1dcb
+=======
+        - lab/docker/networking/main.qmd
+>>>>>>> remotes/origin/codex/create-docker-networking-lab
         - lab/libvirt/single/main.qmd
 
     - part: "Задания. Практика"

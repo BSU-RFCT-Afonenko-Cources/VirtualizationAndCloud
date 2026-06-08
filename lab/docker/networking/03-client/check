@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/lab/docker/networking/evidence/client-response.json
+jq -e '.http_code == 200 and .body.service == "net-api" and .body.status == "ok" and (.url | contains("net-api"))' "$EVIDENCE" >/dev/null || { echo "Некорректный client-response.json"; exit 1; }
+[ "$(docker inspect -f '{{.State.Status}}' net-client 2>/dev/null)" = exited ] || { echo "Диагностический net-client не сохранён"; exit 1; }
+[ "$(docker inspect -f '{{if index .NetworkSettings.Networks "lab-net"}}yes{{end}}' net-client)" = yes ] || { echo "net-client не был подключён к lab-net"; exit 1; }
+[ "$(docker inspect -f '{{.State.ExitCode}}' net-client)" = 0 ] || { echo "net-client завершился с ошибкой"; exit 1; }
+echo "Docker DNS и HTTP evidence проверены"

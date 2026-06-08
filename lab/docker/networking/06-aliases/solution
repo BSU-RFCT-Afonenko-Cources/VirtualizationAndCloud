@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+docker network disconnect lab-net net-api
+docker network connect --alias api.internal lab-net net-api
+docker rm -f net-client >/dev/null 2>&1 || true
+docker run --name net-client --network lab-net --label course.lab=docker-networking --label course.role=diagnostic course/net-client:1.0 http://api.internal:8080/ > /home/ubuntu/lab/docker/networking/evidence/alias-response.json
+chown ubuntu:ubuntu /home/ubuntu/lab/docker/networking/evidence/alias-response.json

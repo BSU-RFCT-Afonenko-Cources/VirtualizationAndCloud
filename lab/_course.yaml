@@ -7,6 +7,7 @@ assignments:
     - ubuntu/assignment.yaml
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -18,6 +19,10 @@ assignments:
 =======
     - docker/images/assignment.yaml
 >>>>>>> remotes/origin/codex/create-docker-lab-for-reproducible-builds
+||||||| 6df1dcb
+=======
+    - docker/networking/assignment.yaml
+>>>>>>> remotes/origin/codex/create-docker-networking-lab
 
 =======
     - docker/compose/assignment.yaml

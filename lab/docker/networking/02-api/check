@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+[ "$(docker inspect -f '{{.State.Running}}' net-api 2>/dev/null)" = true ] || { echo "net-api не запущен"; exit 1; }
+[ "$(docker inspect -f '{{.State.Health.Status}}' net-api)" = healthy ] || { echo "net-api не healthy"; exit 1; }
+[ "$(docker inspect -f '{{index .Config.Labels "course.role"}}' net-api)" = backend ] || { echo "Неверная роль net-api"; exit 1; }
+[ "$(docker inspect -f '{{if index .NetworkSettings.Networks "lab-net"}}yes{{end}}' net-api)" = yes ] || { echo "net-api не в lab-net"; exit 1; }
+[ "$(docker inspect -f '{{json .NetworkSettings.Ports}}' net-api)" = '{"8080/tcp":null}' ] || { echo "Порт net-api опубликован или не объявлен"; exit 1; }
+echo "net-api изолирован внутри lab-net"

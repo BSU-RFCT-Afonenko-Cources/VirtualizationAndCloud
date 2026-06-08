@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+curl --fail --silent --show-error http://127.0.0.1:18080/ | jq -c '{url:"http://127.0.0.1:18080/",http_code:200,body:.}' > /home/ubuntu/lab/docker/networking/evidence/proxy-response.json
+printf '{"container":"net-api","published_ports":[],"direct_host_access":false}\n' > /home/ubuntu/lab/docker/networking/evidence/backend-isolation.json
+chown ubuntu:ubuntu /home/ubuntu/lab/docker/networking/evidence/proxy-response.json /home/ubuntu/lab/docker/networking/evidence/backend-isolation.json

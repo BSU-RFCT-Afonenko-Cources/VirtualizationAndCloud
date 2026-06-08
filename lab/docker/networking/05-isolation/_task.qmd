@@ -1,0 +1,5 @@
+Проверьте endpoint через опубликованный порт `net-proxy` и сохраните ответ в `proxy-response.json`. Отдельно зафиксируйте результат проверки отсутствия прямой публикации backend в `backend-isolation.json`.
+
+::: {#exr-network-isolation}
+Ответ через proxy должен иметь HTTP-код 200 и JSON API. Evidence изоляции должно указывать имя `net-api`, пустой набор published ports и значение `direct_host_access: false`.
+:::
