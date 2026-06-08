@@ -1,0 +1,1 @@
+Service logs объединяют stdout и stderr задач одного service и добавляют контекст task. Это удобная точка диагностики replicated workload, хотя полнота результата зависит от logging driver и доступности task logs. Evidence этого этапа — текстовый снимок реальных логов после HTTP-запросов.

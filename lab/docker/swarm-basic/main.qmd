@@ -1,0 +1,47 @@
+---
+metadata-files:
+  - 01-swarm-init/step.yaml
+  - 02-service-model/step.yaml
+  - 03-published-port/step.yaml
+  - 04-scale-replicas/step.yaml
+  - 05-task-rescheduling/step.yaml
+  - 06-service-logs/step.yaml
+  - 07-service-inspect/step.yaml
+  - 08-cleanup/step.yaml
+---
+
+# Docker Swarm: manager, node, service, task
+
+{{< include _assignment-description.qmd >}}
+
+## {{< meta swarm-init.title >}}
+{{< include 01-swarm-init/_theory.qmd >}}
+{{< include 01-swarm-init/_task.qmd >}}
+
+## {{< meta service-model.title >}}
+{{< include 02-service-model/_theory.qmd >}}
+{{< include 02-service-model/_task.qmd >}}
+
+## {{< meta published-port.title >}}
+{{< include 03-published-port/_theory.qmd >}}
+{{< include 03-published-port/_task.qmd >}}
+
+## {{< meta scale-replicas.title >}}
+{{< include 04-scale-replicas/_theory.qmd >}}
+{{< include 04-scale-replicas/_task.qmd >}}
+
+## {{< meta task-rescheduling.title >}}
+{{< include 05-task-rescheduling/_theory.qmd >}}
+{{< include 05-task-rescheduling/_task.qmd >}}
+
+## {{< meta service-logs.title >}}
+{{< include 06-service-logs/_theory.qmd >}}
+{{< include 06-service-logs/_task.qmd >}}
+
+## {{< meta service-inspect.title >}}
+{{< include 07-service-inspect/_theory.qmd >}}
+{{< include 07-service-inspect/_task.qmd >}}
+
+## {{< meta cleanup.title >}}
+{{< include 08-cleanup/_theory.qmd >}}
+{{< include 08-cleanup/_task.qmd >}}

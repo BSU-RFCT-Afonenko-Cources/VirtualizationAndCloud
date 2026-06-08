@@ -1,0 +1,1 @@
+Опубликованный порт принадлежит service, а не отдельному контейнеру. Стандартный ingress publish mode использует **routing mesh**: запрос к published port любого node принимается Swarm и направляется к доступной задаче сервиса. Target port — порт приложения внутри task, published port — входной порт узла.

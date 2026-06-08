@@ -16,6 +16,7 @@ book:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/libvirt/main.qmd
 ||||||| f589c88
 =======
@@ -37,6 +38,10 @@ book:
 =======
         - lab/docker/networking/main.qmd
 >>>>>>> remotes/origin/codex/create-docker-networking-lab
+||||||| 6df1dcb
+=======
+        - lab/docker/swarm-basic/main.qmd
+>>>>>>> remotes/origin/codex/create-docker-swarm-lab-structure
 
   appendices:
     - part: "Командные оболочки"
