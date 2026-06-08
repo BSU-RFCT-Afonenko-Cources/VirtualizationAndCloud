@@ -1,0 +1,51 @@
+---
+metadata-files:
+  - 01-threat-model/step.yaml
+  - 02-non-root/step.yaml
+  - 03-read-only-rootfs/step.yaml
+  - 04-capabilities/step.yaml
+  - 05-secrets/step.yaml
+  - 06-config/step.yaml
+  - 07-image-evidence/step.yaml
+  - 08-integration/step.yaml
+---
+
+# Конфигурация и базовая безопасность контейнеров
+
+## Введение
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta threat-model.title >}}
+{{< include 01-threat-model/_theory.qmd >}}
+{{< include 01-threat-model/_task.qmd >}}
+
+### {{< meta non-root.title >}}
+{{< include 02-non-root/_theory.qmd >}}
+{{< include 02-non-root/_task.qmd >}}
+
+### {{< meta read-only-rootfs.title >}}
+{{< include 03-read-only-rootfs/_theory.qmd >}}
+{{< include 03-read-only-rootfs/_task.qmd >}}
+
+### {{< meta capabilities.title >}}
+{{< include 04-capabilities/_theory.qmd >}}
+{{< include 04-capabilities/_task.qmd >}}
+
+### {{< meta secrets.title >}}
+{{< include 05-secrets/_theory.qmd >}}
+{{< include 05-secrets/_task.qmd >}}
+
+### {{< meta config.title >}}
+{{< include 06-config/_theory.qmd >}}
+{{< include 06-config/_task.qmd >}}
+
+### {{< meta image-evidence.title >}}
+{{< include 07-image-evidence/_theory.qmd >}}
+{{< include 07-image-evidence/_task.qmd >}}
+
+### {{< meta integration.title >}}
+{{< include 08-integration/_theory.qmd >}}
+{{< include 08-integration/_task.qmd >}}

@@ -15,6 +15,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -38,6 +39,10 @@ assignments:
 =======
     - docker/assignment.yaml
 >>>>>>> remotes/origin/codex/create-lab-on-cgroups-v2-concepts
+||||||| 6df1dcb
+=======
+    - docker/security/assignment.yaml
+>>>>>>> remotes/origin/codex/create-lab-on-container-security
 
 =======
     - docker/compose/assignment.yaml

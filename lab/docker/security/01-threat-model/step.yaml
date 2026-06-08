@@ -1,0 +1,16 @@
+threat-model:
+  title: "01. Модель угроз"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - ../prepare/prepare.sh
+    check:
+      exec:
+        - check/check.sh
+    solution:
+      import:
+        - solution/solution.sh
+      exec:
+        - solution/solution.sh

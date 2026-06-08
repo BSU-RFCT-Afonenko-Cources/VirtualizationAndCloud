@@ -1,0 +1,13 @@
+title: "Конфигурация и базовая безопасность контейнеров"
+description: _assignment-description.qmd
+time-limit-minutes: 120
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-threat-model/step.yaml
+  - 02-non-root/step.yaml
+  - 03-read-only-rootfs/step.yaml
+  - 04-capabilities/step.yaml
+  - 05-secrets/step.yaml
+  - 06-config/step.yaml
+  - 07-image-evidence/step.yaml
+  - 08-integration/step.yaml
