@@ -1,0 +1,1 @@
+Лабораторная работа показывает путь от OCI bundle до реального Linux-процесса. Вы подготовите rootfs и `config.json`, запустите workload напрямую через OCI runtime, исследуете namespaces, mounts, cgroups, capabilities и seccomp, а затем сравните результат с Docker-контейнером.

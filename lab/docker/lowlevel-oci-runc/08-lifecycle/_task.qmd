@@ -1,0 +1,5 @@
+::: {#exr-oci-08}
+Пройдите стадии create, start, kill и delete для идентификатора `oci-lowlevel-lab`. После каждой значимой стадии получите данные через runtime state и сохраните переходы в `/home/ubuntu/oci-runc-lab/evidence/lifecycle.json`.
+
+Итоговый файл должен содержать наблюдавшиеся статусы created, running, stopped и deleted. После delete runtime не должен находить контейнер с этим идентификатором.
+:::

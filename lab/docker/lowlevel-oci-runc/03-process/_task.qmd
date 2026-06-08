@@ -1,0 +1,5 @@
+::: {#exr-oci-03}
+Настройте process в OCI bundle так, чтобы runtime запускал долгоживущий диагностический workload без псевдотерминала. Workload должен обновлять `/run/oci-lab/heartbeat` внутри rootfs не реже одного раза в несколько секунд и оставаться в состоянии running.
+
+Сохраните текущее состояние runtime в `/home/ubuntu/oci-runc-lab/evidence/runc-state.json`. Проверка сопоставит PID, аргументы процесса и heartbeat с реально работающим контейнером.
+:::

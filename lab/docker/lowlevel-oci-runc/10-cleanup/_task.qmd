@@ -1,0 +1,5 @@
+::: {#exr-oci-10}
+Остановите и удалите OCI runtime container, сопоставимый Docker-контейнер и временный OCI bundle. Убедитесь, что идентификатор `oci-lowlevel-lab` больше не виден runtime, а каталог `/home/ubuntu/oci-runc-lab/oci-lab-bundle` отсутствует.
+
+Создайте `/home/ubuntu/oci-runc-lab/evidence/cleanup.json` с булевыми полями `runtime_absent`, `docker_absent` и `bundle_absent`, отражающими фактическое состояние после очистки.
+:::

@@ -1,0 +1,5 @@
+::: {#exr-oci-01}
+Создайте файл `/home/ubuntu/oci-runc-lab/evidence/runtime-stack.json` с инвентаризацией доступного runtime stack. Для Docker, containerd и OCI runtime укажите путь к исполняемому файлу и строку версии; отдельно укажите выбранный OCI runtime (`runc` либо `crun`).
+
+Файл должен быть валидным JSON и отражать реально установленные компоненты, а не заранее заданные значения.
+:::

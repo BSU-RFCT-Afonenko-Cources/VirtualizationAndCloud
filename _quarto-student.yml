@@ -22,6 +22,7 @@ book:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/libvirt/main.qmd
 ||||||| f589c88
 =======
@@ -67,6 +68,10 @@ book:
 =======
         - lab/docker/lowlevel-network-primitives/main.qmd
 >>>>>>> remotes/origin/codex/create-lab-on-low-level-network-primitives
+||||||| 6df1dcb
+=======
+        - lab/docker/lowlevel-oci-runc/main.qmd
+>>>>>>> remotes/origin/codex/create-low-level-oci/runc-lab
 
   appendices:
     - part: "Командные оболочки"

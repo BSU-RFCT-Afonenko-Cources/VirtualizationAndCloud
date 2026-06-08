@@ -21,6 +21,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -95,3 +96,8 @@ assignments:
 =======
     - docker/lowlevel-namespaces/assignment.yaml
 >>>>>>> remotes/origin/codex/create-lab-on-linux-namespaces-for-containers
+||||||| 6df1dcb
+
+=======
+    - docker/lowlevel-oci-runc/assignment.yaml
+>>>>>>> remotes/origin/codex/create-low-level-oci/runc-lab

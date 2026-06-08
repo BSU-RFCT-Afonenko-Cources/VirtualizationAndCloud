@@ -1,0 +1,14 @@
+step-09:
+  title: "Сравнение OCI-контейнера и Docker-контейнера"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - ../prepare.bash
+    check:
+      exec:
+        - check/check.bash
+    solution:
+      exec:
+        - solution/solution.bash

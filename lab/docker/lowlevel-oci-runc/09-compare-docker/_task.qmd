@@ -1,0 +1,5 @@
+::: {#exr-oci-09}
+Запустите OCI-контейнер из bundle и сопоставимый Docker-контейнер с именем `oci-lowlevel-docker`, использующий тот же workload. Оба процесса должны оставаться работающими.
+
+Создайте `/home/ubuntu/oci-runc-lab/evidence/comparison.json` с отдельными объектами oci и docker. Для каждого сохраните host PID, process args, cgroup path и inode mount, PID и UTS namespaces. Данные Docker должны согласовываться с Docker inspect.
+:::

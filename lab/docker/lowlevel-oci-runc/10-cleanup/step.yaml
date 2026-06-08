@@ -1,0 +1,14 @@
+step-10:
+  title: "Очистка OCI assets"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - ../prepare.bash
+    check:
+      exec:
+        - check/check.bash
+    solution:
+      exec:
+        - solution/solution.bash
