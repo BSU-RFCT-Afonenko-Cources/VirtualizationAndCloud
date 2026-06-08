@@ -1,0 +1,7 @@
+:::{#exr-docker-security-capabilities}
+#### Минимальные capabilities
+
+Пересоздайте `security-api`, удалив все Linux capabilities без добавления исключений. Запретите процессам повышать привилегии. Не отключайте стандартный seccomp-профиль Docker.
+
+Сохраните доступность обоих HTTP endpoint после применения ограничений.
+:::

@@ -1,0 +1,7 @@
+:::{#exr-docker-security-read-only}
+#### Неизменяемая корневая файловая система
+
+Пересоздайте `security-api` с read-only root filesystem. Единственной writable-областью приложения должен быть `tmpfs` в `/var/lib/hardened-api`, доступный UID/GID `10001:10001` и ограниченный параметрами `noexec`, `nosuid` и `nodev`.
+
+Убедитесь, что health endpoint продолжает отвечать, а настроенный API endpoint способен обновлять счётчик запросов.
+:::

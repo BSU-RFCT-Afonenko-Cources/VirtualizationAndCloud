@@ -1,0 +1,7 @@
+:::{#exr-docker-security-threat-model}
+#### Модель угроз
+
+Создайте в рабочем каталоге файл `threat-model.json`. Корневой объект должен содержать массив `risks`; каждый элемент — непустые строковые поля `category`, `asset`, `threat`, `impact` и `mitigation`.
+
+Опишите как минимум четыре риска с уникальными категориями `root-user`, `writable-rootfs`, `capabilities` и `secret-in-image`. Свяжите меры защиты с API-сервисом этой лаборатории.
+:::

@@ -1,0 +1,7 @@
+:::{#exr-docker-security-image-evidence}
+#### Свидетельство о происхождении образа
+
+Создайте `image-evidence.json` для локально использованного базового образа. Укажите поля `base_image`, `base_digest`, `application_image`, `application_version` и `scan_status`.
+
+Значения должны соответствовать реально доступным локальным образам и OCI-меткам `security-api:lab`. Digest должен иметь формат OCI, а статус этого учебного шага — `local-metadata-checked`.
+:::
