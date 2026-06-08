@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["project", "captured_at", "services", "stats"],
+  "properties": {
+    "project": {"const": "orders-platform"},
+    "captured_at": {"type": "string"},
+    "services": {"type": "array", "minItems": 5},
+    "stats": {"type": "array", "minItems": 5}
+  }
+}

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+readonly STEP="${1:?step number is required}"
+readonly WORK=/home/ubuntu/capstone-compose
+readonly ASSETS=/opt/lab/docker/capstone-compose/assets
+readonly COMPOSE=/home/ubuntu/capstone-compose/compose.yaml
+
+/opt/lab/docker/capstone-compose/scripts/prepare
+install -m 0644 -o ubuntu -g ubuntu /opt/lab/docker/capstone-compose/assets/target-state.json /home/ubuntu/capstone-compose/target-state.json
+
+if ((10#$STEP >= 2)); then
+  for component in gateway orders-api inventory-api worker; do
+    install -m 0644 -o ubuntu -g ubuntu "/opt/lab/docker/capstone-compose/assets/platform/${component}/Dockerfile" "/home/ubuntu/capstone-compose/${component}/Dockerfile"
+  done
+  sudo -u ubuntu docker build -t orders-gateway:1.0.0 /home/ubuntu/capstone-compose/gateway
+  sudo -u ubuntu docker build -t orders-api:1.0.0 /home/ubuntu/capstone-compose/orders-api
+  sudo -u ubuntu docker build -t inventory-api:1.0.0 /home/ubuntu/capstone-compose/inventory-api
+  sudo -u ubuntu docker build -t orders-worker:1.0.0 /home/ubuntu/capstone-compose/worker
+fi
+
+if ((10#$STEP >= 3)); then
+  install -m 0644 -o ubuntu -g ubuntu /opt/lab/docker/capstone-compose/assets/compose.yaml /home/ubuntu/capstone-compose/compose.yaml
+  install -m 0644 -o ubuntu -g ubuntu /opt/lab/docker/capstone-compose/assets/.env /home/ubuntu/capstone-compose/.env
+  install -m 0600 -o ubuntu -g ubuntu /opt/lab/docker/capstone-compose/assets/db_password.txt /home/ubuntu/capstone-compose/secrets/db_password.txt
+  sudo -u ubuntu docker compose --project-directory /home/ubuntu/capstone-compose --env-file /home/ubuntu/capstone-compose/.env -f /home/ubuntu/capstone-compose/compose.yaml up -d --build --wait
+fi
+
+if ((10#$STEP >= 9)); then
+  python3 /opt/lab/docker/capstone-compose/scripts/write-evidence
+  chown ubuntu:ubuntu /home/ubuntu/capstone-compose/evidence/platform.json
+fi
+
+if ((10#$STEP >= 10)); then
+  /opt/lab/docker/capstone-compose/scripts/backup-restore
+fi

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+readonly WORK=/home/ubuntu/capstone-compose
+readonly SOURCE_DB=orders-platform-db-1
+readonly BACKUP=/home/ubuntu/capstone-compose/evidence/orders.sql
+readonly PASSWORD=/home/ubuntu/capstone-compose/secrets/db_password.txt
+order_id="$(docker exec orders-platform-db-1 psql -U platform -d orders -Atc "SELECT id FROM orders ORDER BY id LIMIT 1")"
+if [[ -z "$order_id" ]]; then
+  response="$(curl -fsS -H 'Content-Type: application/json' -d '{"sku":"BOOK-001","quantity":1}' http://127.0.0.1:8080/api/orders)"
+  order_id="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["id"])' <<<"$response")"
+  for attempt in {1..30}; do
+    status="$(curl -fsS "http://127.0.0.1:8080/api/orders/${order_id}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["status"])')"
+    [[ "$status" == completed ]] && break
+    sleep 1
+  done
+fi
+printf '%s\n' "$order_id" > /home/ubuntu/capstone-compose/evidence/restored-order-id.txt
+docker exec orders-platform-db-1 pg_dump -U platform -d orders > /home/ubuntu/capstone-compose/evidence/orders.sql
+docker rm -f orders-restore-db orders-restore-api >/dev/null 2>&1 || true
+docker volume rm orders-restore-db-data >/dev/null 2>&1 || true
+docker volume create orders-restore-db-data >/dev/null
+docker network rm orders-restore-data >/dev/null 2>&1 || true
+docker network create orders-restore-data >/dev/null
+docker run -d --name orders-restore-db --network orders-restore-data -e POSTGRES_DB=orders -e POSTGRES_USER=platform -e POSTGRES_PASSWORD_FILE=/run/secrets/db_password -v orders-restore-db-data:/var/lib/postgresql/data -v /home/ubuntu/capstone-compose/secrets/db_password.txt:/run/secrets/db_password:ro postgres:16-alpine >/dev/null
+for attempt in {1..60}; do docker exec orders-restore-db pg_isready -U platform -d orders >/dev/null 2>&1 && break; sleep 1; done
+docker exec -i orders-restore-db psql -U platform -d orders < /home/ubuntu/capstone-compose/evidence/orders.sql >/dev/null
+docker run -d --name orders-restore-api --network orders-restore-data -p 8081:8080 -e DB_HOST=orders-restore-db -e DB_NAME=orders -e DB_USER=platform -e DB_PASSWORD_FILE=/run/secrets/db_password -v /home/ubuntu/capstone-compose/secrets/db_password.txt:/run/secrets/db_password:ro orders-api:1.0.0 >/dev/null

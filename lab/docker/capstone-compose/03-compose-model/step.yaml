@@ -1,0 +1,20 @@
+step-03:
+  title: "03. Compose-модель"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    prepare:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/03-compose-model/prepare
+    pre-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/03-compose-model/pre-step
+    check:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/03-compose-model/check
+    solution:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/03-compose-model/solution
+    post-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/03-compose-model/post-step

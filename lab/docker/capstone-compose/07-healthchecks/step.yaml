@@ -1,0 +1,20 @@
+step-07:
+  title: "07. Healthchecks and dependencies"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    prepare:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/07-healthchecks/prepare
+    pre-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/07-healthchecks/pre-step
+    check:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/07-healthchecks/check
+    solution:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/07-healthchecks/solution
+    post-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/07-healthchecks/post-step

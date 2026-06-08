@@ -1,0 +1,7 @@
+:::{#exr-capstone-11-11-security}
+## Security hardening
+
+Для gateway, обоих API и worker обеспечьте запуск не от root, read-only root filesystem и удаление всех добавляемых по умолчанию capabilities. Предоставьте только необходимые временные writable-пути.
+
+Не используйте privileged mode, host network, host PID или Docker socket. После hardening все четыре custom service должны оставаться healthy, а полный workflow заказа — успешно выполняться.
+:::

@@ -1,0 +1,131 @@
+name: orders-platform
+services:
+  gateway:
+    build: ./gateway
+    image: orders-gateway:1.0.0
+    labels:
+      lab.component: gateway
+      lab.version: 1.0.0
+    ports:
+      - "8080:8080"
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      orders-api:
+        condition: service_healthy
+      inventory-api:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+    cap_drop: [ALL]
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, http://127.0.0.1:8080/health]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  orders-api:
+    build: ./orders-api
+    image: orders-api:1.0.0
+    labels:
+      lab.component: orders-api
+      lab.version: 1.0.0
+    environment:
+      DB_HOST: db
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
+    networks: [backend, data]
+    depends_on:
+      db:
+        condition: service_healthy
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  inventory-api:
+    build: ./inventory-api
+    image: inventory-api:1.0.0
+    labels:
+      lab.component: inventory-api
+      lab.version: 1.0.0
+    environment:
+      DB_HOST: db
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
+    networks: [backend, data]
+    depends_on:
+      db:
+        condition: service_healthy
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  worker:
+    build: ./worker
+    image: orders-worker:1.0.0
+    labels:
+      lab.component: worker
+      lab.version: 1.0.0
+    environment:
+      DB_HOST: db
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
+    networks: [data]
+    depends_on:
+      db:
+        condition: service_healthy
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    healthcheck:
+      test: [CMD, python, -c, "import pathlib; assert 'worker.py' in pathlib.Path('/proc/1/cmdline').read_text()"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  db:
+    image: postgres:16-alpine
+    labels:
+      lab.component: db
+      lab.version: 1.0.0
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    networks: [data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+networks:
+  frontend: {}
+  backend:
+    internal: true
+  data:
+    internal: true
+volumes:
+  db-data: {}
+  backup-data: {}
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt

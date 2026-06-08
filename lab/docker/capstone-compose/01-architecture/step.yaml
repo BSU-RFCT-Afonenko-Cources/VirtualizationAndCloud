@@ -1,0 +1,20 @@
+step-01:
+  title: "01. Архитектурное целевое состояние"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    prepare:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/01-architecture/prepare
+    pre-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/01-architecture/pre-step
+    check:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/01-architecture/check
+    solution:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/01-architecture/solution
+    post-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/01-architecture/post-step

@@ -1,0 +1,20 @@
+step-09:
+  title: "09. Наблюдаемость"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    prepare:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/09-observability/prepare
+    pre-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/09-observability/pre-step
+    check:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/09-observability/check
+    solution:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/09-observability/solution
+    post-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/09-observability/post-step

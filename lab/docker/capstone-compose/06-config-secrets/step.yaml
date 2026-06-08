@@ -1,0 +1,20 @@
+step-06:
+  title: "06. Конфигурация и секреты"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    prepare:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/06-config-secrets/prepare
+    pre-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/06-config-secrets/pre-step
+    check:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/06-config-secrets/check
+    solution:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/06-config-secrets/solution
+    post-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/06-config-secrets/post-step

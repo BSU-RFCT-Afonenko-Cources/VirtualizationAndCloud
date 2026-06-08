@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+import datetime, json, subprocess
+base=["docker","compose","--project-directory","/home/ubuntu/capstone-compose","--env-file","/home/ubuntu/capstone-compose/.env","-f","/home/ubuntu/capstone-compose/compose.yaml"]
+ps=json.loads(subprocess.check_output(base+["ps","--format","json"], text=True))
+stats=[json.loads(line) for line in subprocess.check_output(["docker","stats","--no-stream","--format","{{json .}}"], text=True).splitlines() if line]
+data={"project":"orders-platform","captured_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"services":[{"name":x.get("Service"),"state":x.get("State"),"health":x.get("Health","")} for x in ps],"stats":stats}
+with open("/home/ubuntu/capstone-compose/evidence/platform.json","w",encoding="utf-8") as f: json.dump(data,f,indent=2)
