@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+docker rm -f net-api >/dev/null 2>&1 || true
+docker run -d --name net-api --network lab-net --label course.lab=docker-networking --label course.role=backend course/net-api:1.0 >/dev/null
+for _ in $(seq 1 30); do
+  [ "$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{end}}' net-api 2>/dev/null)" = healthy ] && exit 0
+  sleep 1
+done
+echo "net-api не стал healthy" >&2
+exit 1

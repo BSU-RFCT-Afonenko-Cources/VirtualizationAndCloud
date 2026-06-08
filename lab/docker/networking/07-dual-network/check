@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+for NETWORK in frontend backend; do
+  [ "$(docker network inspect -f '{{.Driver}}' "$NETWORK" 2>/dev/null)" = bridge ] || { echo "$NETWORK не bridge"; exit 1; }
+  [ "$(docker network inspect -f '{{index .Labels "course.lab"}}' "$NETWORK")" = docker-networking ] || { echo "Нет lab label у $NETWORK"; exit 1; }
+done
+[ "$(docker inspect -f '{{if index .NetworkSettings.Networks "frontend"}}yes{{end}}' net-proxy)" = yes ] || { echo "Proxy не во frontend"; exit 1; }
+[ "$(docker inspect -f '{{if index .NetworkSettings.Networks "backend"}}yes{{end}}' net-proxy)" = yes ] || { echo "Proxy не в backend"; exit 1; }
+[ "$(docker inspect -f '{{if index .NetworkSettings.Networks "backend"}}yes{{end}}' net-api)" = yes ] || { echo "API не в backend"; exit 1; }
+[ "$(docker inspect -f '{{if index .NetworkSettings.Networks "frontend"}}yes{{end}}' net-api)" != yes ] || { echo "API не должен быть во frontend"; exit 1; }
+[ "$(docker inspect -f '{{json .HostConfig.PortBindings}}' net-api)" = '{}' ] || { echo "API опубликован на host"; exit 1; }
+curl --fail --silent http://127.0.0.1:18080/ | jq -e '.service == "net-api"' >/dev/null || { echo "Proxy не достигает API"; exit 1; }
+echo "Dual-homed proxy и backend isolation проверены"

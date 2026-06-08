@@ -1,0 +1,5 @@
+Добавьте контейнеру `net-api` alias `api.internal` в сети `lab-net`. Выполните запрос из нового диагностического контейнера по этому alias и сохраните результат в `alias-response.json`.
+
+::: {#exr-network-alias}
+Inspect контейнера должен показывать alias `api.internal` в `lab-net`, а evidence — HTTP-код 200, JSON-тело `net-api` и поле URL, использующее стабильное имя.
+:::

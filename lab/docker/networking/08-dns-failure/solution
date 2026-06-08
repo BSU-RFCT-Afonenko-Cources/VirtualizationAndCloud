@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+docker rm -f net-client-dns-fail net-client >/dev/null 2>&1 || true
+set +e
+docker run --name net-client-dns-fail --network backend --label course.lab=docker-networking --label course.role=diagnostic course/net-client:1.0 http://missing-api.internal:8080/ > /home/ubuntu/lab/docker/networking/evidence/dns-error.json
+FAIL_CODE=$?
+set -e
+[ "$FAIL_CODE" -ne 0 ] || { echo "Неверное DNS-имя неожиданно сработало" >&2; exit 1; }
+docker run --name net-client --network backend --label course.lab=docker-networking --label course.role=diagnostic course/net-client:1.0 http://api.internal:8080/ > /home/ubuntu/lab/docker/networking/evidence/dns-recovery.json
+chown ubuntu:ubuntu /home/ubuntu/lab/docker/networking/evidence/dns-error.json /home/ubuntu/lab/docker/networking/evidence/dns-recovery.json

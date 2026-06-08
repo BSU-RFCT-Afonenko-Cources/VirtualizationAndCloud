@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+docker rm -f net-client net-client-dns-fail net-proxy net-api >/dev/null 2>&1 || true
+docker network rm lab-net frontend backend >/dev/null 2>&1 || true
+docker network create --driver bridge --label course.lab=docker-networking --label course.role=frontend frontend >/dev/null
+docker network create --driver bridge --label course.lab=docker-networking --label course.role=backend backend >/dev/null
+docker run -d --name net-api --network backend --network-alias api.internal --label course.lab=docker-networking --label course.role=backend course/net-api:1.0 >/dev/null
+docker run -d --name net-proxy --network frontend --label course.lab=docker-networking --label course.role=proxy -e TARGET_HOST=api.internal -e TARGET_PORT=8080 -p 127.0.0.1:18080:8080 course/net-proxy:1.0 >/dev/null
+docker network connect backend net-proxy
+for _ in $(seq 1 30); do
+  API_STATUS=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{end}}' net-api 2>/dev/null || true)
+  PROXY_STATUS=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{end}}' net-proxy 2>/dev/null || true)
+  [ "$API_STATUS" = healthy ] && [ "$PROXY_STATUS" = healthy ] && exit 0
+  sleep 1
+done
+echo "Dual-network topology не стала healthy" >&2
+exit 1

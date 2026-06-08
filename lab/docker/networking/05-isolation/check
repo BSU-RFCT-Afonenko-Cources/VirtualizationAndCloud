@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+curl --fail --silent http://127.0.0.1:18080/ | jq -e '.service == "net-api" and .status == "ok"' >/dev/null || { echo "Proxy endpoint недоступен"; exit 1; }
+jq -e '.http_code == 200 and .body.service == "net-api" and .body.status == "ok"' /home/ubuntu/lab/docker/networking/evidence/proxy-response.json >/dev/null || { echo "Некорректный proxy-response.json"; exit 1; }
+jq -e '.container == "net-api" and .published_ports == [] and .direct_host_access == false' /home/ubuntu/lab/docker/networking/evidence/backend-isolation.json >/dev/null || { echo "Некорректный backend-isolation.json"; exit 1; }
+[ "$(docker inspect -f '{{json .HostConfig.PortBindings}}' net-api)" = '{}' ] || { echo "Backend опубликован на host"; exit 1; }
+echo "Доступ через proxy и изоляция backend подтверждены"

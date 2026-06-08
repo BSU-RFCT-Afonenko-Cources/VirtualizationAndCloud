@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+[ "$(docker inspect -f '{{.State.Health.Status}}' net-proxy 2>/dev/null)" = healthy ] || { echo "net-proxy не healthy"; exit 1; }
+[ "$(docker inspect -f '{{index .Config.Labels "course.role"}}' net-proxy)" = proxy ] || { echo "Неверная роль proxy"; exit 1; }
+BINDING=$(docker inspect -f '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostIp}}:{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' net-proxy)
+[ "$BINDING" = 127.0.0.1:18080 ] || { echo "Ожидался binding 127.0.0.1:18080"; exit 1; }
+[ "$(docker inspect -f '{{json .HostConfig.PortBindings}}' net-api)" = '{}' ] || { echo "У backend появился published port"; exit 1; }
+echo "Опубликован только proxy"

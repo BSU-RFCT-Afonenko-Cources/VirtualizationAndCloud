@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+for CONTAINER in net-api net-client net-client-dns-fail net-proxy; do
+  if docker container inspect "$CONTAINER" >/dev/null 2>&1; then
+    echo "Контейнер $CONTAINER не удалён"
+    exit 1
+  fi
+done
+for NETWORK in lab-net frontend backend; do
+  if docker network inspect "$NETWORK" >/dev/null 2>&1; then
+    echo "Сеть $NETWORK не удалена"
+    exit 1
+  fi
+done
+for SYSTEM_NETWORK in bridge host none; do
+  docker network inspect "$SYSTEM_NETWORK" >/dev/null 2>&1 || { echo "Системная сеть $SYSTEM_NETWORK отсутствует"; exit 1; }
+done
+echo "Лабораторные ресурсы удалены, системные сети сохранены"

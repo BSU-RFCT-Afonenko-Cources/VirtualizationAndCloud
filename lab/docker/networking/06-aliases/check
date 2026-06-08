@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+docker inspect -f '{{json (index .NetworkSettings.Networks "lab-net").Aliases}}' net-api | jq -e 'index("api.internal") != null' >/dev/null || { echo "Alias api.internal не найден"; exit 1; }
+jq -e '.http_code == 200 and .body.service == "net-api" and (.url | contains("api.internal"))' /home/ubuntu/lab/docker/networking/evidence/alias-response.json >/dev/null || { echo "Запрос через alias не подтверждён"; exit 1; }
+echo "Network alias работает"

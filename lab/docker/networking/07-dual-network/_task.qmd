@@ -1,0 +1,5 @@
+Переведите лабораторную топологию на две user-defined bridge-сети `frontend` и `backend` с labels лабораторной работы. Подключите `net-proxy` к обеим сетям, а `net-api` — только к `backend`, сохранив для API alias `api.internal`.
+
+::: {#exr-network-dual-homed}
+Proxy должен одновременно состоять во `frontend` и `backend` и оставаться доступным на `127.0.0.1:18080`. API должно состоять только в `backend`, не иметь published ports и отвечать proxy через alias.
+:::

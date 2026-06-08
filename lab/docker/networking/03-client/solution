@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+docker rm -f net-client >/dev/null 2>&1 || true
+docker run --name net-client --network lab-net --label course.lab=docker-networking --label course.role=diagnostic course/net-client:1.0 http://net-api:8080/ > /home/ubuntu/lab/docker/networking/evidence/client-response.json
+chown ubuntu:ubuntu /home/ubuntu/lab/docker/networking/evidence/client-response.json

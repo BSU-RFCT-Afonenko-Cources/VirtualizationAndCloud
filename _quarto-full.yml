@@ -50,6 +50,7 @@ book:
     - part: "Задания. Лабораторные"
       chapters:
         - lab/ubuntu/main.qmd
+        - lab/docker/networking/main.qmd
         - lab/libvirt/single/main.qmd
 
     - part: "Задания. Практика"
