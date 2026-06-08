@@ -1,0 +1,11 @@
+:::{#exr-docker-images-labels}
+#### Добавьте метаданные образа
+
+Расширьте Dockerfile labels со следующими ключами и значениями:
+
+- `maintainer`: `student@course.local`;
+- `course`: `virtualization-and-cloud`;
+- `component`: `image-lab-api`.
+
+Пересоберите образ и обновите теги `v1` и `latest`, затем пересоздайте рабочий контейнер.
+:::

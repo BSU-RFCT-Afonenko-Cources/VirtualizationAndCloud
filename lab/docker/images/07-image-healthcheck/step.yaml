@@ -1,0 +1,11 @@
+images-image-healthcheck:
+  title: "Healthcheck образа"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    check:
+      exec:
+        - check.sh
+    solution:
+      exec:
+        - solution.sh
