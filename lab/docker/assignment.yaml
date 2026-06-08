@@ -1,0 +1,14 @@
+title: "Docker: процессы и восстановление"
+description: _assignment-description.qmd
+time-limit-minutes: 240
+virtual-machine: "Ubuntu 26.04 LTS — Docker Lab"
+steps:
+  - capstone-process-hibernation/01-state-model/step.yaml
+  - capstone-process-hibernation/02-run-worker/step.yaml
+  - capstone-process-hibernation/03-quiesce-write/step.yaml
+  - capstone-process-hibernation/04-freeze-pause/step.yaml
+  - capstone-process-hibernation/05-checkpoint-disk/step.yaml
+  - capstone-process-hibernation/06-restore-instance/step.yaml
+  - capstone-process-hibernation/07-backup-files/step.yaml
+  - capstone-process-hibernation/08-failure-recovery/step.yaml
+  - capstone-process-hibernation/09-runbook/step.yaml

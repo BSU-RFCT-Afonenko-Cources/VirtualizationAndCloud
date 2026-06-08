@@ -1,0 +1,7 @@
+:::{#exr-hib-freeze}
+### Пауза без сохранения на диск
+
+Снимите согласованную остановку приложения, затем продемонстрируйте pause/freeze контейнера и последующий resume. Во время паузы проверьте Docker-состояние, cgroup процесса и неизменность файлового прогресса.
+
+После resume прогресс должен снова увеличиваться у того же `instance_id`. Сохраните структурированное evidence в `evidence/freeze.json` с полями `container_id`, `instance_id`, `pid`, `progress_before`, `progress_during`, `progress_after`, `docker_paused_observed`, `cgroup_frozen_observed` и `resumed`.
+:::

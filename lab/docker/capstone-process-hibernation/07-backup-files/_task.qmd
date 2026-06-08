@@ -1,0 +1,7 @@
+:::{#exr-hib-backup}
+### Резервная копия файлового состояния
+
+Согласованно приостановите запись и создайте архив `backups/hib-data.tar.gz`, содержащий очередь, progress и журнал событий. Рядом сохраните SHA-256 checksum и JSON manifest.
+
+`backups/manifest.json` должен содержать имя архива, checksum, список файлов, размер, `instance_id`, `progress`, временную метку и признак согласованного состояния. Progress в manifest должен совпадать с endpoint и сохранённым `data/progress.json`.
+:::

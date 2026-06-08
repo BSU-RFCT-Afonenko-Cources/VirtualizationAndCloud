@@ -1,0 +1,1 @@
+Практические задания по контейнеризации Docker: процессы, runtime-состояние, cgroups, namespaces, checkpoint/restore и восстановление после сбоев.

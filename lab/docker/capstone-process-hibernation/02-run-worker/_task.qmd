@@ -1,0 +1,7 @@
+:::{#exr-hib-run-worker}
+### Долгоживущая полезная нагрузка
+
+Соберите образ `hib-worker:lab` из предоставленного исходного кода и запустите контейнер `hib-worker`. Подключите `/home/ubuntu/capstone-process-hibernation/data` как `/data`, а endpoint приложения опубликуйте на `127.0.0.1:18080`.
+
+Добейтесь состояния, в котором контейнер работает, `/hib-status` отвечает JSON-объектом, а `progress` увеличивается. Сохраните два последовательных ответа endpoint в `evidence/progress-before.json` и `evidence/progress-after.json`; второй должен относиться к тому же `instance_id` и иметь больший прогресс.
+:::

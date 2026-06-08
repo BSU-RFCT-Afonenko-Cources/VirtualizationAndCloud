@@ -1,0 +1,6 @@
+FROM python:3.12-slim
+COPY hib_worker.py /usr/local/bin/hib_worker.py
+RUN chmod 0755 /usr/local/bin/hib_worker.py
+EXPOSE 8080
+VOLUME ["/data"]
+ENTRYPOINT ["/usr/local/bin/hib_worker.py"]
