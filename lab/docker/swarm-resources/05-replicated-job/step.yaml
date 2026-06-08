@@ -1,0 +1,11 @@
+05-replicated-job:
+  title: "Replicated job pattern"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    check:
+      exec:
+        - check.sh
+    solution:
+      exec:
+        - solution.sh

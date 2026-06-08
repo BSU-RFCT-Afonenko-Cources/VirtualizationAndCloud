@@ -1,0 +1,7 @@
+:::{#exr-swarm-resources-placement}
+#### Размещение API
+
+Создайте Swarm service `lab-api` из образа `swarm-resources-api:lab` с одной репликой. Задайте constraint, допускающий только узел с label `swarm_resources=true`, и опубликуйте API на порту `18080` узла с целевым портом `8080`.
+
+Результат считается готовым, когда constraint присутствует в спецификации, задача работает на размеченном узле, а endpoint возвращает JSON со значениями `service: swarm-resources-api` и `status: ok`.
+:::

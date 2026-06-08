@@ -1,0 +1,7 @@
+:::{#exr-swarm-resources-overcommit}
+#### Управляемое ожидание и восстановление
+
+Создайте однорепличный service `lab-overcommit` из worker-образа с лабораторным constraint и заведомо невозможными reservations: `1000` CPU и `1 TiB` памяти. Пока задача ожидает размещения, сохраните файл `/home/ubuntu/swarm-resources/evidence/overcommit-pending.json` со следующими полями, полученными из состояния задачи: `service`, `desired_state`, `current_state`, `error`. Значения должны подтверждать service `lab-overcommit`, desired state `Running`, текущее состояние `Pending` и ошибку нехватки ресурсов.
+
+Затем уменьшите reservations до `0.05` CPU и `32 MiB` памяти. Финальное состояние — одна работающая задача при сохранённом evidence исходного pending-сценария.
+:::
