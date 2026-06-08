@@ -1,0 +1,7 @@
+:::{#exr-cgroups-v2-07}
+#### IO controller и наблюдение write pressure
+
+Исследуйте IO controller для группы `io`. Если доступно подходящее block device, примените безопасный write BPS limit и выполните write-heavy workload в `/home/ubuntu/cgroups-v2-lab/io-data`.
+
+Создайте `07-io.json`. Для supported-ветки укажите device, правило, снимки `io.stat` и записанные bytes; для unsupported-ветки укажите статус, причину и фактические controllers/filesystem данные.
+:::

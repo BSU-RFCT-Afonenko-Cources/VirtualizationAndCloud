@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 metadata-files:
   - capstone-process-hibernation/01-state-model/step.yaml
   - capstone-process-hibernation/02-run-worker/step.yaml
@@ -45,3 +46,22 @@ metadata-files:
 
 {{< include capstone-process-hibernation/09-runbook/_theory.qmd >}}
 {{< include capstone-process-hibernation/09-runbook/_task.qmd >}}
+||||||| 6df1dcb
+=======
+title: "Docker и низкоуровневая контейнеризация"
+steps:
+  - lowlevel-cgroups-v2/01/step.yaml
+  - lowlevel-cgroups-v2/02/step.yaml
+  - lowlevel-cgroups-v2/03/step.yaml
+  - lowlevel-cgroups-v2/04/step.yaml
+  - lowlevel-cgroups-v2/05/step.yaml
+  - lowlevel-cgroups-v2/06/step.yaml
+  - lowlevel-cgroups-v2/07/step.yaml
+  - lowlevel-cgroups-v2/08/step.yaml
+  - lowlevel-cgroups-v2/09/step.yaml
+  - lowlevel-cgroups-v2/10/step.yaml
+  - lowlevel-cgroups-v2/11/step.yaml
+---
+
+{{< include _assignment-description.qmd >}}
+>>>>>>> remotes/origin/codex/create-lab-on-cgroups-v2-concepts

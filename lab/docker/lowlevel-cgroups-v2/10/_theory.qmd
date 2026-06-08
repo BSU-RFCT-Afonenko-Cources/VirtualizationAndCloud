@@ -1,0 +1,5 @@
+Параметры Docker resource limits преобразуются daemon/runtime в настройки cgroup контейнера. `HostConfig` хранит желаемую конфигурацию Docker, а cgroupfs показывает интерфейс, реально применяемый ядром к init-процессу контейнера.
+
+Memory limit соответствует `memory.max`, PIDs limit — `pids.max`, а CPU bandwidth — `cpu.max` с единицами quota/period. Точный путь группы зависит от cgroup driver и systemd, поэтому его следует получать из membership PID, а не угадывать.
+
+`docker stats` читает те же kernel counters через daemon. Сопоставление inspect, PID и файлов cgroup отделяет декларацию CLI от фактического enforcement.

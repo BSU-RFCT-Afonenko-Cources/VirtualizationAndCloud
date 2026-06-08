@@ -11,6 +11,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -30,6 +31,10 @@ assignments:
 =======
     - docker/swarm-basic/assignment.yaml
 >>>>>>> remotes/origin/codex/create-docker-swarm-lab-structure
+||||||| 6df1dcb
+=======
+    - docker/assignment.yaml
+>>>>>>> remotes/origin/codex/create-lab-on-cgroups-v2-concepts
 
 =======
     - docker/compose/assignment.yaml
