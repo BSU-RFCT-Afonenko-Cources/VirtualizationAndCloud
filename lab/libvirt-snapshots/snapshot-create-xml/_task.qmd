@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-snapshot-create-xml}
+#### Проверяемое задание
+
+Перейдите в `~/snapshot-create-xml`. Создайте `lab-xml-001.xml` с name, description, `<memory snapshot='no'/>` и external disk `vda`, source `/tmp/libvirt-snapshots/lab-xml-001.qcow2`, driver qcow2. Выполните `snapshot-create` с `--disk-only --atomic --validate`; если `--validate` не поддерживается, сохраните ошибку и повторите без него. Сохраните `create-result.txt`, `lab-xml-001-dump.xml` либо `create-error.txt`, и `domblklist-after.txt`.
+:::

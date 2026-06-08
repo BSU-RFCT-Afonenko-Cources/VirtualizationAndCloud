@@ -1,0 +1,10 @@
+`--no-metadata` создаёт external overlay и переключает block device, но не добавляет объект в snapshot tree. Такой режим подходит для live backup pattern: создать overlay, копировать ставший неизменяемым base, затем выполнить commit/pivot.
+
+Отсутствие metadata не означает отсутствие snapshot storage state. Истиной для активного I/O остаётся `domblklist`, поэтому демонстрация должна одновременно сохранить snapshot list и текущий disk source.
+
+:::{#exm-lab-libvirt-snapshots-no-metadata-snapshot}
+#### Overlay без snapshot object
+```bash
+sudo -n virsh -c qemu:///system snapshot-create-as lab-vm lab-nometa-001 --disk-only --atomic --no-metadata --diskspec vda,snapshot=external,file=/tmp/libvirt-snapshots/lab-nometa-001.qcow2
+```
+:::

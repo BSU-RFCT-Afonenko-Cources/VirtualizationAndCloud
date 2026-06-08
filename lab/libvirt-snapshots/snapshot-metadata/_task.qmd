@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-snapshot-metadata}
+#### Проверяемое задание
+
+Перейдите в `~/snapshot-metadata`. Выберите существующий snapshot с префиксом `lab-` и запишите его имя в `selected-snapshot.txt`. Сохраните `snapshot-dump.xml`, `snapshot-current.txt`, `snapshot-info.txt`, `snapshot-parent.txt`; отсутствие parent оформите как читаемую диагностику в последнем файле.
+:::

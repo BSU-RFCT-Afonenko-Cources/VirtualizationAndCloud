@@ -1,0 +1,10 @@
+Active block commit копирует данные из верхнего overlay вниз в backing file. Сочетание `--active --pivot` после завершения переключает live QEMU на нижний слой; прежний active overlay затем можно удалить, если он больше нигде не используется.
+
+Block job относится к live block graph, а не автоматически ко всему snapshot metadata tree. После pivot нужно отдельно проверить `domblklist`, дождаться завершения job и только затем очищать metadata или неактивный файл.
+
+:::{#exm-lab-libvirt-snapshots-blockcommit}
+#### Active commit с pivot
+```bash
+sudo -n virsh -c qemu:///system blockcommit lab-vm vda --active --pivot --verbose
+```
+:::

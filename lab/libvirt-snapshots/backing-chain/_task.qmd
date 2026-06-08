@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-backing-chain}
+#### Проверяемое задание
+
+Перейдите в `~/backing-chain`. Определите текущий source `vda` через `domblklist --details`, сохраните его как `ACTIVE_DISK=...` в `active-disk.env`. Сохраните `domblklist.txt` и результат `qemu-img info --backing-chain` в `backing-chain.txt`.
+:::

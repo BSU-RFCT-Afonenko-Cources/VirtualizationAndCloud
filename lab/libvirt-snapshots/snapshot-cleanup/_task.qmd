@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-snapshot-cleanup}
+#### Проверяемое задание
+
+Перейдите в `~/snapshot-cleanup`. Сокращайте active chain `vda` последовательными `blockcommit --active --pivot`, пока active source не станет исходным `BASE_DISK` из `/home/ubuntu/snapshot-baseline/baseline.env`. Удалите только laboratory snapshot metadata и только неактивные файлы `lab-*.qcow2`/`lab-*.memory` из `/tmp/libvirt-snapshots`. Сохраните `snapshot-list-final.txt`, `domblklist-final.txt`, `disk-info-final.txt`, `cleanup-results.txt`.
+:::

@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-snapshot-revert}
+#### Проверяемое задание
+
+Перейдите в `~/snapshot-revert`. Запишите marker о намерении отката в `marker-before.txt`, затем попытайтесь выполнить `snapshot-revert lab-vm lab-ext-001`. При успехе создайте `revert-success.txt`, при отказе сохраните stderr в `revert-error.txt` без ручного удаления chain. После попытки сохраните `snapshot-current.txt`, `domstate.txt` и `domblklist-after.txt`.
+:::

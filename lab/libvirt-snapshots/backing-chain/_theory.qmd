@@ -1,0 +1,10 @@
+External snapshots образуют цепочку `base <- overlay <- active overlay`. Чтение неизменённых блоков проходит вниз к backing file, а новые записи остаются в верхнем слое.
+
+`qemu-img info --backing-chain` следует запускать для текущего source из `domblklist`. Команда показывает каждый слой, его формат и backing filename; это обязательная проверка перед commit, pull или удалением файлов.
+
+:::{#exm-lab-libvirt-snapshots-backing-chain}
+#### Просмотр полной цепочки
+```bash
+sudo -n qemu-img info --backing-chain /tmp/libvirt-snapshots/lab-ext-001.qcow2
+```
+:::

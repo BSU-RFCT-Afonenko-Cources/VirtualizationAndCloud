@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-memory-snapshot}
+#### Проверяемое задание
+
+Перейдите в `~/memory-snapshot`. Сохраните preview в `lab-mem-001.xml`, используя external memory `/tmp/libvirt-snapshots/lab-mem-001.memory` и external disk `/tmp/libvirt-snapshots/lab-mem-001.qcow2`. Выполните snapshot только если команда поддерживается окружением. При успехе сохраните `memory-success.txt` и dumpxml; при отказе — непустой `memory-error.txt` с stderr. Всегда сохраните `domblklist-after.txt`.
+:::

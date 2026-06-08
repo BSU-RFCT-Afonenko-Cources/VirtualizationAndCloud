@@ -1,0 +1,10 @@
+XML-first подход делает snapshot policy явной и воспроизводимой: `<name>`, `<description>`, `<memory>` и каждый `<disk>` можно проверить до выполнения. Для disk-only snapshot у памяти задают `snapshot='no'`, а для `vda` — external source.
+
+`--validate` просит libvirt проверить XML по schema, если установленная версия поддерживает этот флаг. Для XML с external disk policy операция выполняется с `--disk-only`, иначе full-system semantics могут игнорировать per-disk настройки.
+
+:::{#exm-lab-libvirt-snapshots-snapshot-create-xml}
+#### Создание по XML
+```bash
+sudo -n virsh -c qemu:///system snapshot-create lab-vm lab-xml-001.xml --disk-only --atomic --validate
+```
+:::

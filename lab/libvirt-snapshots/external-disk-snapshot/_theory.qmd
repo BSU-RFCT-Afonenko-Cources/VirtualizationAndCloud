@@ -1,0 +1,10 @@
+External disk snapshot не записывает новые блоки в прежний образ: QEMU переключается на новый qcow2 overlay, а прежний активный слой становится его backing file. Это удобно для live backup и последующей консолидации.
+
+Для работающей VM snapshot без `--quiesce` обычно crash-consistent: состояние диска соответствует внезапному отключению питания. `--atomic` требует либо применить изменения ко всем выбранным дискам, либо не применять их вовсе.
+
+:::{#exm-lab-libvirt-snapshots-external-disk-snapshot}
+#### Создание external disk-only overlay
+```bash
+sudo -n virsh -c qemu:///system snapshot-create-as lab-vm lab-ext-001 --disk-only --atomic --diskspec vda,snapshot=external,file=/tmp/libvirt-snapshots/lab-ext-001.qcow2
+```
+:::

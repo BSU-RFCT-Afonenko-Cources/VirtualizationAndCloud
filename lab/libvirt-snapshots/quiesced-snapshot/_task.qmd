@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-quiesced-snapshot}
+#### Проверяемое задание
+
+Перейдите в `~/quiesced-snapshot`. Сохраните результат `domfsinfo lab-vm` в `domfsinfo.txt`. Попытайтесь создать `lab-quiesce-001` с `--disk-only --quiesce --atomic` и overlay `/tmp/libvirt-snapshots/lab-quiesce-001.qcow2`. При успехе создайте `quiesce-success.txt` и `lab-quiesce-001.xml`; при ошибке сохраните stderr в `quiesce-error.txt`. В обоих случаях сохраните `domblklist-after.txt`.
+:::

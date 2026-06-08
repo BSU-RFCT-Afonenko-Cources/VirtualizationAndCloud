@@ -1,0 +1,10 @@
+`snapshot-delete` работает с объектами metadata и, в зависимости от типа snapshot и версии libvirt, может пытаться изменить storage. Для external snapshots безопасный общий приём после отдельно проверенной консолидации — `--metadata`, который забывает graph object, не удаляя файл.
+
+Удалять следует только имена с лабораторным префиксом `lab-`. Если metadata всё ещё описывает активную или разветвлённую chain, ошибку нужно сохранить и не переходить к принудительному удалению файлов.
+
+:::{#exm-lab-libvirt-snapshots-snapshot-delete}
+#### Удаление только metadata
+```bash
+sudo -n virsh -c qemu:///system snapshot-delete lab-vm lab-ext-001 --metadata
+```
+:::

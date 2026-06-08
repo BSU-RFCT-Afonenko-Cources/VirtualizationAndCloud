@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-snapshot-preview}
+#### Проверяемое задание
+
+Перейдите в `~/snapshot-preview`. С помощью `snapshot-create-as --print-xml` создайте только preview для `lab-preview`: disk-only, disk `vda`, external source `/tmp/libvirt-snapshots/lab-preview.qcow2`. Сохраните XML как `lab-preview.xml` и убедитесь, что файл overlay фактически не появился.
+:::

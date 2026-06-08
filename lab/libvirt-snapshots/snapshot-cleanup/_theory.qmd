@@ -1,0 +1,11 @@
+Безопасная очистка начинается с определения active source и его backing chain. Пока файл является active layer или backing file, удалять его нельзя. Сначала chain сокращают commit/pivot или pull, затем удаляют metadata и лишь после этого — неиспользуемые overlays.
+
+Финальное состояние лабораторной — один активный disk layer, отсутствие `lab-*` snapshot metadata и временных `.qcow2`/`.memory` в `/tmp/libvirt-snapshots`. Исходный base path берётся из baseline, а не угадывается по имени.
+
+:::{#exm-lab-libvirt-snapshots-snapshot-cleanup}
+#### Финальная проверка
+```bash
+sudo -n virsh -c qemu:///system domblklist lab-vm --details
+sudo -n virsh -c qemu:///system snapshot-list lab-vm --name
+```
+:::

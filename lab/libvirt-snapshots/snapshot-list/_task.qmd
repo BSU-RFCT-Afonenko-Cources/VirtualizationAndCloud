@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-snapshot-list}
+#### Проверяемое задание
+
+Перейдите в `~/snapshot-list`. Сохраните результаты `snapshot-list`, `snapshot-list --tree`, `snapshot-list --name`, а также фильтров `--internal`, `--external` и `--disk-only` в файлы `snapshot-list.txt`, `snapshot-tree.txt`, `snapshot-names.txt`, `snapshot-internal.txt`, `snapshot-external.txt`, `snapshot-disk-only.txt`. Для каждого фильтра сохраняйте stderr в тот же файл, чтобы даже неподдерживаемый флаг оставил диагностику.
+:::

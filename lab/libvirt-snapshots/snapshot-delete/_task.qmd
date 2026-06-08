@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-snapshot-delete}
+#### Проверяемое задание
+
+Перейдите в `~/snapshot-delete`. Сохраните дерево в `snapshot-tree-before.txt`. Для каждого snapshot с именем `lab-*` выполните безопасное `snapshot-delete --metadata`; не удаляйте файлы и чужие metadata. Сохраните вывод операций в `delete-results.txt`, ошибки в `delete-error.txt`, а итоговое дерево — в `snapshot-tree-after.txt`.
+:::
