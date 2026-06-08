@@ -1,0 +1,34 @@
+version: 1
+rootfs:
+  path: /home/ubuntu/mini-runtime/rootfs
+  readonly: true
+namespaces:
+  - uts
+  - pid
+  - mount
+  - network
+cgroups:
+  path: /sys/fs/cgroup/mini-runtime
+  memory_max: 134217728
+  pids_max: 64
+  cpu_max: "50000 100000"
+mounts:
+  - source: proc
+    target: /proc
+    type: proc
+  - source: /home/ubuntu/mini-runtime/runtime-state
+    target: /run/mini-runtime
+    type: bind
+    writable: true
+network:
+  host_interface: mrt-host
+  runtime_interface: mrt-runtime
+  host_address: 10.200.0.1/30
+  runtime_address: 10.200.0.2/30
+  endpoint: http://10.200.0.2:8080/status
+workload:
+  name: mini-runtime-api
+  executable: /opt/mini-runtime/mini-runtime-api.py
+  uid: 65534
+  gid: 65534
+  hostname: mini-runtime

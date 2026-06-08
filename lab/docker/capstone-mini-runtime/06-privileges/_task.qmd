@@ -1,0 +1,8 @@
+Снизьте привилегии процесса после настройки runtime.
+
+:::{#exr-mini-runtime-privileges}
+#### Примените least privilege
+API должен работать с UID/GID `65534`, без effective и bounding capabilities, с включённым `no_new_privs`. Base rootfs внутри mount namespace должен быть read-only, а запись должна оставаться возможной только в выделенный runtime state.
+
+Сохраните `/home/ubuntu/mini-runtime/evidence/privileges.json` с полями `Uid`, `Gid`, `CapEff`, `CapBnd`, `NoNewPrivs` и `Seccomp`, полученными из живого `/proc/<pid>/status`. Не приписывайте процессу seccomp-фильтр, если он фактически не применён или не унаследован.
+:::

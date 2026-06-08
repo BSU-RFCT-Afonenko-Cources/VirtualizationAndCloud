@@ -1,0 +1,8 @@
+Запустите `mini-runtime-api` как долгоживущий процесс в UTS, PID, mount и network namespaces.
+
+:::{#exr-mini-runtime-namespaces}
+#### Создайте изолированные views
+Назначьте hostname `mini-runtime`; обеспечьте API локальный PID 1; подключите подготовленный rootfs как read-only root и отдельный writable runtime state. Сохраните host PID процесса в `/run/mini-runtime-lab/api.pid`, а PID launcher — в `/run/mini-runtime-lab/launcher.pid`.
+
+Процесс должен оставаться запущенным после завершения действий оператора. Его UTS, PID, mount и network namespace inode должны отличаться от соответствующих namespace inode проверяющего host process.
+:::

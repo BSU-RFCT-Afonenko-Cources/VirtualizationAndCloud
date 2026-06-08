@@ -1,0 +1,8 @@
+Создайте в `/home/ubuntu/mini-runtime` машинно-читаемую спецификацию `mini-runtime-spec.yaml` версии 1 для одного процесса `mini-runtime-api`.
+
+:::{#exr-mini-runtime-architecture}
+#### Опишите целевую архитектуру
+В спецификации должны присутствовать разделы `rootfs`, `namespaces`, `cgroups`, `mounts`, `network` и `workload`. Зафиксируйте абсолютный путь rootfs, режим read-only, UTS/PID/mount/network namespaces, не менее двух ресурсных лимитов, отдельный writable runtime path, пару virtual Ethernet interfaces, адреса обеих сторон, HTTP endpoint, hostname и непривилегированные UID/GID процесса.
+
+Используйте значения, согласованные со всей работой: rootfs `/home/ubuntu/mini-runtime/rootfs`, cgroup `/sys/fs/cgroup/mini-runtime`, hostname `mini-runtime`, адрес runtime `10.200.0.2/30`, endpoint с путём `/status`, UID и GID `65534`.
+:::

@@ -1,0 +1,8 @@
+Выполните controlled stop и повторный start runtime.
+
+:::{#exr-mini-runtime-failure-drill}
+#### Докажите cleanup и restart
+Запомните старый host PID, остановите runtime и убедитесь, что процесс завершён, `mrt-host` удалён, а cgroup освобождена. Затем заново создайте runtime и дождитесь готовности API на том же endpoint.
+
+Создайте `/home/ubuntu/mini-runtime/evidence/restart.json` с `old_pid`, `new_pid`, `cleanup_verified` и `restart_verified`. Старый и новый PID должны различаться. После restart обновите остальные evidence-файлы для нового процесса.
+:::

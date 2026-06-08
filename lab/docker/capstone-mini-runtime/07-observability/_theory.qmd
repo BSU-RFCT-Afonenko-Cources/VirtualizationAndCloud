@@ -1,0 +1,5 @@
+Runtime считается управляемым, когда его состояние можно диагностировать после запуска. Минимальный evidence pack связывает host PID, namespaces, cgroup membership, mounts, network interfaces, privilege state, логи и ответ workload.
+
+Evidence не должен быть свободным отчётом. JSON и TXT артефакты имеют стабильную схему и могут автоматически сопоставляться с текущим `/proc`, cgroupfs и HTTP endpoint.
+
+Снимок быстро устаревает после restart. Поэтому сбор evidence — операция runtime lifecycle, которую необходимо повторять для нового процесса.

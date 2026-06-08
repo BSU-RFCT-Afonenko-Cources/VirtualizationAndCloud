@@ -1,0 +1,14 @@
+title: "Самостоятельная работа: минимальный контейнерный runtime из Linux primitives"
+description: _description.md
+time-limit-minutes: 240
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-architecture/step.yaml
+  - 02-rootfs/step.yaml
+  - 03-namespaces/step.yaml
+  - 04-network/step.yaml
+  - 05-resources/step.yaml
+  - 06-privileges/step.yaml
+  - 07-observability/step.yaml
+  - 08-failure-drill/step.yaml
+  - 09-final/step.yaml

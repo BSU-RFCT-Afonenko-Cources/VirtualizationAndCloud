@@ -1,0 +1,8 @@
+Соберите структурированный evidence pack работающего runtime.
+
+:::{#exr-mini-runtime-observability}
+#### Зафиксируйте живое состояние
+В `/home/ubuntu/mini-runtime/evidence` должны находиться `runtime.json`, `resources.json`, `privileges.json`, `network.json`, `mounts.txt` и `api.json`. Зафиксируйте host PID, hostname, ссылки UTS/PID/mount/network namespaces, cgroup membership, значения лимитов, privilege fields, network inventory, полный mountinfo и фактический ответ `/status`.
+
+В writable runtime state должен существовать лог API. Все PID и namespace references в evidence должны соответствовать текущему, а не ранее остановленному процессу.
+:::

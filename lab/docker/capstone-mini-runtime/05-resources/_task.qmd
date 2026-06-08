@@ -1,0 +1,8 @@
+Поместите runtime в отдельную cgroup v2 и примените ограничения ресурсов.
+
+:::{#exr-mini-runtime-resources}
+#### Ограничьте workload
+Используйте cgroup `/sys/fs/cgroup/mini-runtime`. Установите `memory.max` в `134217728`, `pids.max` в `64` и `cpu.max` в `50000 100000`. Процесс API и порождённые им обработчики должны наследовать эту cgroup.
+
+Сохраните реальные значения файлов cgroupfs в `/home/ubuntu/mini-runtime/evidence/resources.json`. После применения лимитов endpoint API должен продолжать отвечать.
+:::

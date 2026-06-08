@@ -1,0 +1,17 @@
+02_rootfs:
+  title: "Rootfs и filesystem policy"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+    pre-step:
+      exec:
+        - pre-step.sh
+    check:
+      exec:
+        - check.sh
+    solution:
+      exec:
+        - solution.sh
+    post-step:
+      exec:
+        - post-step.sh

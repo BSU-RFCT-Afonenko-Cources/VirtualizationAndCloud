@@ -1,0 +1,8 @@
+Создайте явную сетевую границу между хостом и API.
+
+:::{#exr-mini-runtime-network}
+#### Подключите API к хосту
+Создайте host interface `mrt-host` с адресом `10.200.0.1/30` и interface `mrt-runtime` с адресом `10.200.0.2/30` внутри network namespace API. Поднимите loopback и оба конца пары. API должен слушать порт 8080, а endpoint `http://10.200.0.2:8080/status` должен отвечать с хоста.
+
+Сохраните `/home/ubuntu/mini-runtime/evidence/network.json` с endpoint и структурированным inventory interfaces из runtime namespace. Evidence должно отражать реально работающую конфигурацию.
+:::
