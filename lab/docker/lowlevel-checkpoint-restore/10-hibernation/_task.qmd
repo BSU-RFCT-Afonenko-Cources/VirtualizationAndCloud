@@ -1,0 +1,5 @@
+:::{#exr-cr-hibernation-workflow}
+В full-mode выполните end-to-end workflow для контейнера `cr-hibernate`: запустите workload, получите HTTP state, создайте внешний checkpoint `hibernate-1`, удалите runtime instance, создайте совместимый экземпляр и восстановите его из checkpoint directory.
+
+Сохраните состояния до и после в `evidence/hibernation.json`; проверьте endpoint, монотонность counter, неизменность session/starts и наличие artifacts. В fallback-mode выполните HTTP pause/unpause workflow и сохраните его как ограниченную имитацию без утверждения о сохранении process image.
+:::

@@ -1,0 +1,7 @@
+Рабочий каталог лабораторной — `/home/ubuntu/cr-lab`.
+
+:::{#exr-cr-terms-evidence}
+Создайте `evidence/terms.json` — JSON-объект с ключами `freeze`, `checkpoint`, `restore`, `filesystem_snapshot` и `backup`. Для каждого ключа укажите булевы признаки `keeps_process_memory`, `creates_process_image_files`, `keeps_filesystem_data` и строку `result`.
+
+Значения должны machine-readable отражать различия из теории. Для freeze результатом является тот же остановленный процесс, для checkpoint — файлы образа процесса, для restore — продолженный процесс, а snapshot и backup относятся к файловым данным.
+:::

@@ -1,0 +1,5 @@
+:::{#exr-cr-support-diagnostics}
+Проверьте доступность Docker daemon, CRIU, экспериментальной checkpoint-команды и kernel/cgroup prerequisites. Сохраните результат в `evidence/support.json`, включая `docker_available`, `checkpoint_cli`, `criu_available`, `criu_check_ok`, `cgroup_version`, `mode` и непустой массив `reasons` для fallback.
+
+Запишите выбранный режим единственной строкой `full` или `fallback` в файл `mode`. Версии и диагностические сообщения сохраните в каталоге `evidence/diagnostics`.
+:::

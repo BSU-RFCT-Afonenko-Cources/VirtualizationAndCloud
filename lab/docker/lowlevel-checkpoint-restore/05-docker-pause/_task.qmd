@@ -1,0 +1,5 @@
+:::{#exr-cr-docker-pause}
+Подготовьте локальный образ `cr-demo-counter:lab` и контейнер `cr-docker-counter` с bind mount `state/docker` в `/state`, без TTY. Примените pause, докажите состояние `Paused=true` и отсутствие прогресса, затем выполните unpause.
+
+Сохраните `evidence/docker-pause.json` с container id, PID, inspect-состояниями, значениями счётчика и числом запусков. После упражнения контейнер должен снова работать.
+:::

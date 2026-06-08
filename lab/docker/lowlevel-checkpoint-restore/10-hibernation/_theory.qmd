@@ -1,0 +1,5 @@
+Гибернация объединяет checkpoint, остановку runtime instance и последующий restore. Инженерная цель — сократить downtime долгого вычисления или сохранить in-memory состояние перед обслуживанием.
+
+Для переноса checkpoint за пределы lifecycle контейнера используется внешний checkpoint directory. Новый runtime instance должен быть создан с совместимыми mount, network и security settings.
+
+HTTP endpoint даёт независимое наблюдение внутреннего состояния. После restore session и starts должны сохраниться, counter — продолжиться, а volume journal — остаться доступным.

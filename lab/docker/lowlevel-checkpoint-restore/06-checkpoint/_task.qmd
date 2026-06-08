@@ -1,0 +1,5 @@
+:::{#exr-cr-create-checkpoint}
+Для `cr-docker-counter` создайте именованный checkpoint `cr-checkpoint-1` и сохраните значение счётчика, session id и число запусков непосредственно перед операцией.
+
+В full-mode должны существовать checkpoint artifacts и запись в списке checkpoint. Если реальная попытка обнаружила ограничение среды, переключите лабораторию в fallback-mode и создайте `evidence/checkpoint-unsupported.json` с командой-операцией, exit code, stderr и причиной. Основной evidence сохраните как `evidence/checkpoint.json`.
+:::

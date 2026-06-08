@@ -1,0 +1,5 @@
+---
+title: "Checkpoint/Restore, гибернация контейнеров и сохранение процессов"
+---
+
+{{< include _assignment-description.qmd >}}

@@ -1,0 +1,16 @@
+title: "Checkpoint/Restore, гибернация контейнеров и сохранение процессов"
+description: _assignment-description.qmd
+time-limit-minutes: 240
+virtual-machine: "Ubuntu — Docker/CRIU Lab"
+steps:
+  - 01-terms/step.yaml
+  - 02-support/step.yaml
+  - 03-counter/step.yaml
+  - 04-freeze/step.yaml
+  - 05-docker-pause/step.yaml
+  - 06-checkpoint/step.yaml
+  - 07-restore/step.yaml
+  - 08-open-files/step.yaml
+  - 09-limitations/step.yaml
+  - 10-hibernation/step.yaml
+  - 11-cleanup/step.yaml

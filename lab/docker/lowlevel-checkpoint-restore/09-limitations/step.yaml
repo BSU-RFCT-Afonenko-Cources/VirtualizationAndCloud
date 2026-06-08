@@ -1,0 +1,11 @@
+step-09:
+  title: "Ограничения checkpoint/restore"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check/check.sh
+      solution:
+        exec:
+          - solution/solution.sh
