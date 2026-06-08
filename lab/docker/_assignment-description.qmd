@@ -1,6 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 Практические задания по контейнеризации Docker: процессы, runtime-состояние, cgroups, namespaces, checkpoint/restore и восстановление после сбоев.
 ||||||| 6df1dcb
 =======
 Практические лабораторные работы по низкоуровневым механизмам контейнеризации и Docker runtime isolation.
 >>>>>>> remotes/origin/codex/create-lab-on-cgroups-v2-concepts
+||||||| 6df1dcb
+=======
+Практические задания по контейнеризации Docker: процессы, runtime-состояние, cgroups, namespaces, checkpoint/restore и восстановление после сбоев.
+>>>>>>> remotes/origin/codex/create-capstone-lab-on-process-hibernation

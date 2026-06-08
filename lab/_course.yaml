@@ -22,6 +22,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -101,3 +102,8 @@ assignments:
 =======
     - docker/lowlevel-oci-runc/assignment.yaml
 >>>>>>> remotes/origin/codex/create-low-level-oci/runc-lab
+||||||| 6df1dcb
+
+=======
+    - docker/assignment.yaml
+>>>>>>> remotes/origin/codex/create-capstone-lab-on-process-hibernation
