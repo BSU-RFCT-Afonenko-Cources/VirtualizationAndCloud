@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/01-inventory`.
+
+:::{#exr-capstone-01-inventory}
+#### Проверяемое состояние
+
+В каталоге `/home/ubuntu/capstone/01-inventory` сохраните непустые файлы `domains.txt`, `networks.txt`, `pools.txt`, `nodeinfo.txt` и `capabilities.xml`. Они должны отражать текущее состояние системного подключения libvirt; XML capabilities должен быть корректным.
+:::

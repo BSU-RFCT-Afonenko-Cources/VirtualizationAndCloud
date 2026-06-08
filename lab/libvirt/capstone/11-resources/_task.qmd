@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/11-resources`.
+
+:::{#exr-capstone-11-resources}
+#### Проверяемое состояние
+
+Настройте persistent и runtime-профили: `cap-edge` — 1 vCPU и 512 MiB, `cap-app` — 2 vCPU и 1024 MiB, `cap-db` — 2 vCPU и 1536 MiB. Сохраните `/home/ubuntu/capstone/11-resources/resources.json` с параметрами всех доменов и перечнем block devices.
+:::

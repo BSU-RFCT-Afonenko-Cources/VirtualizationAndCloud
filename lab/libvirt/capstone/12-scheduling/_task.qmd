@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/12-scheduling`.
+
+:::{#exr-capstone-12-scheduling}
+#### Проверяемое состояние
+
+Примените к `cap-app` persistent CPU quota/period, ограничивающие домен до эквивалента одного CPU при сохранении двух vCPU. Выполните краткую CPU-нагрузку внутри app-ВМ и сохраните `/home/ubuntu/capstone/12-scheduling/evidence.json` с параметрами политики, результатом нагрузки и HTTP status проверки `/health` через edge.
+:::

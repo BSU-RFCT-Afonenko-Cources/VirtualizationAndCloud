@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/13-resize`.
+
+:::{#exr-capstone-13-resize}
+#### Проверяемое состояние
+
+Увеличьте `cap-db-data.qcow2` с 2 до 3 GiB, расширьте файловую систему внутри `cap-db` и не меняйте mount point `/srv/cap-db`. Сохраните `/home/ubuntu/capstone/13-resize/evidence.json` с capacity volume, размером гостевого устройства, размером файловой системы и числом заказов.
+:::

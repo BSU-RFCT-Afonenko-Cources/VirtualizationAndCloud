@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/15-backup`.
+
+:::{#exr-capstone-15-backup}
+#### Проверяемое состояние
+
+Создайте набор `/home/ubuntu/capstone/15-backup/set`: XML трёх доменов, двух сетей и pool, `volumes.txt`, копию `cap-db-data.qcow2`, логический `orders.json`, `manifest.json` и `SHA256SUMS`. Все файлы должны быть непустыми, а checksum — успешно проверяться.
+:::

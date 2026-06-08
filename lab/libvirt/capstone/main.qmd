@@ -1,0 +1,89 @@
+---
+metadata-files:
+  - 01-inventory/step.yaml
+  - 02-target-state/step.yaml
+  - 03-storage/step.yaml
+  - 04-networks/step.yaml
+  - 05-provision/step.yaml
+  - 06-lifecycle/step.yaml
+  - 07-database/step.yaml
+  - 08-api/step.yaml
+  - 09-edge/step.yaml
+  - 10-isolation/step.yaml
+  - 11-resources/step.yaml
+  - 12-scheduling/step.yaml
+  - 13-resize/step.yaml
+  - 14-snapshot/step.yaml
+  - 15-backup/step.yaml
+  - 16-recovery/step.yaml
+---
+
+# Практическое развёртывание виртуализованной сервисной инфраструктуры
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta 01-inventory.title >}}
+{{< include 01-inventory/_theory.qmd >}}
+{{< include 01-inventory/_task.qmd >}}
+
+### {{< meta 02-target-state.title >}}
+{{< include 02-target-state/_theory.qmd >}}
+{{< include 02-target-state/_task.qmd >}}
+
+### {{< meta 03-storage.title >}}
+{{< include 03-storage/_theory.qmd >}}
+{{< include 03-storage/_task.qmd >}}
+
+### {{< meta 04-networks.title >}}
+{{< include 04-networks/_theory.qmd >}}
+{{< include 04-networks/_task.qmd >}}
+
+### {{< meta 05-provision.title >}}
+{{< include 05-provision/_theory.qmd >}}
+{{< include 05-provision/_task.qmd >}}
+
+### {{< meta 06-lifecycle.title >}}
+{{< include 06-lifecycle/_theory.qmd >}}
+{{< include 06-lifecycle/_task.qmd >}}
+
+### {{< meta 07-database.title >}}
+{{< include 07-database/_theory.qmd >}}
+{{< include 07-database/_task.qmd >}}
+
+### {{< meta 08-api.title >}}
+{{< include 08-api/_theory.qmd >}}
+{{< include 08-api/_task.qmd >}}
+
+### {{< meta 09-edge.title >}}
+{{< include 09-edge/_theory.qmd >}}
+{{< include 09-edge/_task.qmd >}}
+
+### {{< meta 10-isolation.title >}}
+{{< include 10-isolation/_theory.qmd >}}
+{{< include 10-isolation/_task.qmd >}}
+
+### {{< meta 11-resources.title >}}
+{{< include 11-resources/_theory.qmd >}}
+{{< include 11-resources/_task.qmd >}}
+
+### {{< meta 12-scheduling.title >}}
+{{< include 12-scheduling/_theory.qmd >}}
+{{< include 12-scheduling/_task.qmd >}}
+
+### {{< meta 13-resize.title >}}
+{{< include 13-resize/_theory.qmd >}}
+{{< include 13-resize/_task.qmd >}}
+
+### {{< meta 14-snapshot.title >}}
+{{< include 14-snapshot/_theory.qmd >}}
+{{< include 14-snapshot/_task.qmd >}}
+
+### {{< meta 15-backup.title >}}
+{{< include 15-backup/_theory.qmd >}}
+{{< include 15-backup/_task.qmd >}}
+
+### {{< meta 16-recovery.title >}}
+{{< include 16-recovery/_theory.qmd >}}
+{{< include 16-recovery/_task.qmd >}}

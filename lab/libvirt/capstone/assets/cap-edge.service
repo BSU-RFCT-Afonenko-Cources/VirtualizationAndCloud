@@ -1,0 +1,9 @@
+[Unit]
+Description=Capstone edge reverse proxy
+After=network-online.target
+Wants=network-online.target
+[Service]
+ExecStart=/usr/bin/python3 /opt/capstone/edge_proxy.py
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target
