@@ -20,6 +20,7 @@ book:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/libvirt/main.qmd
 ||||||| f589c88
 =======
@@ -57,6 +58,10 @@ book:
 =======
         - lab/docker/lowlevel-rootfs-overlay/main.qmd
 >>>>>>> remotes/origin/codex/create-lab-on-container-root-filesystem
+||||||| 6df1dcb
+=======
+        - lab/docker/basic-containers/main.qmd
+>>>>>>> remotes/origin/codex/create-lab-on-docker-container-management
 
   appendices:
     - part: "Командные оболочки"

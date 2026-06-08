@@ -1,0 +1,5 @@
+:::{#exr-basic-containers-inventory}
+#### Зафиксируйте исходное состояние
+
+Убедитесь, что Docker Engine доступен. В каталоге `/home/ubuntu/basic-containers/evidence` сохраните отдельные JSON-файлы `engine.json`, `images.json`, `containers.json` и `networks.json`. Используйте machine-readable вывод Docker, а не снимок текста терминала. Файлы должны описывать сервер Docker, локальные образы, все контейнеры и сети.
+:::

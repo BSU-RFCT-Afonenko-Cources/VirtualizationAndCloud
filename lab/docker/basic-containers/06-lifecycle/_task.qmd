@@ -1,0 +1,7 @@
+:::{#exr-basic-containers-lifecycle}
+#### Проследите остановку и повторный запуск
+
+Зафиксируйте идентификатор и running-state `lab-http`, остановите контейнер и подтвердите остановленное состояние. Затем снова запустите тот же контейнер, проверьте HTTP endpoint и сохранность `/tmp/lab-control.txt`.
+
+Сохраните структурированные результаты в `/home/ubuntu/basic-containers/evidence/06-lifecycle.json`. В нём должны быть поля `containerId`, `before`, `stopped`, `after`, `httpService` и `controlFile`.
+:::

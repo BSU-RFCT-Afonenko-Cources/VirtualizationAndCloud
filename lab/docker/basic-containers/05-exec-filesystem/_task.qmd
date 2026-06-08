@@ -1,0 +1,5 @@
+:::{#exr-basic-containers-exec}
+#### Проверьте writable layer
+
+Через Docker exec создайте внутри `lab-http` файл `/tmp/lab-control.txt` с точным содержимым `writable-layer-ok`. Затем прочитайте его через новый exec-процесс и сохраните полученное значение в `/home/ubuntu/basic-containers/evidence/05-control.txt`.
+:::

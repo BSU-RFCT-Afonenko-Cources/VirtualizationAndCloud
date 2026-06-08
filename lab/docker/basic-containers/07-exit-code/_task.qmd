@@ -1,0 +1,7 @@
+:::{#exr-basic-containers-job}
+#### Выполните сетевую диагностику
+
+Создайте именованный одноразовый контейнер `lab-job` на основе подготовленного образа `curlimages/curl:8.12.1`. Подключите его к `lab-net` и запросите диагностический endpoint службы по DNS-имени `lab-http`. Контейнер должен завершиться с кодом `0`.
+
+Сохраните stdout задания в `/home/ubuntu/basic-containers/evidence/07-job-output.json`, а числовой код завершения — в `/home/ubuntu/basic-containers/evidence/07-exit-code.txt`. Не удаляйте `lab-job` до проверки.
+:::

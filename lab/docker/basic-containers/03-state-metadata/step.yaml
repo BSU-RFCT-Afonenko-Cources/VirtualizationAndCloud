@@ -1,0 +1,11 @@
+03-state-metadata:
+  title: "Состояние и метаданные"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh
