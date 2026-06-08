@@ -1,0 +1,70 @@
+---
+metadata-files:
+  - 01-inventory/step.yaml
+  - 02-first-service/step.yaml
+  - 03-state-metadata/step.yaml
+  - 04-logs/step.yaml
+  - 05-exec-filesystem/step.yaml
+  - 06-lifecycle/step.yaml
+  - 07-exit-code/step.yaml
+  - 08-restart-policy/step.yaml
+  - 09-cleanup/step.yaml
+---
+
+# Контейнер как изолированный процесс и объект управления Docker
+
+{{< include _assignment-description.qmd >}}
+
+## Инвентаризация Docker Engine
+
+{{< include 01-inventory/_theory.qmd >}}
+
+{{< include 01-inventory/_task.qmd >}}
+
+## Запуск первого сервиса
+
+{{< include 02-first-service/_theory.qmd >}}
+
+{{< include 02-first-service/_task.qmd >}}
+
+## Состояние и метаданные
+
+{{< include 03-state-metadata/_theory.qmd >}}
+
+{{< include 03-state-metadata/_task.qmd >}}
+
+## Логи и stdout
+
+{{< include 04-logs/_theory.qmd >}}
+
+{{< include 04-logs/_task.qmd >}}
+
+## Exec и файловая система
+
+{{< include 05-exec-filesystem/_theory.qmd >}}
+
+{{< include 05-exec-filesystem/_task.qmd >}}
+
+## Stop, start и restart
+
+{{< include 06-lifecycle/_theory.qmd >}}
+
+{{< include 06-lifecycle/_task.qmd >}}
+
+## Exit code и одноразовые контейнеры
+
+{{< include 07-exit-code/_theory.qmd >}}
+
+{{< include 07-exit-code/_task.qmd >}}
+
+## Restart policy
+
+{{< include 08-restart-policy/_theory.qmd >}}
+
+{{< include 08-restart-policy/_task.qmd >}}
+
+## Очистка ресурсов
+
+{{< include 09-cleanup/_theory.qmd >}}
+
+{{< include 09-cleanup/_task.qmd >}}

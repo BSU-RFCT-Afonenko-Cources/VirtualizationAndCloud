@@ -1,0 +1,7 @@
+:::{#exr-basic-containers-inspect}
+#### Сохраните и разберите состояние
+
+Сохраните полное JSON-описание `lab-http` в `/home/ubuntu/basic-containers/evidence/03-inspect.json`. На его основе создайте `/home/ubuntu/basic-containers/evidence/03-summary.json` с полями `name`, `image`, `running`, `networks` и `mounts`.
+
+Итог должен подтверждать имя `/lab-http`, образ `lab-http-image:1.0`, работающее состояние и подключение к `lab-net`; поле mounts должно оставаться JSON-массивом даже при отсутствии подключённых хранилищ.
+:::

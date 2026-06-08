@@ -1,0 +1,14 @@
+title: "Контейнер как изолированный процесс и объект управления Docker"
+description: _assignment-description.qmd
+time-limit-minutes: 120
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-inventory/step.yaml
+  - 02-first-service/step.yaml
+  - 03-state-metadata/step.yaml
+  - 04-logs/step.yaml
+  - 05-exec-filesystem/step.yaml
+  - 06-lifecycle/step.yaml
+  - 07-exit-code/step.yaml
+  - 08-restart-policy/step.yaml
+  - 09-cleanup/step.yaml
