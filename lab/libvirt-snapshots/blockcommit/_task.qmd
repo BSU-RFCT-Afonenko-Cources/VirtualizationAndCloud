@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-blockcommit}
+#### Проверяемое задание
+
+Перейдите в `~/blockcommit`. Зафиксируйте active source в `active-before.txt`, а его непосредственный backing file — в `backing-before.txt`. Если у него есть backing file и домен работает, выполните `blockcommit lab-vm vda --active --pivot --verbose`, сохранив вывод в `blockcommit-output.txt`; при unsupported/invalid state сохраните stderr в `blockcommit-error.txt`. Затем сохраните `domblklist-after.txt` и `backing-chain-after.txt` для нового active source.
+:::

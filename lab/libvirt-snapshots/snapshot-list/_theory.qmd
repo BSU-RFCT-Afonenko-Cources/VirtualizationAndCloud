@@ -1,0 +1,11 @@
+Libvirt хранит snapshot metadata как дерево. Новый snapshot обычно становится current, а прежний current — его parent; после отката и создания нового snapshot может появиться ветвление.
+
+`snapshot-list` умеет показывать таблицу, дерево, только имена и фильтровать объекты по типу. Пустой результат является корректным состоянием до создания первого snapshot, а неподдерживаемый конкретной версией фильтр следует зафиксировать как диагностику.
+
+:::{#exm-lab-libvirt-snapshots-snapshot-list}
+#### Представления дерева
+```bash
+sudo -n virsh -c qemu:///system snapshot-list lab-vm --tree
+sudo -n virsh -c qemu:///system snapshot-list lab-vm --name --disk-only
+```
+:::

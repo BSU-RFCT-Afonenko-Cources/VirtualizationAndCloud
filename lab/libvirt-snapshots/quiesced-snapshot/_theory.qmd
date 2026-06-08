@@ -1,0 +1,11 @@
+Флаг `--quiesce` просит QEMU guest agent заморозить файловые системы перед созданием disk-only snapshot и разморозить их после операции. Это повышает согласованность приложений и файловой системы по сравнению с crash-consistent снимком.
+
+Guest agent должен быть установлен в госте, запущен и подключён каналом в domain XML. Отсутствие agent — ожидаемая ветка лабораторной: важно сохранить точный stderr, а не маскировать ошибку пустым файлом.
+
+:::{#exm-lab-libvirt-snapshots-quiesced-snapshot}
+#### Проверка agent и попытка quiesce
+```bash
+sudo -n virsh -c qemu:///system domfsinfo lab-vm
+sudo -n virsh -c qemu:///system snapshot-create-as lab-vm lab-quiesce-001 --disk-only --quiesce --atomic --diskspec vda,snapshot=external,file=/tmp/libvirt-snapshots/lab-quiesce-001.qcow2
+```
+:::

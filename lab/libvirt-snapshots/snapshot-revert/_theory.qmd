@@ -1,0 +1,11 @@
+`snapshot-revert` — разрушительная операция: изменения после выбранной точки могут быть потеряны. Disk-only snapshot не содержит RAM, поэтому итоговое состояние домена определяется поддержкой driver и флагами запуска.
+
+Поддержка прямого revert для external disk snapshots различается между версиями и конфигурациями libvirt. Нельзя подменять неуспешный revert ручным удалением активного overlay: следует сохранить stderr и продолжить анализ chain.
+
+:::{#exm-lab-libvirt-snapshots-snapshot-revert}
+#### Попытка контролируемого revert
+```bash
+sudo -n virsh -c qemu:///system snapshot-revert lab-vm lab-ext-001
+sudo -n virsh -c qemu:///system domblklist lab-vm --details
+```
+:::

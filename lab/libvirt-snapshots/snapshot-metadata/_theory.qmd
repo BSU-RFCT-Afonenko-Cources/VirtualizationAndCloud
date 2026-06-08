@@ -1,0 +1,11 @@
+Metadata-команды описывают graph snapshots независимо от файлов backing chain. `snapshot-dumpxml` показывает parent и disk policy, `snapshot-current --name` — current marker, а `snapshot-info` — сводные свойства.
+
+У корневого snapshot нет parent, поэтому ненулевой код `snapshot-parent` допустим только вместе с сохранённой понятной диагностикой. Перед revert или delete нужно сопоставить metadata с фактическим `domblklist`.
+
+:::{#exm-lab-libvirt-snapshots-snapshot-metadata}
+#### Чтение metadata
+```bash
+sudo -n virsh -c qemu:///system snapshot-info lab-vm lab-ext-001
+sudo -n virsh -c qemu:///system snapshot-parent lab-vm lab-ext-001
+```
+:::

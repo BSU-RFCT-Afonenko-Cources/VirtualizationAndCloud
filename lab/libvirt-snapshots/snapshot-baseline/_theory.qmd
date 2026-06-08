@@ -1,0 +1,11 @@
+Snapshot фиксирует состояние виртуальной машины в определённый момент, но корректная работа начинается с инвентаризации. Target диска (`vda`) — имя устройства в domain XML, а source — реальный файл активного слоя. После external snapshot source изменится на overlay, поэтому исходный путь нужно сохранить заранее.
+
+`dumpxml` фиксирует persistent/runtime-конфигурацию домена, а `qemu-img info` показывает формат образа и backing file. Эти данные образуют baseline, с которым сравниваются последующие состояния.
+
+:::{#exm-lab-libvirt-snapshots-snapshot-baseline}
+#### Инвентаризация домена и диска
+```bash
+sudo -n virsh -c qemu:///system domblklist lab-vm --details
+sudo -n virsh -c qemu:///system dumpxml lab-vm
+```
+:::

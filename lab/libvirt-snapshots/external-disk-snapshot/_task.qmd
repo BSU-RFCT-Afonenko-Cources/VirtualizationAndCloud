@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-external-disk-snapshot}
+#### Проверяемое задание
+
+Перейдите в `~/external-disk-snapshot`. Создайте `lab-ext-001` с `--disk-only --atomic` и `--diskspec vda,snapshot=external,file=/tmp/libvirt-snapshots/lab-ext-001.qcow2`. Сохраните `snapshot-list.txt`, `lab-ext-001.xml` и `domblklist-after.txt`.
+:::

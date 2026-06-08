@@ -1,0 +1,10 @@
+Full/system snapshot объединяет disk state и состояние RAM/runtime. External memory state сохраняется в отдельный файл и требует места, сопоставимого с объёмом памяти гостя; поддержка зависит от QEMU/libvirt, состояния домена и типа дисков.
+
+Такой snapshot похож на hibernation: при восстановлении возвращаются процессы и устройства, но он не является переносимой резервной копией. Перед запуском полезно сохранить preview XML и диагностику возможностей.
+
+:::{#exm-lab-libvirt-snapshots-memory-snapshot}
+#### Preview внешнего memory state
+```bash
+sudo -n virsh -c qemu:///system snapshot-create-as lab-vm lab-mem-001 --memspec file=/tmp/libvirt-snapshots/lab-mem-001.memory,snapshot=external --diskspec vda,snapshot=external,file=/tmp/libvirt-snapshots/lab-mem-001.qcow2 --print-xml
+```
+:::

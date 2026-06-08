@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-snapshot-baseline}
+#### Проверяемое задание
+
+Перейдите в каталог `~/snapshot-baseline`. Создайте `/tmp/libvirt-snapshots` через `sudo -n`, затем сохраните `domstate.txt`, `domblklist.txt`, `domain.xml`, `disk-info.txt` и `baseline.env`. В `baseline.env` должны быть строки `DISK_TARGET=vda` и `BASE_DISK=<абсолютный source vda>`; `qemu-img info` запускайте для этого source.
+:::

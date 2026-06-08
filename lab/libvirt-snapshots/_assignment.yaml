@@ -1,0 +1,19 @@
+title: "Libvirt snapshots: external overlays, metadata and consolidation"
+description: _assignment-description.qmd
+time-limit-minutes: 240
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - snapshot-baseline/step.yaml
+  - snapshot-list/step.yaml
+  - snapshot-preview/step.yaml
+  - external-disk-snapshot/step.yaml
+  - quiesced-snapshot/step.yaml
+  - memory-snapshot/step.yaml
+  - snapshot-create-xml/step.yaml
+  - snapshot-metadata/step.yaml
+  - snapshot-revert/step.yaml
+  - backing-chain/step.yaml
+  - blockcommit/step.yaml
+  - snapshot-delete/step.yaml
+  - no-metadata-snapshot/step.yaml
+  - snapshot-cleanup/step.yaml

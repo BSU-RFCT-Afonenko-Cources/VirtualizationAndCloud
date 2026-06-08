@@ -1,0 +1,10 @@
+`snapshot-create-as --print-xml` строит `<domainsnapshot>`, но не изменяет домен и не создаёт overlay. Это безопасный способ проверить имя, memory policy и per-disk policy перед операцией.
+
+Для external disk-only snapshot диск `vda` получает `snapshot='external'`, а `<source file='…'/>` задаёт абсолютный путь нового qcow2 overlay. Исходный образ при реальном создании станет backing file.
+
+:::{#exm-lab-libvirt-snapshots-snapshot-preview}
+#### Preview external snapshot
+```bash
+sudo -n virsh -c qemu:///system snapshot-create-as lab-vm lab-preview --disk-only --diskspec vda,snapshot=external,file=/tmp/libvirt-snapshots/lab-preview.qcow2 --print-xml
+```
+:::

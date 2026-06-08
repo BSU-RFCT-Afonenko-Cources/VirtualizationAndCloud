@@ -1,0 +1,79 @@
+---
+metadata-files:
+  - snapshot-baseline/step.yaml
+  - snapshot-list/step.yaml
+  - snapshot-preview/step.yaml
+  - external-disk-snapshot/step.yaml
+  - quiesced-snapshot/step.yaml
+  - memory-snapshot/step.yaml
+  - snapshot-create-xml/step.yaml
+  - snapshot-metadata/step.yaml
+  - snapshot-revert/step.yaml
+  - backing-chain/step.yaml
+  - blockcommit/step.yaml
+  - snapshot-delete/step.yaml
+  - no-metadata-snapshot/step.yaml
+  - snapshot-cleanup/step.yaml
+---
+
+# Libvirt snapshots
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta snapshot-baseline.title >}}
+{{< include snapshot-baseline/_theory.qmd >}}
+{{< include snapshot-baseline/_task.qmd >}}
+
+### {{< meta snapshot-list.title >}}
+{{< include snapshot-list/_theory.qmd >}}
+{{< include snapshot-list/_task.qmd >}}
+
+### {{< meta snapshot-preview.title >}}
+{{< include snapshot-preview/_theory.qmd >}}
+{{< include snapshot-preview/_task.qmd >}}
+
+### {{< meta external-disk-snapshot.title >}}
+{{< include external-disk-snapshot/_theory.qmd >}}
+{{< include external-disk-snapshot/_task.qmd >}}
+
+### {{< meta quiesced-snapshot.title >}}
+{{< include quiesced-snapshot/_theory.qmd >}}
+{{< include quiesced-snapshot/_task.qmd >}}
+
+### {{< meta memory-snapshot.title >}}
+{{< include memory-snapshot/_theory.qmd >}}
+{{< include memory-snapshot/_task.qmd >}}
+
+### {{< meta snapshot-create-xml.title >}}
+{{< include snapshot-create-xml/_theory.qmd >}}
+{{< include snapshot-create-xml/_task.qmd >}}
+
+### {{< meta snapshot-metadata.title >}}
+{{< include snapshot-metadata/_theory.qmd >}}
+{{< include snapshot-metadata/_task.qmd >}}
+
+### {{< meta snapshot-revert.title >}}
+{{< include snapshot-revert/_theory.qmd >}}
+{{< include snapshot-revert/_task.qmd >}}
+
+### {{< meta backing-chain.title >}}
+{{< include backing-chain/_theory.qmd >}}
+{{< include backing-chain/_task.qmd >}}
+
+### {{< meta blockcommit.title >}}
+{{< include blockcommit/_theory.qmd >}}
+{{< include blockcommit/_task.qmd >}}
+
+### {{< meta snapshot-delete.title >}}
+{{< include snapshot-delete/_theory.qmd >}}
+{{< include snapshot-delete/_task.qmd >}}
+
+### {{< meta no-metadata-snapshot.title >}}
+{{< include no-metadata-snapshot/_theory.qmd >}}
+{{< include no-metadata-snapshot/_task.qmd >}}
+
+### {{< meta snapshot-cleanup.title >}}
+{{< include snapshot-cleanup/_theory.qmd >}}
+{{< include snapshot-cleanup/_task.qmd >}}

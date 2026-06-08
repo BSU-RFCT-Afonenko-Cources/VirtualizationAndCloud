@@ -1,0 +1,5 @@
+:::{#exr-lab-libvirt-snapshots-no-metadata-snapshot}
+#### Проверяемое задание
+
+Перейдите в `~/no-metadata-snapshot`. Сохраните список имён до операции в `snapshot-names-before.txt`. Создайте external disk-only overlay `/tmp/libvirt-snapshots/lab-nometa-001.qcow2` с `--no-metadata`, затем сохраните `snapshot-names-after.txt`, `domblklist-after.txt` и `no-metadata-result.txt`. Имя `lab-nometa-001` не должно появиться в metadata list, но файл должен стать source `vda`.
+:::
