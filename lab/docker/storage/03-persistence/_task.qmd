@@ -1,0 +1,7 @@
+:::{#exr-storage-persistence}
+### Данные после пересоздания
+
+В контейнере `storage-db` сохраните в `/data/records.json` валидный JSON-массив с записью, у которой `id` равен `persistent-1`, а `value` равен `survived-recreate`.
+
+Удалите `storage-db`. Создайте и оставьте запущенным новый контейнер `storage-db-v2`, подключив тот же `lab-data` в `/data`. Данные должны читаться из `/data/records.json` через новый контейнер без повторной записи файла.
+:::

@@ -1,0 +1,7 @@
+:::{#exr-storage-backup}
+### Архив и checksum
+
+Создайте каталог `/home/ubuntu/storage/backups`. Одноразовым контейнером `storage-backup` из `alpine:3.20` подключите `lab-data` read-only и каталог backups с правом записи. Создайте отдельный непустой архив `lab-data.tar.gz`, содержащий `records.json`.
+
+Для архива создайте `/home/ubuntu/storage/backups/lab-data.tar.gz.sha256` в формате, совместимом с проверкой SHA-256. Backup-контейнер должен иметь label `course.role=backup` и успешно завершиться.
+:::

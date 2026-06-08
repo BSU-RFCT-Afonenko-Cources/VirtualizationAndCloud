@@ -1,0 +1,15 @@
+:::{#exr-storage-bind-config}
+### Read-only конфигурация API
+
+В уже подготовленном каталоге `/home/ubuntu/storage/config` создайте `api.json` — JSON-объект с полями `service_name` со значением `storage-api` и `dataset` со значением `/data/records.json`.
+
+Запустите контейнер `storage-api` из `python:3.12-alpine` со следующими свойствами:
+
+- host port `8080` опубликован на container port `8080` только для loopback-интерфейса;
+- `lab-data` подключён read-only в `/data`;
+- host-файл `api.json` подключён read-only в `/app/config.json`;
+- подготовленный `/home/ubuntu/storage/assets/api.py` подключён read-only в `/app/api.py` и используется как приложение;
+- healthcheck обращается к `/health`, а контейнер получает label `course.lab=storage`.
+
+После запуска API должен перейти в состояние healthy, а `/records` — возвращать имя сервиса из bind-mounted конфигурации и записи из volume.
+:::

@@ -1,0 +1,40 @@
+---
+title: "Volumes, bind mounts и stateful-контейнеры"
+metadata-files:
+  - 01-ephemeral-layer/step.yaml
+  - 02-named-volume/step.yaml
+  - 03-persistence/step.yaml
+  - 04-bind-config/step.yaml
+  - 05-seed-data/step.yaml
+  - 06-volume-backup/step.yaml
+  - 07-volume-restore/step.yaml
+  - 08-cleanup-volumes/step.yaml
+---
+
+# Volumes, bind mounts и stateful-контейнеры
+
+{{< include _assignment-description.qmd >}}
+
+{{< include 01-ephemeral-layer/_theory.qmd >}}
+{{< include 01-ephemeral-layer/_task.qmd >}}
+
+{{< include 02-named-volume/_theory.qmd >}}
+{{< include 02-named-volume/_task.qmd >}}
+
+{{< include 03-persistence/_theory.qmd >}}
+{{< include 03-persistence/_task.qmd >}}
+
+{{< include 04-bind-config/_theory.qmd >}}
+{{< include 04-bind-config/_task.qmd >}}
+
+{{< include 05-seed-data/_theory.qmd >}}
+{{< include 05-seed-data/_task.qmd >}}
+
+{{< include 06-volume-backup/_theory.qmd >}}
+{{< include 06-volume-backup/_task.qmd >}}
+
+{{< include 07-volume-restore/_theory.qmd >}}
+{{< include 07-volume-restore/_task.qmd >}}
+
+{{< include 08-cleanup-volumes/_theory.qmd >}}
+{{< include 08-cleanup-volumes/_task.qmd >}}
