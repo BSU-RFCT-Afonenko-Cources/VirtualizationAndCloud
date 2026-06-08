@@ -1,0 +1,11 @@
+tagging-convention:
+  title: "Соглашение о тегах"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    check:
+      exec:
+        - check.sh
+    solution:
+      exec:
+        - solution.sh

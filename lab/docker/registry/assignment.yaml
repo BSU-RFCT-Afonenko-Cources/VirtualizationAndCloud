@@ -1,0 +1,12 @@
+title: "Локальный registry и жизненный цикл образов"
+description: _description.qmd
+time-limit-minutes: 90
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-registry-role/step.yaml
+  - 02-tagging-convention/step.yaml
+  - 03-push-image/step.yaml
+  - 04-pull-clean-state/step.yaml
+  - 05-digest-pinning/step.yaml
+  - 06-version-upgrade/step.yaml
+  - 07-cleanup-awareness/step.yaml

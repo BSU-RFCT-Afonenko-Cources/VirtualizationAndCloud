@@ -18,6 +18,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -45,6 +46,10 @@ assignments:
 =======
     - docker/security/assignment.yaml
 >>>>>>> remotes/origin/codex/create-lab-on-container-security
+||||||| 6df1dcb
+=======
+    - docker/registry/assignment.yaml
+>>>>>>> remotes/origin/codex/create-lab-on-local-registry-lifecycle
 
 =======
     - docker/compose/assignment.yaml

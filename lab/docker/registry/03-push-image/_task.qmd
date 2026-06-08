@@ -1,0 +1,5 @@
+:::{#exr-lab-docker-registry-push}
+#### Публикация v1
+
+Опубликуйте `localhost:5000/course/api:v1` в локальном registry. После публикации убедитесь средствами Registry HTTP API v2, что repository `course/api` появился в catalog, а версия `v1` — в списке tags.
+:::

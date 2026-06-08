@@ -1,0 +1,7 @@
+:::{#exr-lab-docker-registry-repull}
+#### Повторная загрузка v1
+
+Удалите локальный тег `localhost:5000/course/api:v1`, не удаляя данные из registry. Затем снова получите эту версию из локального registry.
+
+В результате локальный образ должен иметь registry-тег и RepoDigest, совпадающий с digest manifest `v1` на сервере.
+:::

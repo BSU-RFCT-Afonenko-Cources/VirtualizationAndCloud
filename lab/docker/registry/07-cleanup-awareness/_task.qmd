@@ -1,0 +1,7 @@
+:::{#exr-lab-docker-registry-cleanup}
+#### Границы cleanup
+
+Удалите лабораторные контейнеры API `registry-api-digest` и `registry-api-v2`. Удалите локальные теги repository `localhost:5000/course/api`, включая версионные и digest-ссылки, которые больше не используются контейнерами.
+
+Не удаляйте и не останавливайте `lab-registry`. После локальной очистки его API должен по-прежнему показывать repository `course/api` и обе опубликованные версии `v1` и `v2`.
+:::
