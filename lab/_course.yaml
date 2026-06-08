@@ -10,6 +10,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -34,3 +35,8 @@ assignments:
     - docker/compose/assignment.yaml
 
 >>>>>>> remotes/origin/codex/create-docker-compose-lab-for-multi-container-app
+||||||| 6df1dcb
+
+=======
+    - docker/swarm-updates/assignment.yaml
+>>>>>>> remotes/origin/codex/create-lab-for-swarm-scaling-and-updates

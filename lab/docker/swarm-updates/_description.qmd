@@ -1,0 +1,5 @@
+# Swarm scaling, rolling update и rollback
+
+В лабораторной работе вы последовательно развернёте HTTP API заказов в Docker Swarm, измените число реплик, настроите политику обновления, выполните успешный и аварийный релизы, а затем восстановите сервис rollback-операцией.
+
+Рабочий каталог: `/home/ubuntu/swarm-updates`. Сервис: `orders-api`. Проверочный endpoint доступен через published port `18080`.

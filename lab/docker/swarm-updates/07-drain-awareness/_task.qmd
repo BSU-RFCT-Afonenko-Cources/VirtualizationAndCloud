@@ -1,0 +1,7 @@
+:::{#exr-swarm-drain-awareness}
+## Фиксация placement-состояния
+
+Не переводя единственный узел стенда в drain, сохраните его доступность `active`. Добавьте сервису `orders-api` placement constraint, допускающий запуск на manager-узле, и убедитесь, что API остаётся доступным.
+
+Создайте `/home/ubuntu/swarm-updates/evidence/node-awareness.json` с полями `node_id`, `hostname`, `availability`, `manager_status` и `service_constraints`. Значения должны отражать фактические данные Swarm, а `service_constraints` должен быть JSON-массивом.
+:::
