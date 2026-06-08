@@ -1,0 +1,5 @@
+:::{#exr-cr-open-volume}
+Исследуйте открытый `journal.log` контейнера через `/proc/<container-pid>/fd`, зафиксируйте inode, размер, последнюю запись и session id. После периода работы убедитесь, что тот же журнал вырос и старые данные сохранились.
+
+Сохраните `evidence/open-files.json`. В fallback-mode выполните эту проверку на работающем pause/unpause workload и явно укажите, что она доказывает поведение volume/open file, но не restore.
+:::

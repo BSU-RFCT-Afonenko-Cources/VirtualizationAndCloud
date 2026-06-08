@@ -1,0 +1,5 @@
+:::{#exr-cr-negative-test}
+Создайте отдельный контейнер `cr-negative-tty` с выделенным TTY и попытайтесь сделать checkpoint `cr-negative-checkpoint`. Не изменяйте основной `cr-docker-counter`.
+
+Сохраните `evidence/negative-test.json` с tested feature, container settings, outcome, exit code и stderr. При fallback из-за общей недоступности checkpoint сохраните одновременно эту причину и параметры подготовленного TTY-контейнера.
+:::

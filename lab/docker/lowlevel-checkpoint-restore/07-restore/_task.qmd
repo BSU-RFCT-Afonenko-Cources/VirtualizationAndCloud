@@ -1,0 +1,5 @@
+:::{#exr-cr-restore-continuity}
+В full-mode восстановите `cr-docker-counter` из `cr-checkpoint-1`. Докажите, что counter стал больше сохранённого значения, а session id и `starts` не изменились. Сохраните inspect и список checkpoints.
+
+В fallback-mode создайте `evidence/restore.json`, которое ссылается на диагностированную невозможность checkpoint и явно отмечает, что restart не выдаётся за restore.
+:::

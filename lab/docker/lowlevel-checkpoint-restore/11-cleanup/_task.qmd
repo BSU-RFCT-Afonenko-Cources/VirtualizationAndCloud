@@ -1,0 +1,5 @@
+:::{#exr-cr-cleanup}
+Остановите host workload, разморозив его при необходимости. Удалите все контейнеры с именами `cr-*`, cgroup лабораторной, checkpoint directories и временные state-каталоги.
+
+Сохраните только `evidence/cleanup.json`, где перечислены проверенные категории и подтверждено отсутствие контейнеров, живых процессов `cr-demo-counter`, cgroup и checkpoint artifacts.
+:::

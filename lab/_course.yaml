@@ -12,6 +12,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -45,3 +46,8 @@ assignments:
 =======
     - docker/swarm-updates/assignment.yaml
 >>>>>>> remotes/origin/codex/create-lab-for-swarm-scaling-and-updates
+||||||| 6df1dcb
+
+=======
+    - docker/lowlevel-checkpoint-restore/assignment.yaml
+>>>>>>> remotes/origin/codex/create-lab-on-checkpoint/restore-in-docker

@@ -1,0 +1,11 @@
+step-05:
+  title: "Docker pause как runtime-level freeze"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check/check.sh
+      solution:
+        exec:
+          - solution/solution.sh

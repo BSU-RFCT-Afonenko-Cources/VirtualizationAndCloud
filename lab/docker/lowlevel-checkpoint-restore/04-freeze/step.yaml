@@ -1,0 +1,11 @@
+step-04:
+  title: "Freeze через cgroup freezer"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check/check.sh
+      solution:
+        exec:
+          - solution/solution.sh

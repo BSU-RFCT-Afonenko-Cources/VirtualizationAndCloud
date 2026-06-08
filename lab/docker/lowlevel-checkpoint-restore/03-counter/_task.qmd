@@ -1,0 +1,5 @@
+:::{#exr-cr-counter-workload}
+Запустите долгоживущий процесс `/home/ubuntu/cr-lab/bin/cr-demo-counter` с именем процесса `cr-demo-counter`, каталогом состояния `state/host` и HTTP-портом `18081`.
+
+Сохраните PID в `run/host.pid`. Добейтесь, чтобы `state/host/state.json` существовал, поле `counter` возрастало между наблюдениями, heartbeat обновлялся, а `/proc/<pid>/status` подтверждал имя живого процесса.
+:::

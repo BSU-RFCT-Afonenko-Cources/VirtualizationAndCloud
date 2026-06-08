@@ -1,0 +1,14 @@
+step-01:
+  title: "Термины: pause, freeze, checkpoint, restore"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      pre-step:
+        exec:
+          - ../prepare/prepare.sh
+      check:
+        exec:
+          - check/check.sh
+      solution:
+        exec:
+          - solution/solution.sh
