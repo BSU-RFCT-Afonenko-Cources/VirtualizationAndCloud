@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+
+service_exists edge || fail "service edge does not exist"
+[ "$(docker service inspect --format '{{index .Spec.Labels "course.lab"}}' edge)" = "swarm-networking" ] || fail "edge has no lab label"
+[ "$(docker service inspect --format '{{.Spec.TaskTemplate.ContainerSpec.Image}}' edge | cut -d@ -f1)" = "swarm-lab-edge:1.0" ] || fail "edge must use swarm-lab-edge:1.0"
+[ "$(docker service inspect --format '{{.Spec.Mode.Replicated.Replicas}}' edge)" = "1" ] || fail "edge must have one replica"
+assert_service_network edge lab-front
+assert_service_network edge lab-back
+[ "$(docker service inspect --format '{{range .Spec.TaskTemplate.ContainerSpec.Env}}{{println .}}{{end}}' edge | grep -c '^API_HOST=api$')" = "1" ] || fail "edge must use API_HOST=api"
+[ "$(docker service inspect --format '{{(index .Endpoint.Spec.Ports 0).PublishedPort}}' edge)" = "8080" ] || fail "edge must publish port 8080"
+[ "$(docker service inspect --format '{{(index .Endpoint.Spec.Ports 0).TargetPort}}' edge)" = "8080" ] || fail "edge target port must be 8080"
+[ "$(docker service inspect --format '{{(index .Endpoint.Spec.Ports 0).PublishMode}}' edge)" = "ingress" ] || fail "edge must use ingress publish mode"
+[ "$(docker service inspect --format '{{len .Endpoint.Spec.Ports}}' api)" = "0" ] || fail "api must not publish ports"
+[ "$(docker service inspect --format '{{len .Endpoint.Spec.Ports}}' db)" = "0" ] || fail "db must not publish ports"
+wait_service edge
+wait_healthy edge
+printf 'OK: edge is attached to front/back and is the only published service.\n'

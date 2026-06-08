@@ -1,0 +1,12 @@
+title: "Swarm overlay networks и сервисное взаимодействие"
+description: _assignment-description.qmd
+time-limit-minutes: 90
+virtual-machine: "Ubuntu с Docker Engine в режиме Swarm"
+steps:
+  - 01-overlay-concept/step.yaml
+  - 02-backend-service/step.yaml
+  - 03-edge-service/step.yaml
+  - 04-end-to-end-request/step.yaml
+  - 05-isolation/step.yaml
+  - 06-vip-vs-dnsrr/step.yaml
+  - 07-network-cleanup/step.yaml

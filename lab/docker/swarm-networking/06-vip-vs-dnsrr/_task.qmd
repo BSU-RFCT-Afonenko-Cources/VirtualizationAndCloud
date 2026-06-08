@@ -1,0 +1,7 @@
+:::{#exr-swarm-endpoint-mode}
+#### Фиксация endpoint mode
+
+Не изменяя рабочую цепочку, определите endpoint mode сервиса `api` и сохраните его в `/home/ubuntu/swarm-networking/endpoint-mode.json`.
+
+JSON должен содержать `service` со значением `api` и `endpoint_mode` с фактическим значением из `EndpointSpec`. Для этой лабораторной ожидается режим `vip`.
+:::

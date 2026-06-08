@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+
+service_exists api || fail "complete step 02 first"
+mode=$(docker service inspect --format '{{.Spec.EndpointSpec.Mode}}' api)
+printf '{\n  "service": "api",\n  "endpoint_mode": "%s"\n}\n' "$mode" > /home/ubuntu/swarm-networking/endpoint-mode.json
+chown ubuntu:ubuntu /home/ubuntu/swarm-networking/endpoint-mode.json

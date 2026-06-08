@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+readonly EVIDENCE=/home/ubuntu/swarm-networking/isolation.json
+readonly ACTUAL=/tmp/swarm-networking-isolation-actual.json
+
+[ -f "$EVIDENCE" ] || fail "isolation.json is missing"
+python3 - <<'PY' > /tmp/swarm-networking-isolation-actual.json
+import json
+import subprocess
+
+def ports(service):
+    raw = subprocess.check_output([
+        "docker", "service", "inspect", "--format", "{{json .Endpoint.Spec.Ports}}", service
+    ], text=True).strip()
+    specs = json.loads(raw) if raw and raw != "null" else []
+    return sorted(item["PublishedPort"] for item in specs)
+
+print(json.dumps({
+    "edge_published_ports": ports("edge"),
+    "api_published_ports": ports("api"),
+    "db_published_ports": ports("db"),
+}, sort_keys=True))
+PY
+python3 - <<'PY'
+import json
+with open("/home/ubuntu/swarm-networking/isolation.json", encoding="utf-8") as source:
+    saved = json.load(source)
+with open("/tmp/swarm-networking-isolation-actual.json", encoding="utf-8") as source:
+    actual = json.load(source)
+expected = {
+    "edge_published_ports": [8080],
+    "api_published_ports": [],
+    "db_published_ports": [],
+}
+assert actual == expected, f"current endpoint specs are {actual!r}"
+assert saved == actual, "isolation.json must match current endpoint specs"
+PY
+rm -f "$ACTUAL"
+printf 'OK: only edge publishes port 8080; api and db remain internal.\n'

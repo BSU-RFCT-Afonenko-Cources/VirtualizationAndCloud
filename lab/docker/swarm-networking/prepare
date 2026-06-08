@@ -1,0 +1,203 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly LAB_HOME=/home/ubuntu/swarm-networking
+readonly ASSET_HOME=/opt/swarm-networking-lab
+readonly API_CONTEXT=/opt/swarm-networking-lab/api
+readonly EDGE_CONTEXT=/opt/swarm-networking-lab/edge
+
+install -d -m 0755 -o ubuntu -g ubuntu "$LAB_HOME"
+install -d -m 0755 "$ASSET_HOME" "$API_CONTEXT" "$EDGE_CONTEXT"
+
+cat > /opt/swarm-networking-lab/api/app.py <<'PY'
+import json
+import os
+import socket
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+DB_HOST = os.environ.get("DB_HOST", "db")
+DB_PORT = int(os.environ.get("DB_PORT", "6379"))
+
+
+def redis_command(*parts):
+    request = f"*{len(parts)}\r\n".encode()
+    for part in parts:
+        encoded = str(part).encode()
+        request += f"${len(encoded)}\r\n".encode() + encoded + b"\r\n"
+    with socket.create_connection((DB_HOST, DB_PORT), timeout=2) as connection:
+        connection.sendall(request)
+        response_type = connection.recv(1)
+        line = b""
+        while not line.endswith(b"\r\n"):
+            line += connection.recv(1)
+        if response_type == b"$":
+            length = int(line[:-2])
+            if length < 0:
+                return None
+            data = b""
+            while len(data) < length + 2:
+                data += connection.recv(length + 2 - len(data))
+            return data[:-2].decode()
+        if response_type in (b"+", b":"):
+            return line[:-2].decode()
+        raise RuntimeError(line[:-2].decode())
+
+
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == "/health":
+            payload = {"status": "ok", "service": "api"}
+        elif self.path == "/":
+            payload = {
+                "service": "api",
+                "database": DB_HOST,
+                "marker": redis_command("GET", "lab:marker"),
+            }
+        else:
+            self.send_error(404)
+            return
+        body = json.dumps(payload, sort_keys=True).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, format, *args):
+        print(f"api: {format % args}", flush=True)
+
+
+ThreadingHTTPServer(("0.0.0.0", 8080), Handler).serve_forever()
+PY
+cat > /opt/swarm-networking-lab/api/Dockerfile <<'DOCKER'
+FROM python:3.12-alpine
+WORKDIR /app
+COPY app.py /app/app.py
+EXPOSE 8080
+CMD ["python", "/app/app.py"]
+DOCKER
+cat > /opt/swarm-networking-lab/edge/app.py <<'PY'
+import http.client
+import json
+import os
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+API_HOST = os.environ.get("API_HOST", "api")
+API_PORT = int(os.environ.get("API_PORT", "8080"))
+
+
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        target = "/health" if self.path == "/health" else "/"
+        try:
+            connection = http.client.HTTPConnection(API_HOST, API_PORT, timeout=3)
+            connection.request("GET", target)
+            response = connection.getresponse()
+            body = response.read()
+            self.send_response(response.status)
+            self.send_header("Content-Type", response.getheader("Content-Type", "application/json"))
+        except Exception as error:
+            body = json.dumps({"service": "edge", "error": str(error)}).encode()
+            self.send_response(502)
+            self.send_header("Content-Type", "application/json")
+        self.send_header("X-Lab-Edge", "edge")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, format, *args):
+        print(f"edge: {format % args}", flush=True)
+
+
+ThreadingHTTPServer(("0.0.0.0", 8080), Handler).serve_forever()
+PY
+cat > /opt/swarm-networking-lab/edge/Dockerfile <<'DOCKER'
+FROM python:3.12-alpine
+WORKDIR /app
+COPY app.py /app/app.py
+EXPOSE 8080
+CMD ["python", "/app/app.py"]
+DOCKER
+cat > /opt/swarm-networking-lab/lib.sh <<'LIB'
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly LAB_HOME=/home/ubuntu/swarm-networking
+readonly LAB_LABEL=course.lab=swarm-networking
+readonly MARKER=overlay-db-ok
+
+fail() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+service_exists() {
+    docker service inspect "$1" >/dev/null 2>&1
+}
+
+network_exists() {
+    docker network inspect "$1" >/dev/null 2>&1
+}
+
+service_container() {
+    docker ps --filter "label=com.docker.swarm.service.name=$1" --format '{{.ID}}' | head -n 1
+}
+
+wait_service() {
+    local service_name=$1
+    local attempt
+    for attempt in $(seq 1 60); do
+        if [ "$(docker service inspect --format '{{if .UpdateStatus}}{{.UpdateStatus.State}}{{else}}none{{end}}' "$service_name" 2>/dev/null || true)" = "rollback_paused" ]; then
+            fail "service $service_name rollback paused"
+        fi
+        if [ "$(docker service ps --filter desired-state=running --format '{{.CurrentState}}' "$service_name" 2>/dev/null | grep -c '^Running' || true)" -ge 1 ]; then
+            return 0
+        fi
+        sleep 1
+    done
+    docker service ps --no-trunc "$service_name" >&2 || true
+    fail "service $service_name did not reach Running state"
+}
+
+wait_healthy() {
+    local service_name=$1
+    local container_id
+    local health
+    local attempt
+    for attempt in $(seq 1 60); do
+        container_id=$(service_container "$service_name")
+        if [ -n "$container_id" ]; then
+            health=$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$container_id")
+            if [ "$health" = "healthy" ]; then
+                return 0
+            fi
+        fi
+        sleep 1
+    done
+    [ -n "${container_id:-}" ] && docker inspect "$container_id" >&2 || true
+    fail "service $service_name did not become healthy"
+}
+
+assert_service_network() {
+    local service_name=$1
+    local network_name=$2
+    docker service inspect --format '{{range .Spec.TaskTemplate.Networks}}{{println .Target}}{{end}}' "$service_name" |
+        while read -r network_id; do
+            [ -n "$network_id" ] && docker network inspect --format '{{.Name}}' "$network_id"
+        done | grep -Fxq "$network_name" || fail "$service_name is not attached to $network_name"
+}
+LIB
+chmod 0755 /opt/swarm-networking-lab/lib.sh
+
+if [ "$(docker info --format '{{.Swarm.LocalNodeState}}')" = "inactive" ]; then
+    docker swarm init --advertise-addr 127.0.0.1 >/dev/null
+fi
+[ "$(docker info --format '{{.Swarm.ControlAvailable}}')" = "true" ] || {
+    printf 'Docker Swarm manager is required.\n' >&2
+    exit 1
+}
+
+docker image inspect swarm-lab-api:1.0 >/dev/null 2>&1 || docker build -t swarm-lab-api:1.0 "$API_CONTEXT"
+docker image inspect swarm-lab-edge:1.0 >/dev/null 2>&1 || docker build -t swarm-lab-edge:1.0 "$EDGE_CONTEXT"
+docker image inspect redis:7-alpine >/dev/null 2>&1 || docker pull redis:7-alpine
+chown -R ubuntu:ubuntu "$LAB_HOME"

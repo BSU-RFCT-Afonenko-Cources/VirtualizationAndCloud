@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+
+network_exists lab-back || fail "complete step 01 first"
+if ! service_exists db; then
+    docker service create --name db --label "$LAB_LABEL" --network lab-back --replicas 1 \
+        --health-cmd 'redis-cli ping | grep -q PONG' --health-interval 5s --health-timeout 2s --health-retries 12 \
+        redis:7-alpine redis-server --appendonly no >/dev/null
+fi
+wait_service db
+wait_healthy db
+db_container=$(service_container db)
+[ -n "$db_container" ] || fail "db task container not found"
+docker exec "$db_container" redis-cli SET lab:marker "$MARKER" >/dev/null
+
+if ! service_exists api; then
+    docker service create --name api --label "$LAB_LABEL" --network lab-back --replicas 1 \
+        --env DB_HOST=db --env DB_PORT=6379 \
+        --health-cmd 'python -c "import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8080/health\", timeout=2)"' \
+        --health-interval 5s --health-timeout 3s --health-retries 12 \
+        swarm-lab-api:1.0 >/dev/null
+fi
+wait_service api
+wait_healthy api
+api_container=$(service_container api)
+docker exec "$api_container" python -c 'import json,socket; print(json.dumps({"queried_service":"db","from_service":"api","addresses":sorted({item[4][0] for item in socket.getaddrinfo("db",6379)})}, indent=2))' > /home/ubuntu/swarm-networking/service-dns.json
+chown ubuntu:ubuntu /home/ubuntu/swarm-networking/service-dns.json

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+readonly RESPONSE=/home/ubuntu/swarm-networking/response.json
+readonly LIVE_RESPONSE=/tmp/swarm-networking-live-response.json
+
+[ -f "$RESPONSE" ] || fail "response.json is missing"
+curl --fail --silent --show-error --max-time 5 http://127.0.0.1:8080/ > "$LIVE_RESPONSE"
+python3 - <<'PY'
+import json
+expected = {"service": "api", "database": "db", "marker": "overlay-db-ok"}
+with open("/home/ubuntu/swarm-networking/response.json", encoding="utf-8") as source:
+    saved = json.load(source)
+with open("/tmp/swarm-networking-live-response.json", encoding="utf-8") as source:
+    live = json.load(source)
+for key, value in expected.items():
+    assert saved.get(key) == value, f"saved response: {key} must be {value!r}"
+    assert live.get(key) == value, f"live response: {key} must be {value!r}"
+assert saved == live, "saved response must match the current edge response"
+PY
+rm -f "$LIVE_RESPONSE"
+printf 'OK: client -> edge -> api -> db returned marker overlay-db-ok.\n'
