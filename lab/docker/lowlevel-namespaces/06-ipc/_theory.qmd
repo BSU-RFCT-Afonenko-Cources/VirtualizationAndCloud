@@ -1,0 +1,5 @@
+IPC namespace изолирует System V message queues, semaphore sets, shared-memory segments и POSIX message queues. Это особенно важно для legacy-приложений, которые используют глобальные числовые ключи.
+
+Одинаковый IPC key в двух namespaces не означает общий объект. Проверка должна сопоставлять inspection изнутри с host-side inspection, а не полагаться только на успешное создание.
+
+Docker создаёт отдельный IPC namespace по умолчанию, но допускает явное совместное использование, когда приложениям действительно нужен общий IPC context.

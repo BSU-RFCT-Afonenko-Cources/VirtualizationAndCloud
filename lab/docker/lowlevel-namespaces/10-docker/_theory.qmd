@@ -1,0 +1,5 @@
+Docker скрывает последовательность clone, unshare, mount и network setup за lifecycle контейнера. Однако контейнерная нагрузка остаётся Linux-процессом, host PID которого доступен через inspect.
+
+По host PID можно исследовать `/proc/<pid>/ns` теми же средствами, что использовались вручную. Совпадение или различие handles также объясняет режимы вроде host network или совместного PID namespace.
+
+На более низком уровне containerd управляет lifecycle и snapshots, а runc применяет OCI configuration и создаёт namespaces перед exec полезной нагрузки.

@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-02}
+#### Проверяемое состояние
+
+Запустите долгоживущий диагностический процесс в отдельном UTS namespace с hostname `ns-uts-lab`. Сохраните его внешний PID в `/home/ubuntu/ns-lab/state/02-uts.pid`.
+
+Создайте evidence `02-uts.json` с полями `pid`, `inside_hostname`, `host_hostname`, `inside_uts` и `host_uts`. Процесс должен оставаться живым до проверки.
+:::

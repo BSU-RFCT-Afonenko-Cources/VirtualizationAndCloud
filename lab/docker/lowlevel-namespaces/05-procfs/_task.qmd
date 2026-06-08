@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-05}
+#### Проверяемое состояние
+
+Запустите отдельный PID namespace вместе с отдельным mount namespace и procfs, соответствующим этому PID namespace. Процесс должен оставаться живым, а его host PID сохраните в `state/05-procfs.pid`.
+
+В `05-procfs.json` сохраните `outer_pid`, `inner_pid`, `proc_mount`, массив `visible_pids` и массив `visible_commands`. Host-only процессы не должны попадать в это наблюдение.
+:::

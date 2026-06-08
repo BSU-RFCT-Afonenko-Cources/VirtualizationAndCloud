@@ -1,0 +1,8 @@
+title: "01. Инвентаризация namespaces хоста"
+theory: _theory.qmd
+task: _task.qmd
+actions:
+  - host:
+      pre-step: pre-step.bash
+      check: check.bash
+      solution: solution.bash

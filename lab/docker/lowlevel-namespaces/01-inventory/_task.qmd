@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-01}
+#### Проверяемое состояние
+
+Создайте `/home/ubuntu/ns-lab/evidence/01-inventory.json`. Запишите PID своего shell и PID Docker daemon либо диагностического процесса, а для каждого доступного процесса — объект `namespaces` с handles из `/proc/<pid>/ns`.
+
+Добавьте поля `host_hostname` и `observed_types`. В `observed_types` должны присутствовать как минимум два реально найденных типа namespace; пустые строки и условные значения не принимаются.
+:::

@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-03}
+#### Проверяемое состояние
+
+Запустите `ns-demo` как первый долгоживущий процесс отдельного PID namespace. Сохраните внешний PID в `state/03-pid.pid`.
+
+Evidence `03-pid.json` должен содержать `outer_pid`, `inner_pid`, `nspid` и массив `visible_processes`, полученный изнутри namespace. Внутренний PID первого процесса должен отражать init-поведение.
+:::

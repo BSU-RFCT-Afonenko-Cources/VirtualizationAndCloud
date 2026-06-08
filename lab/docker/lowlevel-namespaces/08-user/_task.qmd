@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-08}
+#### Проверяемое состояние
+
+От имени `ubuntu` запустите долгоживущий процесс в новом user namespace так, чтобы внутри он видел UID и GID 0. Сохраните host PID в `state/08-user.pid`.
+
+В `08-user.json` запишите `pid`, `inside_uid`, `inside_gid`, `host_uid`, `uid_map` и `gid_map`. Host-side UID процесса не должен быть равен 0.
+:::

@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-09}
+#### Проверяемое состояние
+
+Сравните cgroup view хостового процесса и долгоживущего процесса в новом cgroup namespace. При поддержке сохраните PID в `state/09-cgroup.pid` и заполните `09-cgroup.json` полями `status`, `pid`, `host_cgroup`, `inside_cgroup`, `host_handle`, `inside_handle`.
+
+Если feature запрещена средой, сохраните `status: unavailable` и непустое поле `reason`, основанное на фактической проверке.
+:::

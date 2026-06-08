@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-11}
+#### Проверяемое состояние
+
+Завершите все процессы лабораторной, удалите контейнер `ns-docker-demo`, именованный network namespace, временные mounts и рабочий каталог `/home/ubuntu/ns-lab`.
+
+Создайте `/home/ubuntu/ns-lab-cleanup.json` с `clean: true` и массивом `removed`. Проверка не должна находить живые процессы или временные артефакты с префиксом `ns-lab-`.
+:::

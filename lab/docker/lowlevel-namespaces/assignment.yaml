@@ -1,0 +1,19 @@
+title: "Linux namespaces как основа изоляции контейнеров"
+description: _description.qmd
+time-limit-minutes: 180
+virtual-machines:
+  - host:
+      template: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+      prepare: prepare.bash
+steps:
+  - 01-inventory/step.yaml
+  - 02-uts/step.yaml
+  - 03-pid/step.yaml
+  - 04-mount/step.yaml
+  - 05-procfs/step.yaml
+  - 06-ipc/step.yaml
+  - 07-network/step.yaml
+  - 08-user/step.yaml
+  - 09-cgroup/step.yaml
+  - 10-docker/step.yaml
+  - 11-cleanup/step.yaml
