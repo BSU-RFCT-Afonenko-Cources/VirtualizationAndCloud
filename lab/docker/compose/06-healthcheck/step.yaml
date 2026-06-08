@@ -1,0 +1,11 @@
+06-healthcheck:
+  title: "06. Healthcheck"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

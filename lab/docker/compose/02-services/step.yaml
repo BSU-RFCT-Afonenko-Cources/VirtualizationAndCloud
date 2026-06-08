@@ -1,0 +1,11 @@
+02-services:
+  title: "02. Сервисы"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

@@ -1,0 +1,11 @@
+09-update:
+  title: "09. Update version"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

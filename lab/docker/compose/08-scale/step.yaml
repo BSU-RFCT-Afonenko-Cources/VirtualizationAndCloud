@@ -1,0 +1,11 @@
+08-scale:
+  title: "08. Scale stateless service"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh
