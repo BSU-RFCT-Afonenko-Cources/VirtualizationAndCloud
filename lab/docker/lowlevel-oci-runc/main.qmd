@@ -1,0 +1,77 @@
+---
+metadata-files:
+    - 01-runtime-stack/step.yaml
+    - 02-bundle-structure/step.yaml
+    - 03-process/step.yaml
+    - 04-mounts/step.yaml
+    - 05-namespaces/step.yaml
+    - 06-cgroups/step.yaml
+    - 07-capabilities-seccomp/step.yaml
+    - 08-lifecycle/step.yaml
+    - 09-compare-docker/step.yaml
+    - 10-cleanup/step.yaml
+---
+
+# OCI bundle и runc: как Docker запускает контейнер на нижнем уровне
+
+{{< include _assignment-description.qmd >}}
+
+## {{< meta step-01.title >}}
+
+{{< include 01-runtime-stack/_theory.qmd >}}
+
+{{< include 01-runtime-stack/_task.qmd >}}
+
+## {{< meta step-02.title >}}
+
+{{< include 02-bundle-structure/_theory.qmd >}}
+
+{{< include 02-bundle-structure/_task.qmd >}}
+
+## {{< meta step-03.title >}}
+
+{{< include 03-process/_theory.qmd >}}
+
+{{< include 03-process/_task.qmd >}}
+
+## {{< meta step-04.title >}}
+
+{{< include 04-mounts/_theory.qmd >}}
+
+{{< include 04-mounts/_task.qmd >}}
+
+## {{< meta step-05.title >}}
+
+{{< include 05-namespaces/_theory.qmd >}}
+
+{{< include 05-namespaces/_task.qmd >}}
+
+## {{< meta step-06.title >}}
+
+{{< include 06-cgroups/_theory.qmd >}}
+
+{{< include 06-cgroups/_task.qmd >}}
+
+## {{< meta step-07.title >}}
+
+{{< include 07-capabilities-seccomp/_theory.qmd >}}
+
+{{< include 07-capabilities-seccomp/_task.qmd >}}
+
+## {{< meta step-08.title >}}
+
+{{< include 08-lifecycle/_theory.qmd >}}
+
+{{< include 08-lifecycle/_task.qmd >}}
+
+## {{< meta step-09.title >}}
+
+{{< include 09-compare-docker/_theory.qmd >}}
+
+{{< include 09-compare-docker/_task.qmd >}}
+
+## {{< meta step-10.title >}}
+
+{{< include 10-cleanup/_theory.qmd >}}
+
+{{< include 10-cleanup/_task.qmd >}}

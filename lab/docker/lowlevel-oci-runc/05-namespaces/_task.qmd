@@ -1,0 +1,5 @@
+::: {#exr-oci-05}
+Настройте для OCI-контейнера отдельные mount, UTS и PID namespaces и перезапустите workload. Сохраните структурированное сравнение inode namespaces процесса контейнера и PID 1 хоста в `/home/ubuntu/oci-runc-lab/evidence/namespaces.json`.
+
+Для каждого из трёх namespaces файл должен содержать значения host и container. Значения должны быть получены из текущего состояния `/proc`, а не записаны вручную.
+:::

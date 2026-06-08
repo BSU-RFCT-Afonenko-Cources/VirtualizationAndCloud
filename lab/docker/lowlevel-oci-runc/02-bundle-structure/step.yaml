@@ -1,0 +1,14 @@
+step-02:
+  title: "Структура OCI bundle"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - ../prepare.bash
+    check:
+      exec:
+        - check/check.bash
+    solution:
+      exec:
+        - solution/solution.bash

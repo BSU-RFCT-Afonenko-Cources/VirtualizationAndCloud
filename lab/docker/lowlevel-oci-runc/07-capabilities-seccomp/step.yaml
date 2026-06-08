@@ -1,0 +1,14 @@
+step-07:
+  title: "Capabilities и seccomp в OCI"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - ../prepare.bash
+    check:
+      exec:
+        - check/check.bash
+    solution:
+      exec:
+        - solution/solution.bash

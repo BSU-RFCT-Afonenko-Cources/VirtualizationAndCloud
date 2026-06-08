@@ -1,0 +1,15 @@
+title: "OCI bundle и runc: как Docker запускает контейнер на нижнем уровне"
+description: _assignment-description.qmd
+time-limit-minutes: 180
+virtual-machine: "Ubuntu — Docker/OCI Lab"
+steps:
+  - 01-runtime-stack/step.yaml
+  - 02-bundle-structure/step.yaml
+  - 03-process/step.yaml
+  - 04-mounts/step.yaml
+  - 05-namespaces/step.yaml
+  - 06-cgroups/step.yaml
+  - 07-capabilities-seccomp/step.yaml
+  - 08-lifecycle/step.yaml
+  - 09-compare-docker/step.yaml
+  - 10-cleanup/step.yaml

@@ -1,0 +1,5 @@
+::: {#exr-oci-04}
+Добавьте в bundle проверяемые mounts: proc в `/proc`, tmpfs в `/tmp` и bind mount каталога `/home/ubuntu/oci-runc-lab/shared` в `/data`. Перезапустите OCI-контейнер с обновлённой конфигурацией.
+
+Сохраните `/proc/<pid>/mountinfo` контейнерного процесса в `/home/ubuntu/oci-runc-lab/evidence/mountinfo.txt`. Содержимое должно относиться к текущему PID и соответствовать `config.json`.
+:::

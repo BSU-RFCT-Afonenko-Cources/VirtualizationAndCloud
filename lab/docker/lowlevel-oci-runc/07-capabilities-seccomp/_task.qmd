@@ -1,0 +1,5 @@
+::: {#exr-oci-07}
+Ограничьте capability sets процесса небольшим набором, достаточным для workload, и включите seccomp-фильтр, запрещающий хотя бы один неиспользуемый системный вызов. Перезапустите контейнер.
+
+Сохраните строки Cap* и Seccomp из `/proc/<pid>/status` в `/home/ubuntu/oci-runc-lab/evidence/security-status.txt`. Проверка сопоставит их с process.capabilities и linux.seccomp в bundle.
+:::
