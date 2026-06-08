@@ -1,0 +1,7 @@
+Перейдите в `~/backup-checkpoint-full`.
+
+:::{#exr-lab-libvirt-backup-api-backup-checkpoint-full}
+#### Full backup с checkpoint
+
+Создайте `full-backup.xml` для `vda` с target `/tmp/libvirt-backups/lab-vm-vda-checkpoint-full.qcow2` и `checkpoint-full.xml` с именем `lab-full-001`. Передайте оба файла `backup-begin`, сохраните `backup-begin.txt`, `checkpoint-list.txt` и `checkpoint-dumpxml.xml` либо `checkpoint-dumpxml.txt`. При невозможности операции сохраните `unsupported` в `result.txt`.
+:::

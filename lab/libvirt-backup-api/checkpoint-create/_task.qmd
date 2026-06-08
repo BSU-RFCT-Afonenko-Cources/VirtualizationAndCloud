@@ -1,0 +1,7 @@
+Перейдите в `~/checkpoint-create`.
+
+:::{#exr-lab-libvirt-backup-api-checkpoint-create}
+#### Ручной checkpoint
+
+Создайте `checkpoint-manual.xml` с root `<domaincheckpoint>` и именем `lab-manual-001`, затем выполните `checkpoint-create`. Сохраните `checkpoint-list.txt`, `checkpoint-tree.txt`, `checkpoint-dumpxml.xml` и `parent.txt` (если parent отсутствует, запишите `no parent`). Если capability недоступна, сохраните командную ошибку и `unsupported` в `result.txt`.
+:::

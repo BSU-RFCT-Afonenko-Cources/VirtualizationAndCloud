@@ -1,0 +1,7 @@
+Перейдите в `~/backup-default-full` и попробуйте минимальный вызов Backup API.
+
+:::{#exr-lab-libvirt-backup-api-backup-default-full}
+#### Full backup по умолчанию
+
+Выполните `virsh backup-begin lab-vm`, сохранив stdout и stderr в `backup-begin.txt`. Сразу затем сохраните результат `virsh backup-dumpxml lab-vm` в `backup-dumpxml.xml`; если XML уже недоступен, запишите ошибку в `backup-dumpxml.txt`. Создайте `result.txt` со значением `started-or-completed` либо `unsupported` и не скрывайте исходную диагностику.
+:::

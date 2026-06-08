@@ -1,0 +1,10 @@
+В pull-mode гипервизор экспортирует выбранные данные через NBD, а внешний клиент решает, что и куда читать. Поэтому XML описывает server и scratch storage; завершение операции находится под контролем клиента, а не автоматической записи target-файла гипервизором.
+
+Для безопасной лаборатории достаточно корректного XML с Unix socket: он не открывает TCP-порт хоста. Реальный NBD-клиент не требуется, поэтому job можно не запускать; если API пробуется, необходимо сохранить фактический `backup-dumpxml` или ошибку.
+
+:::{#exm-lab-libvirt-backup-api-backup-pull-mode-server}
+#### Локальный NBD endpoint
+```xml
+<server transport='unix' socket='/tmp/libvirt-backups/lab-vm-backup.sock'/>
+```
+:::

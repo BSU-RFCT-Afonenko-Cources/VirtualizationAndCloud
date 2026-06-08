@@ -1,0 +1,10 @@
+`checkpoint-create` создаёт checkpoint metadata отдельно от передачи backup-данных. Это позволяет изучать имя, parent и дерево checkpoints, хотя отдельно созданная точка сама по себе не является резервной копией.
+
+Checkpoint для incremental QEMU backup обычно опирается на persistent qcow2 dirty bitmap. XML после создания следует получать через `checkpoint-dumpxml`, а иерархию — через `checkpoint-list --tree` или топологическую сортировку.
+
+:::{#exm-lab-libvirt-backup-api-checkpoint-create-command}
+#### Создание metadata
+```bash
+sudo -n virsh -c qemu:///system checkpoint-create lab-vm checkpoint-manual.xml
+```
+:::

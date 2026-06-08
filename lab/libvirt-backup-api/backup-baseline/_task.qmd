@@ -1,0 +1,13 @@
+Перейдите в каталог `~/backup-baseline` и зафиксируйте исходное состояние `lab-vm`.
+
+:::{#exr-lab-libvirt-backup-api-backup-baseline}
+#### Инвентаризация перед backup
+
+Создайте `/tmp/libvirt-backups`, затем сохраните:
+
+- `domstate.txt` — вывод `virsh domstate lab-vm`;
+- `domblklist.txt` — вывод `virsh domblklist lab-vm --details`;
+- `/tmp/libvirt-backups/lab-vm.xml` — вывод `virsh dumpxml lab-vm`.
+
+Не останавливайте и не изменяйте домен.
+:::

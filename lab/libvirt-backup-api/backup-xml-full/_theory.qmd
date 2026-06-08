@@ -1,0 +1,12 @@
+Верхний элемент `<domainbackup>` описывает backup job. В push-mode гипервизор сам пишет данные в `<target file=...>`; `<driver type='qcow2'/>` задаёт формат результата, а атрибут `backup='yes'` явно включает диск.
+
+Явный target делает workflow воспроизводимым. Output-файл должен отличаться от активного source исходной VM; в лаборатории он находится только в `/tmp/libvirt-backups`.
+
+:::{#exm-lab-libvirt-backup-api-backup-xml-full-config}
+#### Push backup XML
+```xml
+<domainbackup mode='push'>
+  <disks><disk name='vda' backup='yes' type='file'><driver type='qcow2'/><target file='/tmp/libvirt-backups/lab-vm-vda-full.qcow2'/></disk></disks>
+</domainbackup>
+```
+:::

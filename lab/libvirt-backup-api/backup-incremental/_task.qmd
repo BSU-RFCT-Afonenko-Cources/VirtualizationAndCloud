@@ -1,0 +1,7 @@
+Перейдите в `~/backup-incremental`.
+
+:::{#exr-lab-libvirt-backup-api-backup-incremental}
+#### Incremental backup
+
+Создайте `incremental-backup.xml` в push-mode с `<incremental>lab-full-001</incremental>`, диском `vda` и target `/tmp/libvirt-backups/lab-vm-vda-inc-001.qcow2`. Создайте `checkpoint-inc.xml` с именем `lab-inc-001`. Запустите job только если `lab-full-001` существует; иначе сохраните диагностику. В любом случае сохраните `checkpoint-list.txt`, `backup-begin.txt` и `result.txt`.
+:::

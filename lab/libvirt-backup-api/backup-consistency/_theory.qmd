@@ -1,0 +1,21 @@
+Backup работающей VM без координации обычно crash-consistent: диск соответствует внезапной потере питания, но буферы приложений могут не попасть в него. Для application-consistent backup нужен QEMU guest agent и согласование с приложениями; `domfsinfo` или `guest-ping` позволяют проверить канал agent.
+
+Безопасный шаблон — freeze, немедленный запуск точки backup и гарантированный thaw. Например: `domfsfreeze lab-vm`, затем backup, затем `domfsthaw lab-vm`; нельзя оставлять файловые системы замороженными при ошибке. В этой работе freeze не выполняется, а проверяется только доступность agent и текущее состояние.
+
+:::{#exm-lab-libvirt-backup-api-backup-consistency-agent}
+#### Проверка guest agent
+```bash
+sudo -n virsh -c qemu:///system qemu-agent-command lab-vm '{"execute":"guest-ping"}'
+```
+:::
+
+:::{#exm-lab-libvirt-backup-api-backup-consistency-freeze-template}
+#### Шаблон freeze/thaw, не выполняемый в лаборатории
+```bash
+# sudo -n virsh -c qemu:///system domfsfreeze lab-vm
+# trap 'sudo -n virsh -c qemu:///system domfsthaw lab-vm' EXIT
+# sudo -n virsh -c qemu:///system backup-begin lab-vm full-backup.xml
+# sudo -n virsh -c qemu:///system domfsthaw lab-vm
+# trap - EXIT
+```
+:::

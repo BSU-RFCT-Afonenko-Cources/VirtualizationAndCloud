@@ -1,0 +1,7 @@
+Перейдите в `~/backup-xml-full`.
+
+:::{#exr-lab-libvirt-backup-api-backup-xml-full}
+#### Управляемый full backup
+
+Создайте `full-backup.xml`: root `<domainbackup mode='push'>`, диск `vda` с `backup='yes'`, `type='file'`, qcow2 driver и target `/tmp/libvirt-backups/lab-vm-vda-full.qcow2`. Передайте XML команде `backup-begin`. Сохраните вывод в `backup-begin.txt`, а итог (`created`, `job-active-or-completed` или `unsupported`) — в `result.txt`.
+:::
