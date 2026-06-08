@@ -1,0 +1,15 @@
+Перейдите в каталог `~/cpu-topology`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-cpu-topology-baseline}
+#### Сбор CPU topology и baseline
+
+Сохраните вывод команд:
+
+```bash
+sudo -n virsh -c qemu:///system nodeinfo > nodeinfo.txt
+sudo -n virsh -c qemu:///system capabilities > capabilities.xml
+sudo -n virsh -c qemu:///system vcpucount lab-vm > vcpucount.txt
+sudo -n virsh -c qemu:///system vcpuinfo lab-vm > vcpuinfo.txt
+sudo -n virsh -c qemu:///system cpu-stats lab-vm --total > cpu-stats-total.txt
+```
+:::

@@ -1,0 +1,3 @@
+Лабораторная работа посвящена управлению CPU scheduling для домена `lab-vm` в libvirt/QEMU/KVM: сбору baseline, размещению vCPU на physical CPU, настройке `schedinfo`, quota/period, shares, emulator/global limits, наблюдению эффекта и безопасному сбросу политик.
+
+Все действия выполняются только с доменом `lab-vm` и служебными файлами в домашнем каталоге пользователя `ubuntu`. Подготовительные и проверочные скрипты сохраняют baseline в `/home/ubuntu/.libvirt-cpu-scheduling`, используют только объекты с учебным префиксом `lab-` и не изменяют сетевую конфигурацию или storage pools хоста.

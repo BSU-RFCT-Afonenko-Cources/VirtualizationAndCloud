@@ -1,0 +1,10 @@
+Планирование CPU в libvirt начинается с сопоставления трёх уровней: vCPU гостевой VM, physical CPU хоста и потоков процесса QEMU. Libvirt показывает topology хоста через `nodeinfo` и `capabilities`, а состояние конкретного домена — через `vcpucount`, `vcpuinfo` и `cpu-stats`.
+
+Baseline нужен до любых изменений: он фиксирует исходные masks, количество vCPU и счётчики CPU time. Эти файлы пригодятся в финальном шаге, чтобы вернуть `lab-vm` в нейтральное состояние и отличать persistent-настройки от live-состояния.
+
+:::{#exm-lab-libvirt-cpu-scheduling-cpu-topology-nodeinfo}
+```bash
+sudo -n virsh -c qemu:///system nodeinfo
+sudo -n virsh -c qemu:///system vcpuinfo lab-vm
+```
+:::

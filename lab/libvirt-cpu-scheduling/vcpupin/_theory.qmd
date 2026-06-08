@@ -1,0 +1,10 @@
+`vcpupin` задаёт CPU affinity для конкретного vCPU домена. Маска может быть одним CPU (`0`), диапазоном (`0-1`) или списком (`0,2`); libvirt применяет её к потокам vCPU через механизмы ОС и cgroups.
+
+Команды с `--live` меняют работающий домен, `--config` — persistent XML для следующего запуска, а `--current` выбирает текущее состояние libvirt. В лаборатории применяется live+config, чтобы студент видел разницу между runtime и persistent policy.
+
+:::{#exm-lab-libvirt-cpu-scheduling-vcpupin-set}
+```bash
+sudo -n virsh -c qemu:///system vcpupin lab-vm
+sudo -n virsh -c qemu:///system vcpupin lab-vm 0 0 --live --config
+```
+:::

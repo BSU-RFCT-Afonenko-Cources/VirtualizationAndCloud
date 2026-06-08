@@ -1,0 +1,16 @@
+Перейдите в каталог `~/emulatorpin`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-emulatorpin-set-mask}
+#### Настройка pinning emulator thread
+
+Сохраните `emulatorpin-before.txt`, затем примените маску из `LAB_PIN_MASK`. Если команда не поддерживается, сохраните stderr в `emulatorpin-error.txt` и продолжайте.
+
+```bash
+. /home/ubuntu/.libvirt-cpu-scheduling/baseline.env
+sudo -n virsh -c qemu:///system emulatorpin lab-vm > emulatorpin-before.txt 2> emulatorpin-before.err || true
+sudo -n virsh -c qemu:///system emulatorpin lab-vm "$LAB_PIN_MASK" --live --config > emulatorpin-set.txt 2> emulatorpin-error.txt || true
+sudo -n virsh -c qemu:///system emulatorpin lab-vm > emulatorpin-after.txt 2>> emulatorpin-error.txt || true
+sudo -n virsh -c qemu:///system dumpxml lab-vm > domain.xml
+sed -n '/<cputune>/,/<\/cputune>/p' domain.xml > cputune.xml
+```
+:::

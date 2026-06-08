@@ -1,0 +1,9 @@
+`cpu_shares` — относительный вес планирования, а не потолок потребления CPU. Если CPU свободен, VM может использовать больше своей доли; разница проявляется, когда несколько доменов конкурируют за один и тот же CPU resource.
+
+В отличие от quota, shares не задаёт количество микросекунд CPU time и не приводит к жёсткому throttling. Это policy fairness: домен с shares `2048` при contention получает примерно вдвое больший вес, чем домен с shares `1024`.
+
+:::{#exm-lab-libvirt-cpu-scheduling-cpu-shares-set}
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm --set cpu_shares=512 --live --config
+```
+:::

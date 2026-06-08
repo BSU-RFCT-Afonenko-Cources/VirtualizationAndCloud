@@ -1,0 +1,15 @@
+Перейдите в каталог `~/cputune-xml`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-cputune-xml-extract}
+#### Извлечение cputune из XML
+
+Сохраните полный XML, секцию cputune и результаты поиска ожидаемых элементов:
+
+```bash
+sudo -n virsh -c qemu:///system dumpxml lab-vm > domain.xml
+sed -n '/<cputune>/,/<\/cputune>/p' domain.xml > cputune.xml
+grep -nE '<cputune>|<vcpupin|<emulatorpin|<shares>|<period>|<quota>|<emulator_period>|<emulator_quota>|<global_period>|<global_quota>' domain.xml > cputune-grep.txt || true
+```
+
+Если каких-то элементов нет из-за unsupported-параметров, перечислите их в `unsupported-elements.txt`.
+:::

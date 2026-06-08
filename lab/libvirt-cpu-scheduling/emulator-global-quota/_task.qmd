@@ -1,0 +1,26 @@
+Перейдите в каталог `~/emulator-global-quota`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-emulator-global-quota-apply}
+#### Настройка служебных CPU limits
+
+Сохраните baseline и попробуйте задать безопасную emulator quota:
+
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo-before.txt
+sudo -n virsh -c qemu:///system schedinfo lab-vm \
+  --set emulator_period=100000 --set emulator_quota=80000 \
+  --live --config > quota-set.txt 2> quota-error.txt || true
+```
+
+Если `emulator_period` не поддерживается, попробуйте global quota и добавьте диагностику в тот же файл:
+
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm \
+  --set global_period=100000 --set global_quota=90000 \
+  --live --config >> quota-set.txt 2>> quota-error.txt || true
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo-after.txt
+sudo -n virsh -c qemu:///system dumpxml lab-vm > domain.xml
+```
+
+При успехе удалите пустой `quota-error.txt`; при неподдерживаемом параметре оставьте в нём сообщение libvirt.
+:::

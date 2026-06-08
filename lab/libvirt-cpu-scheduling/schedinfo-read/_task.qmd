@@ -1,0 +1,15 @@
+Перейдите в каталог `~/schedinfo-read`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-schedinfo-read-baseline}
+#### Сохранение scheduler baseline
+
+Сохраните `schedinfo` и XML домена:
+
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo.txt
+sudo -n virsh -c qemu:///system dumpxml lab-vm > domain.xml
+sudo -n virsh -c qemu:///system dumpxml lab-vm | sed -n '/<cputune>/,/<\/cputune>/p' > cputune.xml
+```
+
+Если файл `cputune.xml` пустой, создайте файл `cputune-absent.txt` с коротким пояснением, что `<cputune>` отсутствует в baseline XML.
+:::

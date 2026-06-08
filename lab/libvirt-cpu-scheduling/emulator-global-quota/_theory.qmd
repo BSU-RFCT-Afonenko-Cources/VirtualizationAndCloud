@@ -1,0 +1,10 @@
+Помимо vCPU, libvirt может управлять CPU time служебных потоков QEMU: emulator threads, global domain group и IOThreads. Эти лимиты полезны, когда VM выполняет много I/O и служебные потоки начинают конкурировать с vCPU или соседними доменами.
+
+Поддержка конкретных ключей зависит от libvirt, QEMU, cgroups v1/v2 и драйвера. Поэтому корректная лабораторная процедура сначала пытается задать безопасные значения, а затем сохраняет либо новые параметры, либо диагностический файл с ошибкой unsupported.
+
+:::{#exm-lab-libvirt-cpu-scheduling-emulator-global-quota}
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm --set emulator_period=100000 --set emulator_quota=80000 --live --config
+sudo -n virsh -c qemu:///system schedinfo lab-vm --set global_period=100000 --set global_quota=90000 --live --config
+```
+:::

@@ -1,0 +1,27 @@
+Перейдите в каталог `~/scheduler-reset`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-scheduler-reset-neutral}
+#### Сброс CPU scheduling policy
+
+Загрузите baseline, верните shares и снимите жёсткие quotas:
+
+```bash
+. /home/ubuntu/.libvirt-cpu-scheduling/baseline.env
+sudo -n virsh -c qemu:///system schedinfo lab-vm \
+  --set vcpu_quota=-1 --live --config
+sudo -n virsh -c qemu:///system schedinfo lab-vm \
+  --set emulator_quota=-1 --live --config 2>> reset-log.txt || true
+sudo -n virsh -c qemu:///system schedinfo lab-vm \
+  --set cpu_shares="$LAB_BASELINE_SHARES" --live --config
+sudo -n virsh -c qemu:///system schedinfo lab-vm \
+  --set global_quota=-1 --live --config 2>> reset-log.txt || true
+```
+
+Для каждого vCPU расширьте pinning до `LAB_WIDE_MASK`; той же маской сбросьте `emulatorpin`. Записывайте выполненные операции в `reset-log.txt`. Затем сохраните итоговое состояние:
+
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo-final.txt
+sudo -n virsh -c qemu:///system vcpupin lab-vm > vcpupin-final.txt
+sudo -n virsh -c qemu:///system dumpxml lab-vm > domain-final.xml
+```
+:::

@@ -1,0 +1,10 @@
+`virsh schedinfo` читает и изменяет scheduler parameters домена. Для QEMU/KVM наиболее важны `cpu_shares`, `vcpu_period`, `vcpu_quota`, `emulator_period`, `emulator_quota`, а на новых версиях libvirt также related global или iothread quotas.
+
+Часть параметров хранится в persistent XML в секции `<cputune>`, но baseline XML может не содержать эту секцию: отсутствие `<cputune>` означает, что используются значения по умолчанию драйвера или cgroups.
+
+:::{#exm-lab-libvirt-cpu-scheduling-schedinfo-read}
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm
+sudo -n virsh -c qemu:///system dumpxml lab-vm | sed -n '/<cputune>/,/<\/cputune>/p'
+```
+:::

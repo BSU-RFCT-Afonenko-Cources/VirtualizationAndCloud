@@ -1,0 +1,10 @@
+Persistent CPU scheduling policy домена хранится в domain XML внутри `<cputune>`. Там могут находиться `<vcpupin>`, `<emulatorpin>`, `<shares>`, `<period>`, `<quota>`, emulator/global period/quota и другие элементы, если они поддерживаются драйвером.
+
+XML удобно использовать как источник истины для IaC: его можно выгрузить, проверить XPath/grep и шаблонизировать. При этом live-состояние может временно отличаться, если команда применялась только с `--live` или только с `--config`.
+
+:::{#exm-lab-libvirt-cpu-scheduling-cputune-xml}
+```bash
+sudo -n virsh -c qemu:///system dumpxml lab-vm > domain.xml
+grep -nE '<cputune>|<vcpupin|<shares>|<period>|<quota>' domain.xml
+```
+:::

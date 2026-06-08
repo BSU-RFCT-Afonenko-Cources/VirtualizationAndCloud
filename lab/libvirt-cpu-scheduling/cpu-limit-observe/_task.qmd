@@ -1,0 +1,18 @@
+Перейдите в каталог `~/cpu-limit-observe`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-cpu-limit-observe-stats}
+#### Сбор статистики до и после нагрузки
+
+Сохраните параметры scheduler и два снимка статистики. Если гостевой агент или `stress-ng` недоступны, достаточно сделать короткую паузу между снимками и записать это в `load-note.txt`.
+
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo-current.txt
+sudo -n virsh -c qemu:///system cpu-stats lab-vm --total > cpu-stats-before.txt
+sudo -n virsh -c qemu:///system domstats lab-vm --vcpu > domstats-vcpu-before.txt
+sleep 5
+sudo -n virsh -c qemu:///system cpu-stats lab-vm --total > cpu-stats-after.txt
+sudo -n virsh -c qemu:///system domstats lab-vm --vcpu > domstats-vcpu-after.txt
+printf 'Использована безопасная пауза наблюдения; guest load optional.
+' > load-note.txt
+```
+:::
