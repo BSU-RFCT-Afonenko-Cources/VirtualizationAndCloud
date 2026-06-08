@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/05-provision`.
+
+:::{#exr-capstone-05-provision}
+#### Проверяемое состояние
+
+Создайте persistent домены `cap-edge`, `cap-app`, `cap-db` на подготовленных boot volumes с автоматизированной первичной настройкой пользователя `ubuntu` и SSH. Edge должен иметь интерфейсы в обеих сетях; app и db — только в `cap-back`; к db подключите `cap-db-data.qcow2` как второй virtio-диск. Сохраните итоговые domain XML в каталоге шага.
+:::

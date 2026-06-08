@@ -27,6 +27,7 @@ assignments:
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
     - libvirt-storage-volumes/_assignment.yaml
+<<<<<<< HEAD
     - docker/lowlevel-security-primitives/assignment.yaml
     - docker/compose-debugging/assignment.yaml
 ||||||| 6df1dcb
@@ -62,6 +63,10 @@ assignments:
 =======
     - docker/swarm-networking/assignment.yaml
 >>>>>>> remotes/origin/codex/create-lab-on-swarm-overlay-networks
+||||||| 6e19798
+=======
+    - libvirt/capstone/_assignment.yaml
+>>>>>>> remotes/origin/codex/-libvirt
 
 =======
     - docker/compose/assignment.yaml

@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/10-isolation`.
+
+:::{#exr-capstone-10-isolation}
+#### Проверяемое состояние
+
+Создайте `/home/ubuntu/capstone/10-isolation/evidence.json` с адресами frontend/backend каждого узла, URL входной точки, результатом edge-проверки и результатом внутренней app-db проверки. `cap-app` и `cap-db` не должны быть подключены к `cap-front`; основной URL должен указывать на `cap-edge`.
+:::

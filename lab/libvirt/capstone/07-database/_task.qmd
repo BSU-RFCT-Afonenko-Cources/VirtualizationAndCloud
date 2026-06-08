@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/07-database`.
+
+:::{#exr-capstone-07-database}
+#### Проверяемое состояние
+
+На `cap-db` подготовьте файловую систему дополнительного диска и постоянное монтирование в `/srv/cap-db`. Разместите SQLite-backed HTTP database service, включите автозапуск и создайте минимум две контрольные записи заказов. Сохраните `/home/ubuntu/capstone/07-database/evidence.json` с mount point, device, service state и количеством записей.
+:::

@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/06-lifecycle`.
+
+:::{#exr-capstone-06-lifecycle}
+#### Проверяемое состояние
+
+Приведите все три домена к состоянию `running`, включите для них autostart и дождитесь готовности SSH. В `/home/ubuntu/capstone/06-lifecycle/states.json` сохраните объект, где для каждого домена указаны `state`, `autostart` и `ssh_ready`.
+:::

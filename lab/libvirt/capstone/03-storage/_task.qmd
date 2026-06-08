@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/03-storage`.
+
+:::{#exr-capstone-03-storage}
+#### Проверяемое состояние
+
+Создайте persistent directory-backed pool `capstone-pool` с target `/var/lib/libvirt/capstone`, запустите его и включите autostart. Подготовьте четыре volumes: три boot volume по 8 GiB и `cap-db-data.qcow2` размером 2 GiB. Сохраните pool XML и список volumes в `/home/ubuntu/capstone/03-storage`.
+:::

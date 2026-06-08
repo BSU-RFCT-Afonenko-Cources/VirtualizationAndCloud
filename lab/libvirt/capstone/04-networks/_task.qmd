@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/04-networks`.
+
+:::{#exr-capstone-04-networks}
+#### Проверяемое состояние
+
+Создайте persistent active autostart-сети `cap-front` и `cap-back`. Используйте bridge `virbr-cap-front` с подсетью `192.168.150.0/24` и bridge `virbr-cap-back` с подсетью `192.168.151.0/24`. Frontend должна использовать NAT, backend — не иметь внешнего forwarding. Предусмотрите стабильные DHCP-адреса `.10` для edge, `.20` для app и `.30` для db согласно их сети. Сохраните XML обеих сетей.
+:::

@@ -1,0 +1,22 @@
+title: "Практическое развёртывание виртуализованной сервисной инфраструктуры"
+description: _assignment-description.qmd
+time-limit-minutes: 480
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+prepare: prepare.bash
+steps:
+  - 01-inventory/step.yaml
+  - 02-target-state/step.yaml
+  - 03-storage/step.yaml
+  - 04-networks/step.yaml
+  - 05-provision/step.yaml
+  - 06-lifecycle/step.yaml
+  - 07-database/step.yaml
+  - 08-api/step.yaml
+  - 09-edge/step.yaml
+  - 10-isolation/step.yaml
+  - 11-resources/step.yaml
+  - 12-scheduling/step.yaml
+  - 13-resize/step.yaml
+  - 14-snapshot/step.yaml
+  - 15-backup/step.yaml
+  - 16-recovery/step.yaml

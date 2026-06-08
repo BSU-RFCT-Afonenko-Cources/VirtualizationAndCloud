@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/02-target-state`.
+
+:::{#exr-capstone-02-target-state}
+#### Проверяемое состояние
+
+Создайте `/home/ubuntu/capstone/02-target-state/target-state.json`. Укажите массив доменов `cap-edge`, `cap-app`, `cap-db` с ролями, сети `cap-front` и `cap-back`, pool `capstone-pool`, volumes `cap-edge.qcow2`, `cap-app.qcow2`, `cap-db.qcow2`, `cap-db-data.qcow2`, а также endpoints `/health`, `/version`, `/orders`. Все именованные инфраструктурные объекты должны использовать префикс `cap-` или `capstone-`.
+:::

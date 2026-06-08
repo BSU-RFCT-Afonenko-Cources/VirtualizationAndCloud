@@ -1,0 +1,7 @@
+Перейдите к этапу, используя рабочий каталог `/home/ubuntu/capstone/16-recovery`.
+
+:::{#exr-capstone-16-recovery}
+#### Проверяемое состояние
+
+Выполните контролируемую остановку или повреждение конфигурации `cap-app` либо `cap-edge`, затем восстановите сервис с использованием snapshot, backup или сохранённой конфигурации. Создайте `/home/ubuntu/capstone/16-recovery/evidence.json` с полями `failure`, `recovery_source`, `endpoint_status`, `orders_preserved` и `domains_running`. Итоговый `/orders` через edge должен снова возвращать данные базы.
+:::
