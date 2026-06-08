@@ -1,0 +1,14 @@
+cleanup:
+  title: "08. Leave/cleanup guard"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    check:
+      exec:
+        - check.sh
+    solution:
+      exec:
+        - solution.sh
+    post-step:
+      exec:
+        - post-step.sh

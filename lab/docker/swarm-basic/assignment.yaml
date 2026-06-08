@@ -1,0 +1,13 @@
+title: "Docker Swarm: manager, node, service, task"
+description: _assignment-description.qmd
+time-limit-minutes: 90
+virtual-machine: "Ubuntu — Docker Lab"
+steps:
+  - 01-swarm-init/step.yaml
+  - 02-service-model/step.yaml
+  - 03-published-port/step.yaml
+  - 04-scale-replicas/step.yaml
+  - 05-task-rescheduling/step.yaml
+  - 06-service-logs/step.yaml
+  - 07-service-inspect/step.yaml
+  - 08-cleanup/step.yaml

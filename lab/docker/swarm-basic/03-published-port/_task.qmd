@@ -1,0 +1,5 @@
+:::{#exr-swarm-basic-publish}
+### Публикация HTTP endpoint
+
+Обновите `lab-api`: опубликуйте target port `8000` как ingress published port `8080`. Убедитесь, что корневой HTTP endpoint доступен через loopback-адрес лабораторной машины и возвращает JSON сервиса `swarm-api`.
+:::

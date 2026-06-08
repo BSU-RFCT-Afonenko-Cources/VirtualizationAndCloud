@@ -1,0 +1,5 @@
+:::{#exr-swarm-basic-inspect}
+### Сохранение service inspect
+
+Сохраните полный JSON-массив результата inspect для `lab-api` в `/home/ubuntu/swarm-basic/lab-api-inspect.json`. Evidence должен отражать текущее состояние: service `lab-api`, replicated mode с тремя replicas и ingress-публикацию `8080` на target port `8000`.
+:::

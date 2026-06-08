@@ -1,0 +1,1 @@
+`inspect` предоставляет machine-readable описание orchestration state. В `Spec` находится desired state, включая имя, image и mode; `Endpoint` описывает опубликованные порты; `Mode` фиксирует replicated или global модель. JSON удобен для автоматической проверки и передачи состояния другим инструментам.

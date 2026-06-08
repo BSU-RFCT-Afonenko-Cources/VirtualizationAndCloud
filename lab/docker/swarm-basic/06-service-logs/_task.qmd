@@ -1,0 +1,5 @@
+:::{#exr-swarm-basic-logs}
+### Сохранение service logs
+
+Выполните не менее трёх успешных запросов к опубликованному endpoint, затем сохраните агрегированные логи service `lab-api` в `/home/ubuntu/swarm-basic/service-logs.txt`. Файл должен содержать как минимум три строки приложения с маркером `swarm-api request` и контекстом задач `lab-api`.
+:::
