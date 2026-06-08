@@ -1,0 +1,7 @@
+:::{#exr-swarm-stack-removal}
+### Удалите лабораторный deployment
+
+Удалите stack `shop` и дождитесь исчезновения его services и overlay-сети. Затем удалите только актуальные и оставшиеся версионные secrets/configs с префиксом `shop_`, а также named volume `shop_db_data`.
+
+Swarm оставьте активным для следующих работ. Проверяемое конечное состояние: нет stack `shop`, его services, сети, volume, secrets и configs; опубликованный порт `8080` не отвечает.
+:::

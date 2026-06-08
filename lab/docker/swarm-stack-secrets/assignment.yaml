@@ -1,0 +1,13 @@
+title: "Docker Stack, secrets и configs в Swarm"
+description: _description.md
+time-limit-minutes: 180
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-stack-model/step.yaml
+  - 02-secret-creation/step.yaml
+  - 03-config-creation/step.yaml
+  - 04-deploy-stack/step.yaml
+  - 05-persistent-db-volume/step.yaml
+  - 06-secret-rotation/step.yaml
+  - 07-stack-update/step.yaml
+  - 08-stack-removal/step.yaml

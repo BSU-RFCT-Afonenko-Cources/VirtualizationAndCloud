@@ -1,0 +1,3 @@
+Stateful service должен хранить данные вне writable layer контейнера. Named volume переживает пересоздание task и повторный deployment stack. В single-node Swarm локальный volume подходит для лаборатории, но в multi-node кластере он привязан к конкретному узлу; production-система требует placement constraints или общего volume driver.
+
+Наличие mount проверяет только конфигурацию. Реальную сохранность подтверждает запись данных через приложение, пересоздание task и повторное чтение той же записи.

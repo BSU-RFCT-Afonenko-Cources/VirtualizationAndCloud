@@ -1,0 +1,7 @@
+:::{#exr-swarm-stack-deploy}
+### Разверните stack `shop`
+
+Примените `/home/ubuntu/shop/stack.yml` как stack с именем `shop`. Дождитесь, пока services `shop_web`, `shop_api` и `shop_db` достигнут состояния `1/1`, их tasks станут running, а health checks перестанут сообщать стартовое состояние.
+
+Проверьте наличие stack overlay-сети и доступность health endpoint reverse proxy на опубликованном порту `8080`.
+:::

@@ -1,0 +1,11 @@
+persistent-db-volume:
+  title: "Постоянный volume базы данных"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh
