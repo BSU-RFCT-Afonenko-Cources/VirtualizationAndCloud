@@ -50,7 +50,12 @@ book:
     - part: "Задания. Лабораторные"
       chapters:
         - lab/ubuntu/main.qmd
+<<<<<<< HEAD
         - lab/docker/compose/main.qmd
+||||||| 6df1dcb
+=======
+        - lab/docker/images/main.qmd
+>>>>>>> remotes/origin/codex/create-docker-lab-for-reproducible-builds
         - lab/libvirt/single/main.qmd
 
     - part: "Задания. Практика"

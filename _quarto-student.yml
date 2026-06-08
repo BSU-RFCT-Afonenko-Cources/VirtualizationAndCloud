@@ -13,6 +13,7 @@ book:
         - lab/ubuntu/main.qmd
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/libvirt/main.qmd
 ||||||| f589c88
 =======
@@ -22,6 +23,10 @@ book:
 =======
         - lab/docker/compose/main.qmd
 >>>>>>> remotes/origin/codex/create-docker-compose-lab-for-multi-container-app
+||||||| 6df1dcb
+=======
+        - lab/docker/images/main.qmd
+>>>>>>> remotes/origin/codex/create-docker-lab-for-reproducible-builds
 
   appendices:
     - part: "Командные оболочки"

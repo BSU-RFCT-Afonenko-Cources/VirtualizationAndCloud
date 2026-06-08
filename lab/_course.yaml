@@ -6,6 +6,7 @@ end_date: "2026-06-30"
 assignments:
     - ubuntu/assignment.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -13,6 +14,10 @@ assignments:
     - docker/lowlevel-security-primitives/assignment.yaml
     - docker/compose-debugging/assignment.yaml
 ||||||| 6df1dcb
+||||||| 6df1dcb
+=======
+    - docker/images/assignment.yaml
+>>>>>>> remotes/origin/codex/create-docker-lab-for-reproducible-builds
 
 =======
     - docker/compose/assignment.yaml

@@ -1,0 +1,7 @@
+:::{#exr-docker-images-minimal-dockerfile}
+#### Соберите и запустите API
+
+Создайте в `/home/ubuntu/image-lab` Dockerfile для Python API. Используйте рабочий каталог `/app`, установите зависимости из `requirements.txt`, поместите исходник и `VERSION` в образ и задайте запуск приложения.
+
+Соберите образ `image-lab:build`. Запустите из него контейнер `image-lab-api` с публикацией API на порту `18080` хоста. Проверка ожидает работающие endpoints `/health` и `/version`.
+:::

@@ -1,0 +1,56 @@
+---
+metadata-files:
+  - 01-build-context/step.yaml
+  - 02-minimal-dockerfile/step.yaml
+  - 03-tags-and-versions/step.yaml
+  - 04-labels/step.yaml
+  - 05-build-cache/step.yaml
+  - 06-non-root-runtime/step.yaml
+  - 07-image-healthcheck/step.yaml
+  - 08-image-history/step.yaml
+  - 09-recreate/step.yaml
+---
+
+# Образы, Dockerfile и воспроизводимая сборка
+
+## Введение
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta images-build-context.title >}}
+{{< include 01-build-context/_theory.qmd >}}
+{{< include 01-build-context/_task.qmd >}}
+
+### {{< meta images-minimal-dockerfile.title >}}
+{{< include 02-minimal-dockerfile/_theory.qmd >}}
+{{< include 02-minimal-dockerfile/_task.qmd >}}
+
+### {{< meta images-tags-and-versions.title >}}
+{{< include 03-tags-and-versions/_theory.qmd >}}
+{{< include 03-tags-and-versions/_task.qmd >}}
+
+### {{< meta images-labels.title >}}
+{{< include 04-labels/_theory.qmd >}}
+{{< include 04-labels/_task.qmd >}}
+
+### {{< meta images-build-cache.title >}}
+{{< include 05-build-cache/_theory.qmd >}}
+{{< include 05-build-cache/_task.qmd >}}
+
+### {{< meta images-non-root-runtime.title >}}
+{{< include 06-non-root-runtime/_theory.qmd >}}
+{{< include 06-non-root-runtime/_task.qmd >}}
+
+### {{< meta images-image-healthcheck.title >}}
+{{< include 07-image-healthcheck/_theory.qmd >}}
+{{< include 07-image-healthcheck/_task.qmd >}}
+
+### {{< meta images-image-history.title >}}
+{{< include 08-image-history/_theory.qmd >}}
+{{< include 08-image-history/_task.qmd >}}
+
+### {{< meta images-recreate.title >}}
+{{< include 09-recreate/_theory.qmd >}}
+{{< include 09-recreate/_task.qmd >}}
