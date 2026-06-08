@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+ip link show br-netlab >/dev/null 2>&1 || ip link add br-netlab type bridge
+ip addr replace 10.203.0.1/24 dev br-netlab
+ip link set br-netlab up
+for i in netlab-api-h netlab-client-h; do ip link set "$i" master br-netlab; ip link set "$i" up; done
+ip netns exec net-api-ns ping -c 1 -W 2 10.203.0.20 >/dev/null
+ip netns exec net-client-ns ping -c 1 -W 2 10.203.0.10 >/dev/null
+jq -n --arg stage bridge --argjson bridge "$(ip -j -details addr show br-netlab)" --argjson ports "$(bridge -j link show master br-netlab)" --argjson fdb "$(bridge -j fdb show br br-netlab)" '{stage:$stage,bridge:$bridge[0],ports:$ports,fdb:$fdb,connectivity:{api_to_client:true,client_to_api:true}}' >"$EVIDENCE/04-bridge.json"
+chown ubuntu:ubuntu "$EVIDENCE/04-bridge.json"

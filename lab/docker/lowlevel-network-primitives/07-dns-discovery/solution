@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+install -d -m 0755 /etc/netns/net-client-ns
+cat >/etc/netns/net-client-ns/hosts <<'EOFHOSTS'
+127.0.0.1 localhost
+10.203.0.10 api.internal
+EOFHOSTS
+! grep -Eq '(^|[[:space:]])api\.internal([[:space:]]|$)' /etc/hosts
+resolved=$(ip netns exec net-client-ns getent ahostsv4 api.internal | awk 'NR==1{print $1}')
+response=$(ip netns exec net-client-ns curl --noproxy '*' -fsS --max-time 3 http://api.internal:8080/discovery)
+jq -n --arg stage dns --arg name api.internal --arg address "$resolved" --argjson response "$response" --arg hosts "$(cat /etc/netns/net-client-ns/hosts)" '{stage:$stage,discovery:{name:$name,address:$address,scope:"net-client-ns",hosts:$hosts},http:$response}' >"$EVIDENCE/07-dns.json"
+chown ubuntu:ubuntu "$EVIDENCE/07-dns.json"

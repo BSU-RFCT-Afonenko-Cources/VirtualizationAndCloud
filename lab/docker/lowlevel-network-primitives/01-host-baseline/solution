@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+test ! -e /run/netns/net-api-ns
+test ! -e /run/netns/net-client-ns
+test ! -e /sys/class/net/br-netlab
+links=$(mktemp); routes=$(mktemp); bridges=$(mktemp); networks=$(mktemp)
+ip -j -details link show >"$links"
+ip -j route show table all >"$routes"
+bridge -j link show >"$bridges"
+if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+  docker network ls --format '{{json .}}' | jq -s . >"$networks"
+  docker_available=true
+else
+  printf '[]\n' >"$networks"; docker_available=false
+fi
+jq -n --arg stage host-baseline --argjson docker_available "$docker_available"   --slurpfile interfaces "$links" --slurpfile routes "$routes" --slurpfile bridges "$bridges" --slurpfile docker_networks "$networks"   '{stage:$stage,docker_available:$docker_available,interfaces:$interfaces[0],routes:$routes[0],bridges:$bridges[0],docker_networks:$docker_networks[0]}'   >"$EVIDENCE/01-baseline.json"
+chown ubuntu:ubuntu "$EVIDENCE/01-baseline.json"
+rm -f "$links" "$routes" "$bridges" "$networks"

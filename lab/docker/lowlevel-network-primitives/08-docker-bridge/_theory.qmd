@@ -1,0 +1,7 @@
+Пользовательская Docker bridge network автоматизирует IPAM, создание bridge, namespace attachment, veth и DNS. Контейнер видит свой конец veth под привычным именем, тогда как peer и bridge остаются в host namespace.
+
+Сопоставление выполняется по данным Docker inspect и реальным link attributes Linux. Это показывает, где заканчивается декларативный объект Docker network и начинаются kernel primitives.
+
+Два контейнера этапа образуют отдельную контрольную схему и не заменяют ручные namespaces. Их workload должен быть долгоживущим, чтобы host-side интерфейсы и sandbox identifiers оставались доступными проверке.
+
+Swarm overlay расширяет ту же conceptual model на несколько узлов: локальный namespace по-прежнему подключается через veth, но L2/L3-сегмент дополняется инкапсуляцией, распределённым состоянием и service discovery. Ручная bridge-схема не реализует overlay, а показывает его локальный фундамент.

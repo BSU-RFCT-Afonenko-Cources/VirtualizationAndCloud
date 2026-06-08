@@ -1,0 +1,18 @@
+netlab-02:
+  title: "Создание двух network namespaces"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+    pre-step:
+      exec:
+        - prepare
+        - pre-step
+    check:
+      exec:
+        - check
+    solution:
+      exec:
+        - solution
+    post-step:
+      exec:
+        - post-step

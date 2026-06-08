@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+f="$EVIDENCE/09-isolation.json"; json_valid "$f"
+curl --noproxy '*' -fsS --max-time 3 http://10.203.0.1:18080/health | jq -e '.service=="net-api"' >/dev/null || fail "published endpoint blocked"
+if curl --noproxy '*' -fsS --max-time 2 http://10.203.0.10:8080/health >/dev/null 2>&1; then fail "direct host path remains open"; fi
+ip netns exec net-client-ns curl --noproxy '*' -fsS --max-time 3 http://api.internal:8080/health >/dev/null || fail "namespace client path blocked"
+docker exec netlab-docker-client wget -qO- http://api:8000 >/dev/null || fail "Docker path blocked"
+iptables-save | grep -q netlab-block-direct || fail "isolation rule missing"
+pass "only the published host path is allowed"

@@ -1,0 +1,5 @@
+:::{#exr-netlab-veth}
+Создайте пары `netlab-api-h` ↔ `netlab-api-n` и `netlab-client-h` ↔ `netlab-client-n`. Namespace-концы должны находиться соответственно в `net-api-ns` и `net-client-ns` и иметь адреса `10.203.0.10/24` и `10.203.0.20/24`.
+
+Сохраните `/home/ubuntu/netlab/evidence/03-veth.json` с interface details обоих концов, адресами и peer identifiers. Проверка ожидает корректные пары, но ещё не требует связи между namespace-адресами.
+:::

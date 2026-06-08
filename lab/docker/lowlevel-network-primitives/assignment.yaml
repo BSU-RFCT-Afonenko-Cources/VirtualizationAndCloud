@@ -1,0 +1,15 @@
+title: "Network namespace, veth, bridge и NAT без Docker"
+description: _description.md
+time-limit-minutes: 180
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-host-baseline/step.yaml
+  - 02-network-namespaces/step.yaml
+  - 03-veth-pairs/step.yaml
+  - 04-linux-bridge/step.yaml
+  - 05-routing/step.yaml
+  - 06-nat-published-port/step.yaml
+  - 07-dns-discovery/step.yaml
+  - 08-docker-bridge/step.yaml
+  - 09-network-isolation/step.yaml
+  - 10-cleanup/step.yaml

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+for tool in ip jq curl python3 iptables; do
+  command -v "$tool" >/dev/null 2>&1 || { printf 'Required tool is missing: %s\n' "$tool" >&2; exit 1; }
+done
+install -d -m 0755 /home/ubuntu/netlab /home/ubuntu/netlab/evidence /home/ubuntu/netlab/run
+chown -R ubuntu:ubuntu /home/ubuntu/netlab

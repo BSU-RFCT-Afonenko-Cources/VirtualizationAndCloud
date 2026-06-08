@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+f="$EVIDENCE/07-dns.json"; json_valid "$f"
+test -f /etc/netns/net-client-ns/hosts || fail "namespace hosts file"
+grep -Eq '^10\.203\.0\.10[[:space:]]+api\.internal([[:space:]]|$)' /etc/netns/net-client-ns/hosts || fail "mapping"
+! grep -Eq '(^|[[:space:]])api\.internal([[:space:]]|$)' /etc/hosts || fail "global hosts modified"
+test "$(ip netns exec net-client-ns getent ahostsv4 api.internal | awk 'NR==1{print $1}')" = 10.203.0.10 || fail "resolution"
+ip netns exec net-client-ns curl --noproxy '*' -fsS --max-time 3 http://api.internal:8080/discovery | jq -e '.service=="net-api"' >/dev/null || fail "named HTTP request"
+pass "namespace-scoped name resolves and reaches API"

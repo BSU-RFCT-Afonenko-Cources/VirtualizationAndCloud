@@ -1,0 +1,5 @@
+:::{#exr-netlab-baseline}
+Сохраните исходное состояние interfaces, routes, Linux bridges и Docker networks в структурированный файл `/home/ubuntu/netlab/evidence/01-baseline.json`. В evidence должны присутствовать метка этапа, JSON-представления интерфейсов и маршрутов, список мостов и список Docker networks; отсутствие Docker также должно быть выражено явно.
+
+Не создавайте namespaces, veth, bridge или firewall-правила лабораторной на этом этапе. Проверка ожидает чистый baseline и отсутствие объектов `netlab`/`br-netlab`.
+:::

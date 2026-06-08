@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+f="$EVIDENCE/03-veth.json"; json_valid "$f"
+ip -j -details link show netlab-api-h | jq -e '.[0].linkinfo.info_kind=="veth"' >/dev/null || fail "API host veth"
+ip -j -details link show netlab-client-h | jq -e '.[0].linkinfo.info_kind=="veth"' >/dev/null || fail "client host veth"
+ip -n net-api-ns -j addr show netlab-api-n | jq -e '.[0].addr_info[]|select(.local=="10.203.0.10" and .prefixlen==24)' >/dev/null || fail "API address"
+ip -n net-client-ns -j addr show netlab-client-n | jq -e '.[0].addr_info[]|select(.local=="10.203.0.20" and .prefixlen==24)' >/dev/null || fail "client address"
+for spec in 'netlab-api-h net-api-ns netlab-api-n' 'netlab-client-h net-client-ns netlab-client-n'; do set -- $spec; h=$(cat /sys/class/net/$1/iflink); n=$(ip netns exec "$2" cat /sys/class/net/"$3"/ifindex); test "$h" = "$n" || fail "$1 peer relationship"; done
+pass "veth peers and namespace addresses are correct"

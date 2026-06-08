@@ -1,0 +1,5 @@
+:::{#exr-netlab-isolation}
+Настройте узкую host-side фильтрацию так, чтобы API оставался доступен через published endpoint, но прямое подключение хоста к `10.203.0.10:8080` блокировалось. Связь client namespace с API и Docker-контейнеров внутри их сети должна сохраниться.
+
+Сохраните ruleset и результаты positive/negative connectivity tests в `/home/ubuntu/netlab/evidence/09-isolation.json`. Проверка не принимает замену отказа неработающим API.
+:::

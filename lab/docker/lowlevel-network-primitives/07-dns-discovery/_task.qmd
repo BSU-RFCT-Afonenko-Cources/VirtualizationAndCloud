@@ -1,0 +1,5 @@
+:::{#exr-netlab-dns}
+Реализуйте локальное сопоставление `api.internal` → `10.203.0.10`, применяемое внутри `net-client-ns` и не добавленное в глобальный `/etc/hosts` хоста.
+
+Выполните HTTP-запрос из client namespace по имени и сохраните resolver state, разрешённый адрес и ответ API в `/home/ubuntu/netlab/evidence/07-dns.json`.
+:::

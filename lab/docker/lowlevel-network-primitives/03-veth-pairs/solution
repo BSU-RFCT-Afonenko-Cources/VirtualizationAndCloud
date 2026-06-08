@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+ip link show netlab-api-h >/dev/null 2>&1 || ip link add netlab-api-h type veth peer name netlab-api-n
+ip link show netlab-client-h >/dev/null 2>&1 || ip link add netlab-client-h type veth peer name netlab-client-n
+if ip link show netlab-api-n >/dev/null 2>&1; then ip link set netlab-api-n netns net-api-ns; fi
+if ip link show netlab-client-n >/dev/null 2>&1; then ip link set netlab-client-n netns net-client-ns; fi
+ip -n net-api-ns addr replace 10.203.0.10/24 dev netlab-api-n
+ip -n net-client-ns addr replace 10.203.0.20/24 dev netlab-client-n
+for i in netlab-api-h netlab-client-h; do ip link set "$i" up; done
+ip -n net-api-ns link set netlab-api-n up
+ip -n net-client-ns link set netlab-client-n up
+jq -n --arg stage veth  --argjson api_host "$(ip -j -details link show netlab-api-h)" --argjson api_ns "$(ip -n net-api-ns -j -details addr show netlab-api-n)"  --argjson client_host "$(ip -j -details link show netlab-client-h)" --argjson client_ns "$(ip -n net-client-ns -j -details addr show netlab-client-n)"  '{stage:$stage,pairs:[{host:$api_host[0],namespace:$api_ns[0]},{host:$client_host[0],namespace:$client_ns[0]}]}' >"$EVIDENCE/03-veth.json"
+chown ubuntu:ubuntu "$EVIDENCE/03-veth.json"

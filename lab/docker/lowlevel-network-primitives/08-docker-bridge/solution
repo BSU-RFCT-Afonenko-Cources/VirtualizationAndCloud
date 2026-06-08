@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+command -v docker >/dev/null || fail "docker is required"
+docker info >/dev/null
+docker rm -f netlab-docker-api netlab-docker-client >/dev/null 2>&1 || true
+docker network rm netlab-docker >/dev/null 2>&1 || true
+docker network create --driver bridge --subnet 172.29.203.0/24 netlab-docker >/dev/null
+docker run -d --name netlab-docker-api --network netlab-docker --network-alias api python:3.13-alpine python -m http.server 8000 >/dev/null
+docker run -d --name netlab-docker-client --network netlab-docker alpine:3.21 sleep 1d >/dev/null
+for n in $(seq 1 30); do docker exec netlab-docker-client wget -qO- http://api:8000 >/dev/null 2>&1 && break; sleep 1; done
+network=$(docker network inspect netlab-docker); api=$(docker inspect netlab-docker-api); client=$(docker inspect netlab-docker-client)
+bridge_name=$(docker network inspect -f '{{index .Options "com.docker.network.bridge.name"}}' netlab-docker); test -n "$bridge_name" || bridge_name="br-$(docker network inspect -f '{{.Id}}' netlab-docker | cut -c1-12)"
+links=$(ip -j -details link show master "$bridge_name")
+jq -n --arg stage docker-bridge --arg bridge "$bridge_name" --argjson network "$network" --argjson api "$api" --argjson client "$client" --argjson links "$links" '{stage:$stage,linux_bridge:$bridge,network:$network[0],containers:{api:$api[0],client:$client[0]},host_veth:$links,http:{client_to_api:true,dns_name:"api"}}' >"$EVIDENCE/08-docker.json"
+chown ubuntu:ubuntu "$EVIDENCE/08-docker.json"

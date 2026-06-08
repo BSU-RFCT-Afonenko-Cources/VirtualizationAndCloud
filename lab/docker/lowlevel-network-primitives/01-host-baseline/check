@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+f="$EVIDENCE/01-baseline.json"; json_valid "$f"
+jq -e '.stage=="host-baseline" and (.interfaces|type=="array") and (.routes|type=="array") and (.bridges|type=="array") and (.docker_networks|type=="array")' "$f" >/dev/null || fail "baseline fields"
+! ip netns list | grep -Eq '^(net-api-ns|net-client-ns)\b' || fail "lab namespace already exists"
+test ! -e /sys/class/net/br-netlab || fail "br-netlab already exists"
+! iptables-save 2>/dev/null | grep -q 'netlab-' || fail "netlab firewall rule already exists"
+pass "host baseline is structured and lab objects are absent"
