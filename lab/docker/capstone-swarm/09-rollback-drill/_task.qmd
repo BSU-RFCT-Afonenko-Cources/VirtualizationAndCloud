@@ -1,0 +1,13 @@
+---
+title: "Rollback drill"
+---
+
+:::{#exr-capstone-swarm-09-rollback-drill}
+## Задание
+
+Проведите controlled bad release для `market_orders-api`: версия должна приводить к неуспешным tasks или health check. Зафиксируйте отказ в `evidence/rollback.json`, выполните rollback к `2.0` и восстановите API.
+
+### Критерии готовности
+
+Проверка требует failed task в истории, восстановленный image и endpoint, завершённое состояние rollback и структурированное evidence.
+:::

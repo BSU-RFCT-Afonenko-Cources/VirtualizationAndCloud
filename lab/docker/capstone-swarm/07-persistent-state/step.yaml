@@ -1,0 +1,11 @@
+capstone-swarm-07:
+  title: "07. Persistent state"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

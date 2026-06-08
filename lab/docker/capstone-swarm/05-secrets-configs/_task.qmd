@@ -1,0 +1,13 @@
+---
+title: "Secrets и configs"
+---
+
+:::{#exr-capstone-swarm-05-secrets-configs}
+## Задание
+
+Передайте пароль PostgreSQL через Swarm secret `market_db_password`, а маршруты edge и настройки приложений — через configs `market_edge_routes` и `market_api_config`. Удалите пароль из stack-файла и environment сервисов.
+
+### Критерии готовности
+
+Проверка анализирует attachments сервисов, файлы внутри running tasks и отсутствие открытого пароля в stack declaration и environment.
+:::

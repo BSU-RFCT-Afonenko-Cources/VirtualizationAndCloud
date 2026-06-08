@@ -1,0 +1,7 @@
+---
+title: "Stack как декларация платформы"
+---
+
+Stack объединяет несколько Swarm services в одну декларативную единицу. Stack-файл описывает images, сети, mounts, configs, secrets, deploy policy и порты; `docker stack deploy` преобразует эту модель в service specs.
+
+Production-подобная декларация воспроизводима: ручные изменения service допустимы для drill, но итоговый stack-файл должен оставаться источником истины. Имена объектов stack получают namespace `market`.

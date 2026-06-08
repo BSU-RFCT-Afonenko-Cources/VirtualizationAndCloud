@@ -1,0 +1,11 @@
+capstone-swarm-09:
+  title: "09. Rollback drill"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

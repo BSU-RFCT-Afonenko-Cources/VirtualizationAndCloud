@@ -1,0 +1,7 @@
+---
+title: "Reconciliation после потери task"
+---
+
+Reconciliation loop постоянно сравнивает desired state с observed state. Если контейнер task исчезает, orchestrator создаёт новую task, пока service снова не достигнет заданного числа replicas.
+
+Новая task имеет другой идентификатор. Поэтому факт recovery подтверждается парой ID, running replicas и доступностью бизнес-endpoint, а не только строкой в журнале.

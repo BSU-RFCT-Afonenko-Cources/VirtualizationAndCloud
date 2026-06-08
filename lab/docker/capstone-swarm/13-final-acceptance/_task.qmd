@@ -1,0 +1,13 @@
+---
+title: "Final acceptance"
+---
+
+:::{#exr-capstone-swarm-13-final-acceptance}
+## Задание
+
+Оставьте stack `market` работающим. Edge должен обслуживать health, каталог и полный цикл заказа; данные должны находиться в persistent DB, API — иметь требуемые реплики, а Swarm — не содержать незавершённых обновлений.
+
+### Критерии готовности
+
+Проверка выполняет комплексный acceptance: состояние узла, services/tasks, сети, secrets/configs, volume, policies и HTTP workflow.
+:::

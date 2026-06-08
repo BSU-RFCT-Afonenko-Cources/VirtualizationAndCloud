@@ -1,0 +1,13 @@
+---
+title: "Replicas и load balancing"
+---
+
+:::{#exr-capstone-swarm-06-replicas-load-balancing}
+## Задание
+
+Установите не менее трёх реплик `orders-api` и двух реплик `catalog-api`. Через единственную внешнюю точку edge создайте заказ и получите его обратно, а также запросите каталог.
+
+### Критерии готовности
+
+Проверка требует нужное число running tasks, VIP endpoint mode и рабочий HTTP workflow через опубликованный порт `8080`.
+:::
