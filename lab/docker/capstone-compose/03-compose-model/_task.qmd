@@ -1,0 +1,7 @@
+:::{#exr-capstone-03-03-compose-model}
+## Compose-модель
+
+Создайте `compose.yaml` и несекретный env-файл в корне рабочего каталога. Опишите ровно пять сервисов `gateway`, `orders-api`, `inventory-api`, `db`, `worker`, объявите три сети и два named volume из целевой декларации.
+
+Rendered config должен быть валиден, содержать project name `orders-platform`, build/image для custom services и PostgreSQL для `db`. После развёртывания Compose должен распознавать все пять сервисов как один project.
+:::

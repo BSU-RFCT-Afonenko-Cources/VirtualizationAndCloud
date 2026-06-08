@@ -17,6 +17,7 @@ book:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/libvirt/main.qmd
 ||||||| f589c88
 =======
@@ -42,6 +43,10 @@ book:
 =======
         - lab/docker/swarm-basic/main.qmd
 >>>>>>> remotes/origin/codex/create-docker-swarm-lab-structure
+||||||| 6df1dcb
+=======
+        - lab/docker/capstone-compose/main.qmd
+>>>>>>> remotes/origin/codex/create-docker/compose-capstone-lab-assignment
 
   appendices:
     - part: "Командные оболочки"

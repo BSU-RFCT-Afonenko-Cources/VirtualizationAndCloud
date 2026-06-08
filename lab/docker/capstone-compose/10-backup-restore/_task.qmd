@@ -1,0 +1,7 @@
+:::{#exr-capstone-10-10-backup-restore}
+## Backup/restore
+
+Создайте логический backup PostgreSQL в `evidence/orders.sql` и сохраните его отдельно от `db-data`. Поднимите восстановленную БД в новом volume `orders-restore-db-data` и изолированном namespace `orders-restore`.
+
+Запустите отдельный экземпляр orders API для восстановленной базы на порту `8081`. Проверка должна получить ранее созданный заказ из restore endpoint. Исходная платформа при этом остаётся доступной и не используется восстановленным API.
+:::

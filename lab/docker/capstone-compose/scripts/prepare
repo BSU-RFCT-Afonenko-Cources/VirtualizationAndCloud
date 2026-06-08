@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+readonly WORK=/home/ubuntu/capstone-compose
+readonly ASSETS=/opt/lab/docker/capstone-compose/assets
+install -d -o ubuntu -g ubuntu /home/ubuntu/capstone-compose
+for component in gateway orders-api inventory-api worker db; do
+  install -d -o ubuntu -g ubuntu "/home/ubuntu/capstone-compose/${component}"
+  if [[ -d "/opt/lab/docker/capstone-compose/assets/platform/${component}" ]]; then
+    while IFS= read -r -d '' source; do
+      target="/home/ubuntu/capstone-compose/${component}/${source##*/}"
+      [[ -e "$target" ]] || install -m 0644 -o ubuntu -g ubuntu "$source" "$target"
+    done < <(find "/opt/lab/docker/capstone-compose/assets/platform/${component}" -maxdepth 1 -type f ! -name Dockerfile -print0)
+  fi
+done
+install -d -m 0700 -o ubuntu -g ubuntu /home/ubuntu/capstone-compose/secrets
+install -d -o ubuntu -g ubuntu /home/ubuntu/capstone-compose/evidence
+chown -R ubuntu:ubuntu /home/ubuntu/capstone-compose

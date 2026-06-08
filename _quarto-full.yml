@@ -52,6 +52,7 @@ book:
         - lab/ubuntu/main.qmd
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/docker/compose/main.qmd
 ||||||| 6df1dcb
 =======
@@ -61,6 +62,10 @@ book:
 =======
         - lab/docker/networking/main.qmd
 >>>>>>> remotes/origin/codex/create-docker-networking-lab
+||||||| 6df1dcb
+=======
+        - lab/docker/capstone-compose/main.qmd
+>>>>>>> remotes/origin/codex/create-docker/compose-capstone-lab-assignment
         - lab/libvirt/single/main.qmd
 
     - part: "Задания. Практика"

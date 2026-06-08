@@ -1,0 +1,7 @@
+:::{#exr-capstone-09-09-observability}
+## Наблюдаемость
+
+Создайте `evidence/platform.json` со значениями `project`, `captured_at`, `services` и `stats`. В `services` представьте все пять сервисов с их state и health; в `stats` — структурированные показатели пяти работающих контейнеров.
+
+Файл должен быть валидным JSON, соответствовать предоставленной схеме, отражать project `orders-platform` и не содержать секрет. Это evidence состояния, а не текстовый отчёт.
+:::

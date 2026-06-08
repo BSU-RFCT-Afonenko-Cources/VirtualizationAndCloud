@@ -1,0 +1,20 @@
+step-04:
+  title: "04. Сетевое разделение"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    prepare:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/04-networking/prepare
+    pre-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/04-networking/pre-step
+    check:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/04-networking/check
+    solution:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/04-networking/solution
+    post-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/04-networking/post-step

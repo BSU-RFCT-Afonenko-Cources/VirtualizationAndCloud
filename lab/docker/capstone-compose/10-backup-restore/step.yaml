@@ -1,0 +1,20 @@
+step-10:
+  title: "10. Backup/restore"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    prepare:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/10-backup-restore/prepare
+    pre-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/10-backup-restore/pre-step
+    check:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/10-backup-restore/check
+    solution:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/10-backup-restore/solution
+    post-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/10-backup-restore/post-step

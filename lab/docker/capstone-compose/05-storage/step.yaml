@@ -1,0 +1,20 @@
+step-05:
+  title: "05. Stateful storage"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    prepare:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/05-storage/prepare
+    pre-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/05-storage/pre-step
+    check:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/05-storage/check
+    solution:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/05-storage/solution
+    post-step:
+      exec:
+        - sudo -n /opt/lab/docker/capstone-compose/05-storage/post-step

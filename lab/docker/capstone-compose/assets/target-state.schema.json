@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["platform", "compose_project", "services", "networks", "volumes", "endpoints", "published_ports"],
+  "properties": {
+    "platform": {"const": "orders-platform"},
+    "compose_project": {"const": "orders-platform"},
+    "services": {"type": "array", "minItems": 5, "uniqueItems": true},
+    "networks": {"type": "array", "minItems": 3, "uniqueItems": true},
+    "volumes": {"type": "array", "minItems": 2, "uniqueItems": true},
+    "endpoints": {"type": "object"},
+    "published_ports": {"type": "object", "properties": {"gateway": {"const": 8080}}}
+  }
+}

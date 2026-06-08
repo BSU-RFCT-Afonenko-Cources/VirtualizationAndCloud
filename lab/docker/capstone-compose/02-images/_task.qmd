@@ -1,0 +1,7 @@
+:::{#exr-capstone-02-02-images}
+## Сборка образов
+
+Создайте Dockerfile в каталогах `gateway`, `orders-api`, `inventory-api` и `worker`, затем соберите образы `orders-gateway:1.0.0`, `orders-api:1.0.0`, `inventory-api:1.0.0`, `orders-worker:1.0.0`.
+
+Каждый образ должен иметь OCI-метки title, version и source, запускаться не от root и содержать только необходимые runtime-файлы. API должны сообщать имя сервиса и версию `1.0.0` через предусмотренный исходниками version endpoint. Не включайте пароли и локальные env-файлы в слои.
+:::

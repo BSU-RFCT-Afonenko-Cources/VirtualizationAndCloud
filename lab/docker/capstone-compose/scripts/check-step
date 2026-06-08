@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+set -euo pipefail
+readonly STEP="${1:?step number is required}"
+readonly WORK=/home/ubuntu/capstone-compose
+readonly COMPOSE=/home/ubuntu/capstone-compose/compose.yaml
+readonly ENV=/home/ubuntu/capstone-compose/.env
+readonly SERVICES=(gateway orders-api inventory-api db worker)
+fail() { printf 'CHECK FAILED: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'CHECK PASSED: step %s\n' "$STEP"; }
+compose() { docker compose --project-directory /home/ubuntu/capstone-compose --env-file /home/ubuntu/capstone-compose/.env -f /home/ubuntu/capstone-compose/compose.yaml "$@"; }
+require_file() { [[ -f "$1" ]] || fail "missing file $1"; }
+
+check_target() {
+  require_file /home/ubuntu/capstone-compose/target-state.json
+  python3 - <<'PYJSON' || fail "target-state.json does not match the required schema"
+import json
+path = "/home/ubuntu/capstone-compose/target-state.json"
+data = json.load(open(path, encoding="utf-8"))
+assert data["platform"] == "orders-platform"
+assert data["compose_project"] == "orders-platform"
+assert set(data["services"]) == {"gateway", "orders-api", "inventory-api", "db", "worker"}
+assert set(data["networks"]) == {"frontend", "backend", "data"}
+assert set(data["volumes"]) == {"db-data", "backup-data"}
+assert data["published_ports"] == {"gateway": 8080}
+assert data["endpoints"] == {
+    "health": "/health", "create_order": "/api/orders",
+    "get_order": "/api/orders/{id}", "inventory": "/api/inventory/{sku}"
+}
+PYJSON
+}
+check_images() {
+  for image in orders-gateway:1.0.0 orders-api:1.0.0 inventory-api:1.0.0 orders-worker:1.0.0; do
+    docker image inspect "$image" >/dev/null || fail "missing image $image"
+    [[ "$(docker image inspect -f '{{ index .Config.Labels "org.opencontainers.image.version" }}' "$image")" == 1.0.0 ]] || fail "$image has no version label"
+    user="$(docker image inspect -f '{{.Config.User}}' "$image")"
+    [[ -n "$user" && "$user" != 0 && "$user" != root ]] || fail "$image runs as root"
+  done
+  for pair in 'orders-api:1.0.0 orders-api 18081' 'inventory-api:1.0.0 inventory-api 18082'; do
+    read -r image expected port <<<"$pair"
+    name="capstone-version-${expected}"
+    docker rm -f "$name" >/dev/null 2>&1 || true
+    docker run -d --name "$name" -p "${port}:8080" -v /dev/null:/run/secrets/db_password:ro "$image" >/dev/null
+    for attempt in {1..20}; do
+      body="$(curl -fsS "http://127.0.0.1:${port}/version" 2>/dev/null || true)"
+      [[ "$body" == *"$expected"* && "$body" == *'1.0.0'* ]] && break
+      sleep 1
+    done
+    docker rm -f "$name" >/dev/null
+    [[ "$body" == *"$expected"* && "$body" == *'1.0.0'* ]] || fail "$expected version endpoint is unavailable"
+  done
+}
+check_compose_model() {
+  require_file "$COMPOSE"; require_file "$ENV"
+  rendered="$(compose config --format json)" || fail "compose config is invalid"
+  for service in "${SERVICES[@]}"; do
+    python3 -c 'import json,sys; assert sys.argv[1] in json.load(sys.stdin)["services"]' "$service" <<<"$rendered" || fail "service $service absent from rendered config"
+  done
+  [[ "$(compose config --services | wc -l)" -eq 5 ]] || fail "compose project must have exactly five services"
+}
+check_networks() {
+  check_compose_model
+  [[ "$(docker inspect -f '{{json .NetworkSettings.Ports}}' orders-platform-gateway-1)" == *'8080/tcp'*'8080'* ]] || fail "gateway port 8080 is not published"
+  for service in orders-api inventory-api db worker; do
+    [[ "$(docker inspect -f '{{json .NetworkSettings.Ports}}' "orders-platform-${service}-1")" != *'HostPort'* ]] || fail "$service publishes a host port"
+  done
+  gateway_networks="$(docker inspect -f '{{json .NetworkSettings.Networks}}' orders-platform-gateway-1)"
+  [[ "$gateway_networks" == *frontend* && "$gateway_networks" == *backend* ]] || fail "gateway network attachments are wrong"
+  [[ "$(docker inspect -f '{{json .NetworkSettings.Networks}}' orders-platform-db-1)" == *data* ]] || fail "db is not attached to data network"
+  [[ "$(docker network inspect -f '{{.Internal}}' orders-platform_backend)" == true ]] || fail "backend network must be internal"
+  [[ "$(docker network inspect -f '{{.Internal}}' orders-platform_data)" == true ]] || fail "data network must be internal"
+}
+check_storage() {
+  docker volume inspect orders-platform_db-data >/dev/null || fail "db-data volume is missing"
+  docker volume inspect orders-platform_backup-data >/dev/null || fail "backup-data volume is missing"
+  marker="persist-$(date +%s)"
+  docker exec orders-platform-db-1 psql -U platform -d orders -c "INSERT INTO inventory(sku,available) VALUES ('$marker',1)" >/dev/null
+  compose up -d --force-recreate db >/dev/null
+  for attempt in {1..40}; do docker exec orders-platform-db-1 pg_isready -U platform -d orders >/dev/null 2>&1 && break; sleep 1; done
+  docker exec orders-platform-db-1 psql -U platform -d orders -Atc "SELECT sku FROM inventory WHERE sku='$marker'" | grep -Fxq "$marker" || fail "database data did not survive recreation"
+}
+check_secrets() {
+  require_file /home/ubuntu/capstone-compose/secrets/db_password.txt
+  mode="$(stat -c %a /home/ubuntu/capstone-compose/secrets/db_password.txt)"; [[ "$mode" == 600 ]] || fail "secret mode must be 600"
+  secret="$(cat /home/ubuntu/capstone-compose/secrets/db_password.txt)"
+  for image in orders-gateway:1.0.0 orders-api:1.0.0 inventory-api:1.0.0 orders-worker:1.0.0; do
+    ! docker history --no-trunc "$image" | grep -Fq "$secret" || fail "secret leaked into $image history"
+  done
+  ! compose logs --no-color | grep -Fq "$secret" || fail "secret leaked into logs"
+  docker inspect -f '{{range .Config.Env}}{{println .}}{{end}}' orders-platform-orders-api-1 | grep -q 'DB_PASSWORD_FILE=' || fail "orders-api does not use a secret file"
+}
+check_health() {
+  for service in "${SERVICES[@]}"; do
+    status="$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "orders-platform-${service}-1")"
+    [[ "$status" == healthy ]] || fail "$service health is $status"
+  done
+  curl -fsS http://127.0.0.1:8080/health | grep -q ok || fail "gateway health endpoint failed"
+}
+workflow() {
+  response="$(curl -fsS -H 'Content-Type: application/json' -d '{"sku":"BOOK-001","quantity":2}' http://127.0.0.1:8080/api/orders)" || fail "cannot create order"
+  order_id="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["id"])' <<<"$response")"
+  for attempt in {1..30}; do
+    response="$(curl -fsS "http://127.0.0.1:8080/api/orders/${order_id}")"
+    status="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["status"])' <<<"$response")"
+    [[ "$status" == completed ]] && break
+    sleep 1
+  done
+  [[ "$status" == completed ]] || fail "worker did not complete order $order_id"
+  docker exec orders-platform-db-1 psql -U platform -d orders -Atc "SELECT status FROM orders WHERE id=$order_id" | grep -Fxq completed || fail "database state differs from API"
+  curl -fsS http://127.0.0.1:8080/api/inventory/BOOK-001 | grep -q available || fail "inventory route failed"
+}
+check_evidence() {
+  require_file /home/ubuntu/capstone-compose/evidence/platform.json
+  python3 - <<'PY'
+import json
+p='/home/ubuntu/capstone-compose/evidence/platform.json'
+d=json.load(open(p,encoding='utf-8'))
+assert d['project']=='orders-platform'
+assert isinstance(d['captured_at'],str) and d['captured_at']
+assert len(d['services']) >= 5 and len(d['stats']) >= 5
+assert {'gateway','orders-api','inventory-api','db','worker'} <= {x['name'] for x in d['services']}
+PY
+}
+check_restore() {
+  require_file /home/ubuntu/capstone-compose/evidence/orders.sql
+  docker volume inspect orders-restore-db-data >/dev/null || fail "restore volume is missing"
+  docker inspect orders-restore-db orders-restore-api >/dev/null || fail "restore namespace containers are missing"
+  require_file /home/ubuntu/capstone-compose/evidence/restored-order-id.txt
+  order_id="$(cat /home/ubuntu/capstone-compose/evidence/restored-order-id.txt)"
+  for attempt in {1..30}; do curl -fsS "http://127.0.0.1:8081/orders/${order_id}" >/dev/null 2>&1 && return 0; sleep 1; done
+  fail "restored API does not expose restored order data"
+}
+check_security() {
+  for service in gateway orders-api inventory-api worker; do
+    c="orders-platform-${service}-1"
+    user="$(docker inspect -f '{{.Config.User}}' "$c")"; [[ -n "$user" && "$user" != 0 && "$user" != root ]] || fail "$service runs as root"
+    [[ "$(docker inspect -f '{{.HostConfig.ReadonlyRootfs}}' "$c")" == true ]] || fail "$service root filesystem is writable"
+    [[ "$(docker inspect -f '{{json .HostConfig.CapDrop}}' "$c")" == *ALL* ]] || fail "$service does not drop all capabilities"
+  done
+}
+
+check_target
+((10#$STEP >= 2)) && check_images
+((10#$STEP >= 3)) && check_compose_model
+((10#$STEP >= 4)) && check_networks
+((10#$STEP >= 5)) && check_storage
+((10#$STEP >= 6)) && check_secrets
+((10#$STEP >= 7)) && check_health
+((10#$STEP >= 8)) && workflow
+((10#$STEP >= 9)) && check_evidence
+((10#$STEP >= 10)) && check_restore
+((10#$STEP >= 11)) && check_security
+if ((10#$STEP >= 12)); then check_health; workflow; check_security; fi
+pass

@@ -1,0 +1,7 @@
+:::{#exr-capstone-04-04-networking}
+## Сетевое разделение
+
+Настройте сетевые подключения так, чтобы gateway состоял в `frontend` и `backend`, оба API — в `backend` и `data`, worker и db — только в `data`. Сделайте `backend` и `data` внутренними сетями.
+
+Опубликуйте `8080` только для gateway. У API, worker и db не должно быть host port bindings. После изменения пересоздайте платформу и убедитесь, что внутренние DNS-имена сервисов обеспечивают маршрут gateway → API → db.
+:::

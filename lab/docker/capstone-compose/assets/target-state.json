@@ -1,0 +1,14 @@
+{
+  "platform": "orders-platform",
+  "compose_project": "orders-platform",
+  "services": ["gateway", "orders-api", "inventory-api", "db", "worker"],
+  "networks": ["frontend", "backend", "data"],
+  "volumes": ["db-data", "backup-data"],
+  "endpoints": {
+    "health": "/health",
+    "create_order": "/api/orders",
+    "get_order": "/api/orders/{id}",
+    "inventory": "/api/inventory/{sku}"
+  },
+  "published_ports": {"gateway": 8080}
+}
