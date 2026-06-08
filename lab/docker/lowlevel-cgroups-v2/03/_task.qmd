@@ -1,0 +1,7 @@
+:::{#exr-cgroups-v2-03}
+#### CPU weight
+
+Создайте sibling-группы `cpu-weight/low` и `cpu-weight/high`, назначьте существенно разные значения `cpu.weight` и одновременно запустите в них CPU burner на одном CPU.
+
+Сохраните `03-cpu-weight.json`: веса, выбранный CPU, дельты `usage_usec` и отношение результата high к low. Высокий weight должен получить измеримо больше CPU.
+:::

@@ -1,0 +1,7 @@
+:::{#exr-cgroups-v2-05}
+#### Memory accounting и memory.max
+
+Создайте группу `memory`, задайте `memory.max` равным 32 MiB и запустите allocator, пытающийся удержать существенно больше памяти.
+
+Сохраните `05-memory.json` с лимитом, пиковым наблюдением, кодом/сигналом завершения и дельтами `memory.events`. Должно быть зафиксировано достижение лимита либо controlled allocation failure.
+:::

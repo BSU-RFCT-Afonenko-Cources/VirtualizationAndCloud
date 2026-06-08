@@ -1,0 +1,19 @@
+title: "cgroups v2: ресурсы, лимиты, статистика и freezer"
+description: _description.qmd
+time-limit-minutes: 240
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+prepare:
+  exec:
+    - prepare.bash
+steps:
+  - 01/step.yaml
+  - 02/step.yaml
+  - 03/step.yaml
+  - 04/step.yaml
+  - 05/step.yaml
+  - 06/step.yaml
+  - 07/step.yaml
+  - 08/step.yaml
+  - 09/step.yaml
+  - 10/step.yaml
+  - 11/step.yaml

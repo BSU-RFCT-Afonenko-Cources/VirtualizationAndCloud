@@ -1,0 +1,11 @@
+cgroups-v2-01:
+  title: "Определение режима cgroup"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.bash
+      solution:
+        exec:
+          - solution.bash

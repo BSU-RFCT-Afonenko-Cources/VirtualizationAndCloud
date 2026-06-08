@@ -1,0 +1,19 @@
+title: "Docker и низкоуровневая контейнеризация"
+description: _assignment-description.qmd
+time-limit-minutes: 240
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+prepare:
+  exec:
+    - lowlevel-cgroups-v2/prepare.bash
+steps:
+  - lowlevel-cgroups-v2/01/step.yaml
+  - lowlevel-cgroups-v2/02/step.yaml
+  - lowlevel-cgroups-v2/03/step.yaml
+  - lowlevel-cgroups-v2/04/step.yaml
+  - lowlevel-cgroups-v2/05/step.yaml
+  - lowlevel-cgroups-v2/06/step.yaml
+  - lowlevel-cgroups-v2/07/step.yaml
+  - lowlevel-cgroups-v2/08/step.yaml
+  - lowlevel-cgroups-v2/09/step.yaml
+  - lowlevel-cgroups-v2/10/step.yaml
+  - lowlevel-cgroups-v2/11/step.yaml

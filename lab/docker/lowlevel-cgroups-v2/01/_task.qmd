@@ -1,0 +1,7 @@
+:::{#exr-cgroups-v2-01}
+#### Определение режима cgroup
+
+Определите режим cgroup на хосте. В каталоге evidence создайте `01-mode.json` с полями `mode`, `mount_type`, `mount_point`, `controllers` и `subtree_control`.
+
+Значения должны описывать фактическое unified-монтирование и текущее состояние лабораторной ветки `/sys/fs/cgroup/cg-lab`, а списки контроллеров должны быть JSON-массивами.
+:::

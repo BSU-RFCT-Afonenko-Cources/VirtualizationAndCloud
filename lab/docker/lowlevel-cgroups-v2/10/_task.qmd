@@ -1,0 +1,7 @@
+:::{#exr-cgroups-v2-10}
+#### Связь Docker resource limits с cgroups
+
+Запустите долгоживущий контейнер `cg-docker-demo` с memory limit 64 MiB, PIDs limit 32 и CPU quota 25% одного CPU.
+
+Создайте `10-docker.json`, сопоставив поля Docker inspect, init PID, его относительный cgroup path и фактические значения `memory.max`, `pids.max`, `cpu.max`. Контейнер должен работать до проверки.
+:::
