@@ -1,0 +1,8 @@
+Предъявите завершённый runtime и работающий endpoint.
+
+:::{#exr-mini-runtime-final}
+#### Подтвердите интеграцию primitives
+Ответ `/status` должен быть валидным JSON и содержать `service` со значением `mini-runtime-api`, hostname `mini-runtime`, локальный PID 1, cgroup path, три действующих лимита, marker `mini-runtime-rootfs-v1` и подтверждение writable runtime state.
+
+Убедитесь, что runtime после failure drill запущен, evidence pack обновлён, namespace isolation сохранена, rootfs смонтирован read-only, capabilities отсутствуют, а API доступен только через заявленную сетевую boundary.
+:::

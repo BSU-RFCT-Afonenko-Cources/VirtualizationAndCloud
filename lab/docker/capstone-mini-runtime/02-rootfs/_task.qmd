@@ -1,0 +1,8 @@
+Подготовьте rootfs и writable state в соответствии со спецификацией.
+
+:::{#exr-mini-runtime-rootfs}
+#### Реализуйте filesystem policy
+В rootfs должны существовать `/proc`, `/sys/fs/cgroup`, `/run/mini-runtime` и `/opt/mini-runtime`. Разместите исполняемую полезную нагрузку как `/opt/mini-runtime/mini-runtime-api.py` и маркер `/.mini-runtime-rootfs` со значением `mini-runtime-rootfs-v1`. Добавьте только зависимости, необходимые для запуска API.
+
+Base tree должен принадлежать root и не иметь writable файлов или каталогов. Каталог `/home/ubuntu/mini-runtime/runtime-state` должен быть отдельным, доступным UID/GID `65534` для записи и предназначенным для bind mount в `/run/mini-runtime`.
+:::

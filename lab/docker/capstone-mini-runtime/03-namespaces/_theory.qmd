@@ -1,0 +1,5 @@
+Namespaces создают разные представления глобальных ресурсов ядра. UTS отделяет hostname, PID namespace формирует собственное дерево процессов, mount namespace удерживает filesystem policy, а network namespace исключает случайное использование host network stack.
+
+Namespace — это не флаг в проектной документации, а объект ядра с inode, наблюдаемым через `/proc/<pid>/ns`. Проверка должна сравнивать процесс API с host process и подтверждать, что нужные namespace references различаются.
+
+PID 1 внутри нового PID namespace имеет особую роль: он является корнем локального дерева процессов. Для single-process runtime полезная нагрузка должна видеть себя как PID 1, даже если с хоста у неё другой PID.
