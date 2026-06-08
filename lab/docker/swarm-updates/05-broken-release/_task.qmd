@@ -1,0 +1,7 @@
+:::{#exr-swarm-broken-release}
+## Контролируемый сбой версии
+
+Попытайтесь выпустить образ `orders-api:bad`. Эта версия намеренно не проходит `/health`. Дождитесь, пока настроенная политика остановит rollout, и не выполняйте rollback на этом шаге.
+
+Сохраните файл `/home/ubuntu/swarm-updates/evidence/broken-release.json`. Он должен быть валидным JSON-объектом с полями `service`, `attempted_image`, `update_state`, `message` и `tasks`. Поле `tasks` должно содержать массив фактических записей истории tasks. Зафиксируйте в evidence приостановленный update и попытку запуска плохого образа.
+:::
