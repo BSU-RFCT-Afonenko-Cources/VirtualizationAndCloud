@@ -1,0 +1,14 @@
+registry-role:
+  title: "Роль registry"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - pre-step.sh
+    check:
+      exec:
+        - check.sh
+    solution:
+      exec:
+        - solution.sh

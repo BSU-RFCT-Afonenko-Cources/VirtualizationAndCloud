@@ -1,0 +1,7 @@
+:::{#exr-lab-docker-registry-tagging}
+#### Версионное имя образа
+
+Назначьте локальному образу `course-registry-api:build-v1` имя по схеме `localhost:PORT/course/app:VERSION`. Используйте порт лабораторного registry, namespace `course`, repository `api` и версию `v1`.
+
+Исходный сборочный тег должен сохраниться: новый тег является дополнительной ссылкой на тот же image ID.
+:::

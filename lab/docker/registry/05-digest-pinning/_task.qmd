@@ -1,0 +1,7 @@
+:::{#exr-lab-docker-registry-digest}
+#### Immutable deployment
+
+Определите digest опубликованной версии `v1` и создайте `/home/ubuntu/registry/digest.json`. В JSON должны быть строковые поля `repository`, `tag`, `digest`, `reference` и `container`. Укажите repository `localhost:5000/course/api`, tag `v1`, полную ссылку через `@` и контейнер `registry-api-digest`.
+
+Разверните `registry-api-digest` именно по immutable reference, опубликуйте API на порту хоста `18080` и дождитесь healthy-состояния. Endpoint `/version` должен возвращать версию `v1`.
+:::
