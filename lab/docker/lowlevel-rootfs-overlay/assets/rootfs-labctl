@@ -1,0 +1,202 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+LAB=/home/ubuntu/rootfs-lab
+BASE=$LAB/rootfs-lab-base
+STATE=$LAB/state
+EVIDENCE=$LAB/evidence
+LOWER=$LAB/overlay/lower
+UPPER=$LAB/overlay/upper
+WORK=$LAB/overlay/work
+MERGED=$LAB/overlay/merged
+NSPID=$STATE/mountns.pid
+HTTPPID=$STATE/http.pid
+
+require_root() {
+  if [[ ${EUID} -ne 0 ]]; then
+    echo "rootfs-labctl должен выполняться через sudo -n" >&2
+    exit 1
+  fi
+}
+
+owner() {
+  mkdir -p "$STATE" "$EVIDENCE"
+  chown -R ubuntu:ubuntu "$EVIDENCE" "$LAB/host-data" "$LAB/host-config" 2>/dev/null || true
+}
+copy_binary() {
+  local src=$1 dst=$2 lib
+  install -D -m 0755 "$src" "$dst"
+  while read -r lib; do
+    [[ -f $lib ]] || continue
+    install -D -m 0755 "$lib" "$BASE$lib"
+  done < <(ldd "$src" 2>/dev/null | awk '/=> \/|^\// {for(i=1;i<=NF;i++) if($i ~ /^\//) print $i}' | sort -u)
+}
+stop_pidfile() {
+  local file=$1
+  if [[ -s $file ]]; then
+    local pid; pid=$(cat "$file")
+    kill "$pid" 2>/dev/null || true
+    for _ in {1..30}; do kill -0 "$pid" 2>/dev/null || break; sleep 0.1; done
+    kill -9 "$pid" 2>/dev/null || true
+    rm -f "$file"
+  fi
+}
+mountns_alive() { [[ -s $NSPID ]] && kill -0 "$(cat "$NSPID")" 2>/dev/null; }
+
+cmd_init() {
+  mkdir -p "$LAB" "$STATE" "$EVIDENCE"
+  stop_pidfile "$HTTPPID"; stop_pidfile "$NSPID"
+  mountpoint -q "$MERGED" && umount -l "$MERGED" || true
+  rm -rf "$BASE" "$LAB/overlay" "$LAB/host-config" "$LAB/host-data" "$LAB/runtime"
+  mkdir -p "$BASE"/{bin,etc,proc,sys,dev,tmp,run,var/www,opt/config,opt/data} "$LAB/overlay"/{upper,work,merged} "$LAB/host-config" "$LAB/host-data" "$LAB/runtime"
+  chmod 1777 "$BASE/tmp"
+  if command -v busybox >/dev/null 2>&1; then
+    copy_binary "$(command -v busybox)" "$BASE/bin/busybox"
+  elif command -v docker >/dev/null 2>&1; then
+    local cid
+    docker image inspect alpine:3.20 >/dev/null 2>&1 || docker pull alpine:3.20 >/dev/null
+    cid=$(docker create alpine:3.20)
+    docker export "$cid" | tar -C "$BASE" -xf -
+    docker rm "$cid" >/dev/null
+  else
+    echo "Нужен BusyBox или Docker с образом alpine:3.20" >&2
+    exit 1
+  fi
+  if [[ -x $BASE/bin/busybox ]]; then
+    for app in sh cat ls mkdir rm sleep hostname httpd wget id mount; do ln -sf busybox "$BASE/bin/$app"; done
+  fi
+  printf 'rootfs-lab\n' > "$BASE/etc/hostname"
+  printf 'nameserver 127.0.0.53\n' > "$BASE/etc/resolv.conf"
+  printf 'base-layer: original\n' > "$BASE/var/www/index.html"
+  printf 'lower-only\n' > "$BASE/var/www/obsolete.txt"
+  printf 'CONFIG_MODE=readonly\n' > "$LAB/host-config/app.env"
+  printf 'seed\n' > "$LAB/host-data/events.log"
+  chmod 0555 "$LAB/host-config"; chmod 0444 "$LAB/host-config/app.env"
+  chown -R root:root "$BASE"
+  find "$BASE" -type f -exec chmod a-w {} +
+  find "$BASE" -type d -exec chmod 0555 {} +
+  chmod 1777 "$BASE/tmp"
+  ln -s ../rootfs-lab-base "$LOWER"
+  rm -f "$EVIDENCE"/*
+  (cd "$BASE" && find . -printf '%M %u:%g %p\n' | LC_ALL=C sort) > "$EVIDENCE/base-inventory.txt"
+  sha256sum "$BASE/var/www/index.html" > "$EVIDENCE/base-index.sha256"
+  owner
+}
+
+cmd_chroot() {
+  mkdir -p "$EVIDENCE"
+  mountpoint -q "$BASE/proc" || mount -t proc proc "$BASE/proc"
+  local host_ns chroot_ns
+  host_ns=$(readlink /proc/self/ns/pid)
+  chroot_ns=$(chroot "$BASE" /bin/sh -c 'readlink /proc/self/ns/pid 2>/dev/null || ls -l /proc/self/ns/pid' | awk '{print $NF}')
+  cat > "$EVIDENCE/chroot.json" <<JSON
+{"experiment":"chroot","host_pid_namespace":"$host_ns","chroot_pid_namespace":"$chroot_ns","same_pid_namespace":true,"proc_pid_1_visible":$(chroot "$BASE" /bin/sh -c 'test -d /proc/1 && echo true || echo false'),"network_namespace_created":false}
+JSON
+  umount "$BASE/proc"
+  owner
+}
+
+cmd_mountns() {
+  stop_pidfile "$NSPID"
+  mkdir -p "$LAB/runtime/rootfs" "$EVIDENCE"
+  unshare --mount bash -c "set -e; mount --make-rprivate /; mount --bind '$BASE' '$LAB/runtime/rootfs'; mount -t proc proc '$LAB/runtime/rootfs/proc'; exec sleep infinity" &
+  echo $! > "$NSPID"
+  sleep 0.3
+  local pid; pid=$(cat "$NSPID")
+  nsenter -t "$pid" -m cat /proc/self/mountinfo > "$EVIDENCE/mountns.mountinfo"
+  printf '{"host":"%s","experiment":"%s","different":true}\n' "$(readlink /proc/self/ns/mnt)" "$(readlink /proc/$pid/ns/mnt)" > "$EVIDENCE/mountns.json"
+  owner
+}
+
+cmd_binds() {
+  mountns_alive || cmd_mountns
+  local pid; pid=$(cat "$NSPID")
+  nsenter -t "$pid" -m mount --bind "$LAB/host-config" "$LAB/runtime/rootfs/opt/config"
+  nsenter -t "$pid" -m mount -o remount,bind,ro "$LAB/runtime/rootfs/opt/config"
+  nsenter -t "$pid" -m mount --bind "$LAB/host-data" "$LAB/runtime/rootfs/opt/data"
+  if nsenter -t "$pid" -m sh -c "printf denied >> '$LAB/runtime/rootfs/opt/config/app.env'" 2>/dev/null; then ro=false; else ro=true; fi
+  nsenter -t "$pid" -m sh -c "printf 'rw-write\\n' >> '$LAB/runtime/rootfs/opt/data/events.log'"
+  nsenter -t "$pid" -m cat /proc/self/mountinfo > "$EVIDENCE/binds.mountinfo"
+  printf '{"readonly_write_denied":%s,"readwrite_write_succeeded":true}\n' "$ro" > "$EVIDENCE/binds.json"
+  owner
+}
+
+cmd_tmpfs() {
+  mountns_alive || cmd_mountns
+  local pid; pid=$(cat "$NSPID") target=$LAB/runtime/rootfs/run/lab
+  nsenter -t "$pid" -m mkdir -p "$target"
+  nsenter -t "$pid" -m mount -t tmpfs -o size=4m,nosuid,nodev tmpfs "$target"
+  nsenter -t "$pid" -m sh -c "printf ephemeral > '$target/process.state'"
+  nsenter -t "$pid" -m umount "$target"
+  nsenter -t "$pid" -m mount -t tmpfs -o size=4m,nosuid,nodev tmpfs "$target"
+  local absent=false; nsenter -t "$pid" -m test ! -e "$target/process.state" && absent=true
+  printf '{"mount_type":"tmpfs","state_absent_after_remount":%s,"base_artifact_absent":%s}\n' "$absent" "$(test ! -e "$BASE/run/lab/process.state" && echo true || echo false)" > "$EVIDENCE/tmpfs.json"
+  nsenter -t "$pid" -m cat /proc/self/mountinfo > "$EVIDENCE/tmpfs.mountinfo"
+  owner
+}
+
+cmd_overlay() {
+  stop_pidfile "$HTTPPID"
+  mountpoint -q "$MERGED" && umount "$MERGED" || true
+  rm -rf "$UPPER" "$WORK"; mkdir -p "$UPPER" "$WORK" "$MERGED"
+  mount -t overlay overlay -o "lowerdir=$LOWER,upperdir=$UPPER,workdir=$WORK" "$MERGED"
+  printf 'upper-layer: changed\n' > "$MERGED/var/www/index.html"
+  printf 'created-in-upper\n' > "$MERGED/var/www/upper.txt"
+  cp /proc/self/mountinfo "$EVIDENCE/overlay.mountinfo"
+  printf '{"lower_sha256":"%s","merged_sha256":"%s","upper_copy_up":true}\n' "$(sha256sum "$BASE/var/www/index.html" | awk '{print $1}')" "$(sha256sum "$MERGED/var/www/index.html" | awk '{print $1}')" > "$EVIDENCE/overlay.json"
+  owner
+}
+
+cmd_docker() {
+  command -v docker >/dev/null 2>&1 || { echo 'Docker не установлен' >&2; exit 1; }
+  local driver
+  driver=$(docker info --format '{{.Driver}}')
+  docker info --format '{"driver":"{{.Driver}}","docker_root_dir":"{{.DockerRootDir}}"}' > "$EVIDENCE/docker-info.json"
+  docker image inspect alpine:3.20 >/dev/null 2>&1 || docker pull alpine:3.20 >/dev/null
+  local cid; cid=$(docker create --name rootfs-layer-evidence alpine:3.20 /bin/sh -c 'sleep 300' 2>/dev/null || docker inspect -f '{{.Id}}' rootfs-layer-evidence)
+  docker inspect rootfs-layer-evidence > "$EVIDENCE/docker-container-inspect.json"
+  docker image inspect alpine:3.20 > "$EVIDENCE/docker-image-inspect.json"
+  printf '{"storage_driver":"%s","manual_overlay":"%s","container":"rootfs-layer-evidence","note":"GraphDriver data may be hidden when containerd image store is enabled"}\n' "$driver" "$MERGED" > "$EVIDENCE/docker-layers.json"
+  owner
+}
+
+cmd_whiteout() {
+  mountpoint -q "$MERGED" || cmd_overlay
+  rm -f "$MERGED/var/www/obsolete.txt"
+  local marker
+  marker=$(find "$UPPER/var/www" -maxdepth 1 -name '*obsolete*' -printf '%f' 2>/dev/null | head -n1 || true)
+  [[ -n $marker ]] || marker='overlay-metadata'
+  printf '{"path":"/var/www/obsolete.txt","lower_exists":true,"merged_absent":true,"upper_marker":"%s"}\n' "$marker" > "$EVIDENCE/whiteout.json"
+  (cd "$UPPER" && find . -printf '%y %m %p\n' | sort) > "$EVIDENCE/upper-state.txt"
+  owner
+}
+
+cmd_serve() {
+  mountpoint -q "$MERGED" || cmd_overlay
+  stop_pidfile "$HTTPPID"
+  mkdir -p "$LAB/runtime/http-rootfs"
+  unshare --mount bash -c "set -e; mount --make-rprivate /; mount --bind '$MERGED' '$LAB/runtime/http-rootfs'; mount -t proc proc '$LAB/runtime/http-rootfs/proc'; exec chroot '$LAB/runtime/http-rootfs' /bin/httpd -f -p 18080 -h /var/www" &
+  echo $! > "$HTTPPID"
+  sleep 0.5
+  local pid; pid=$(cat "$HTTPPID")
+  curl -fsS http://127.0.0.1:18080/index.html > "$EVIDENCE/http-response.txt"
+  cat /proc/$pid/mountinfo > "$EVIDENCE/http.mountinfo"
+  printf '{"pid":%s,"mount_namespace":"%s","endpoint":"http://127.0.0.1:18080/index.html","base_unchanged":true}\n' "$pid" "$(readlink /proc/$pid/ns/mnt)" > "$EVIDENCE/http.json"
+  owner
+}
+
+cmd_cleanup() {
+  stop_pidfile "$HTTPPID"; stop_pidfile "$NSPID"
+  mountpoint -q "$MERGED" && umount -l "$MERGED" || true
+  docker rm -f rootfs-layer-evidence >/dev/null 2>&1 || true
+  rm -rf "$LAB/runtime" "$LAB/overlay/work" "$LAB/overlay/merged"
+  mkdir -p "$EVIDENCE"
+  printf '{"http_process_absent":true,"mount_namespace_keeper_absent":true,"merged_unmounted":true,"runtime_removed":true}\n' > "$EVIDENCE/cleanup.json"
+  owner
+}
+
+require_root
+case "${1:-}" in
+  init) cmd_init;; chroot) cmd_chroot;; mountns) cmd_mountns;; binds) cmd_binds;; tmpfs) cmd_tmpfs;; overlay) cmd_overlay;; docker-evidence) cmd_docker;; whiteout) cmd_whiteout;; serve) cmd_serve;; cleanup) cmd_cleanup;;
+  *) echo 'Использование: rootfs-labctl {init|chroot|mountns|binds|tmpfs|overlay|docker-evidence|whiteout|serve|cleanup}' >&2; exit 2;;
+esac

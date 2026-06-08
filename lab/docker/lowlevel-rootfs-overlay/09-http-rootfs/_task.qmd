@@ -1,0 +1,7 @@
+:::{#exr-rootfs-09_http_rootfs}
+#### Проверяемое состояние
+
+Запустите долгоживущий HTTP-процесс действием `serve`, используя merged rootfs как его корень. Проверьте endpoint `127.0.0.1:18080` и сохраните ответ.
+
+Evidence должен содержать host PID, идентификатор mount namespace, mountinfo процесса и признак неизменности base layer. HTTP-ответ должен совпадать с файлом из merged view.
+:::

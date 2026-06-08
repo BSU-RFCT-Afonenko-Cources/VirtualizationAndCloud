@@ -1,0 +1,5 @@
+Docker image состоит из неизменяемых content layers, поверх которых контейнер получает writable snapshot. При классическом драйвере `overlay2` это концептуально похоже на ручные lower, upper, work и merged.
+
+В новых конфигурациях Docker может использовать containerd image store и snapshotter. Тогда host-side пути и поля GraphDriver отличаются или скрыты, хотя модель immutable image плюс writable container snapshot сохраняется.
+
+Для лаборатории не требуется менять глобальный storage driver. Безопаснее получить `docker info` и inspect image/container, а затем сопоставить наблюдаемые признаки с ручным OverlayFS.

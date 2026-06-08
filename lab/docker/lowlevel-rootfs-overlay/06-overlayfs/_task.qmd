@@ -1,0 +1,7 @@
+:::{#exr-rootfs-06_overlayfs}
+#### Проверяемое состояние
+
+Соберите overlay-rootfs действием `overlay` из каталогов `lower`, `upper`, `work` и `merged`. Измените существующий HTTP-файл через merged и создайте новый файл.
+
+Докажите copy-up: lower сохраняет исходный текст и checksum, upper содержит изменённую копию, merged показывает новую версию, а mountinfo содержит overlay mount с ожидаемыми слоями.
+:::

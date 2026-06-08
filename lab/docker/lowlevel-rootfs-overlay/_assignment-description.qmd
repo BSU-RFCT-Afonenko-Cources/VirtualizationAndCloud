@@ -1,0 +1,1 @@
+Лабораторная работа последовательно собирает минимальный root filesystem контейнера: от обычного дерева и `chroot` до отдельного mount namespace, bind mounts, tmpfs и OverlayFS. Итоговая полезная нагрузка — BusyBox HTTP server, читающий изменённый файл из writable upper layer.

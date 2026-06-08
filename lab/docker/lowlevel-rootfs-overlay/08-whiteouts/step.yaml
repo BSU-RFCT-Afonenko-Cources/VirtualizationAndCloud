@@ -1,0 +1,11 @@
+step-08:
+  title: "Whiteouts и удаление файлов"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check/check.sh
+      solution:
+        exec:
+          - solution/solve.sh

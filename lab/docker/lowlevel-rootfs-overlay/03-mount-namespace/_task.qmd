@@ -1,0 +1,7 @@
+:::{#exr-rootfs-03_mount_namespace}
+#### Проверяемое состояние
+
+Создайте отдельный mount namespace для rootfs-эксперимента действием `mountns`. Оставьте keeper-процесс работающим, чтобы namespace можно было исследовать через `/proc/<pid>/ns/mnt` и `nsenter`.
+
+Сохраните JSON со сравнением namespace и `mountinfo` изнутри. В таблице должны присутствовать bind-представление rootfs и отдельный `proc` внутри него.
+:::
