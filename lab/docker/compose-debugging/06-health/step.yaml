@@ -1,0 +1,14 @@
+health:
+  title: "Диагностика health failure"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      pre-step:
+        exec:
+          - pre-step.sh
+      check:
+        exec:
+          - check/check.sh
+      solution:
+        exec:
+          - solution/solution.sh

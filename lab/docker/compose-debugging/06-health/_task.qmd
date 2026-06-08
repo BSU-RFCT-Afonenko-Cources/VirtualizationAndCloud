@@ -1,0 +1,7 @@
+:::{#exr-compose-debugging-health}
+#### Ошибка health endpoint
+
+Сервис `api` переведён в состояние с некорректным health endpoint. Убедитесь, что основной процесс продолжает работать, изучите историю healthcheck и сохраните диагностический JSON в `evidence/health-inspect.json`.
+
+Исправьте путь проверки на существующий endpoint `/health`, пересоздайте затронутые сервисы и добейтесь состояния `healthy` для `api` и `web`.
+:::

@@ -1,0 +1,7 @@
+:::{#exr-compose-debugging-stats}
+#### Snapshot под нагрузкой
+
+Создайте умеренную серию запросов к `/api/load`, не нарушающую доступность приложения. Во время нагрузки сохраните однократный snapshot Docker stats в `evidence/stats.jsonl`.
+
+Каждая строка должна быть JSON-объектом с именем контейнера и метриками CPU, memory usage и network I/O. Evidence должно охватывать контейнеры сервисов `web`, `api` и `db`.
+:::

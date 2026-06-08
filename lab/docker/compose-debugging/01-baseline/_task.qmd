@@ -1,0 +1,9 @@
+Рабочий каталог лабораторной — `/home/ubuntu/compose-debugging`. Каталог `evidence` предназначен для структурированных результатов диагностики.
+
+:::{#exr-compose-debugging-baseline}
+#### Здоровый baseline
+
+Запустите Compose project `web-api-db` и дождитесь готовности сервисов `web`, `api` и `db`. Убедитесь, что внешний endpoint `/api/items` на порту `8080` возвращает данные.
+
+Сохраните в `evidence/baseline.json` JSON-объект с массивом `services`. Для каждого сервиса укажите поля `service`, `state` и `health`. Ожидаются три сервиса, состояние `running` и health status `healthy`.
+:::

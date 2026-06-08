@@ -1,0 +1,9 @@
+:::{#exr-compose-debugging-incident}
+#### Итоговое evidence
+
+Создайте `evidence/incident.json` с полями `incident_id`, `root_causes`, `fixes` и `verification`. Используйте идентификатор `compose-debugging-final`.
+
+`root_causes` и `fixes` должны быть непустыми массивами строк и охватывать ошибки DNS, healthcheck и ресурсную конфигурацию. Объект `verification` должен содержать числовые HTTP-коды для `health` и `items`, а также строковое поле `compose_status` со значением `healthy`.
+
+Финально подтвердите реальную доступность `/health` и `/api/items`, healthy-состояние трёх сервисов и сохранение ресурсных limits сервиса `api`.
+:::

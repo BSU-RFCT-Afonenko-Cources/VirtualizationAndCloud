@@ -1,0 +1,13 @@
+title: "Диагностика Compose-приложений: logs, exec, events, stats"
+description: _assignment-description.qmd
+time-limit-minutes: 180
+virtual-machine: "Ubuntu 26.04 LTS — Docker Lab"
+steps:
+  - 01-baseline/step.yaml
+  - 02-logs/step.yaml
+  - 03-events/step.yaml
+  - 04-stats/step.yaml
+  - 05-dns/step.yaml
+  - 06-health/step.yaml
+  - 07-resources/step.yaml
+  - 08-incident/step.yaml

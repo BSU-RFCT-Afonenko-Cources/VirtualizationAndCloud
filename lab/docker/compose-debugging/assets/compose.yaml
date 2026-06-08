@@ -1,0 +1,61 @@
+name: web-api-db
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: lab-password
+    command: ["postgres", "-c", "log_statement=all"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks: [app-net]
+
+  api:
+    build: ./api
+    environment:
+      DB_HOST: db
+      DB_NAME: app
+      DB_USER: app
+      DB_PASSWORD: lab-password
+      API_HEALTH_PATH: /health
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:8080' + os.environ.get('API_HEALTH_PATH','/health'), timeout=2)\""]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+    networks: [app-net]
+
+  web:
+    image: nginx:1.27-alpine
+    environment:
+      WEB_UPSTREAM: api:8080
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/health"]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+    networks: [app-net]
+
+networks:
+  app-net:
+    name: web-api-db-net
+
+volumes:
+  db-data:
+    name: web-api-db-data
