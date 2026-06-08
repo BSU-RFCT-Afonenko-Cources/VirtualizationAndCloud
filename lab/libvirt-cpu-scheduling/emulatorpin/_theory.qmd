@@ -1,0 +1,10 @@
+QEMU emulator thread выполняет работу, которая не относится напрямую к guest vCPU: часть device emulation, обработку событий и служебные операции. `emulatorpin` настраивается отдельно от `vcpupin`, поэтому можно развести guest compute и emulator work по разным physical CPU или оставить широкую безопасную маску.
+
+Поддержка зависит от драйвера, версии libvirt и состояния домена. В задании важно корректно зафиксировать как успешное применение `<emulatorpin>`, так и диагностируемую неподдержку без аварийного завершения.
+
+:::{#exm-lab-libvirt-cpu-scheduling-emulatorpin-set}
+```bash
+sudo -n virsh -c qemu:///system emulatorpin lab-vm
+sudo -n virsh -c qemu:///system emulatorpin lab-vm 0 --live --config
+```
+:::

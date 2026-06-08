@@ -1,0 +1,14 @@
+Перейдите в каталог `~/cpu-shares`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-cpu-shares-apply}
+#### Изменение относительного веса CPU
+
+Сохраните baseline `cpu_shares`, установите `512` и сохраните итоговый вывод:
+
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo-before.txt
+awk '/cpu_shares/ {print $3}' schedinfo-before.txt > cpu-shares-baseline.txt
+sudo -n virsh -c qemu:///system schedinfo lab-vm --set cpu_shares=512 --live --config
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo-after.txt
+```
+:::

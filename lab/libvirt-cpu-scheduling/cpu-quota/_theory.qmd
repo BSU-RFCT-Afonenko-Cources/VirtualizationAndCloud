@@ -1,0 +1,9 @@
+CPU bandwidth control использует пару `period` и `quota`. `period` задаёт окно enforcement в микросекундах, а `quota` — сколько CPU time можно израсходовать в этом окне; `-1` обычно означает отсутствие жёсткого ограничения.
+
+В libvirt `vcpu_period` и `vcpu_quota` применяются к vCPU threads домена. Небольшой учебный лимит `50000/100000` демонстрирует throttling примерно до половины одного CPU, но не должен делать VM неуправляемой.
+
+:::{#exm-lab-libvirt-cpu-scheduling-cpu-quota-set}
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm --set vcpu_period=100000 --set vcpu_quota=50000 --live --config
+```
+:::

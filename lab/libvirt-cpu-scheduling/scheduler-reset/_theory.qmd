@@ -1,0 +1,10 @@
+Финальный этап любой лаборатории по ресурсным политикам — возврат VM в нейтральное состояние. Для CPU bandwidth это обычно `quota=-1`, для shares — baseline или безопасный default, для pinning — широкая маска всех online CPU либо исходная маска из baseline.
+
+Reset нужно делать и для live, и для persistent config, иначе ограничения могут исчезнуть только до перезапуска или, наоборот, вернуться после reboot. Итоговые диагностические файлы подтверждают отсутствие жёсткого throttling и фиксируют состояние после очистки.
+
+:::{#exm-lab-libvirt-cpu-scheduling-scheduler-reset}
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm --set vcpu_quota=-1 --set emulator_quota=-1 --live --config
+sudo -n virsh -c qemu:///system vcpupin lab-vm 0 0-N --live --config
+```
+:::

@@ -1,0 +1,15 @@
+title: "Libvirt/QEMU/KVM: CPU scheduling, pinning и cputune"
+description: _assignment-description.qmd
+time-limit-minutes: 180
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - cpu-topology/step.yaml
+  - schedinfo-read/step.yaml
+  - vcpupin/step.yaml
+  - emulatorpin/step.yaml
+  - cpu-quota/step.yaml
+  - cpu-shares/step.yaml
+  - emulator-global-quota/step.yaml
+  - cpu-limit-observe/step.yaml
+  - cputune-xml/step.yaml
+  - scheduler-reset/step.yaml

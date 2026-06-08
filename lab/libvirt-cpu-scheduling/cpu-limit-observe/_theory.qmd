@@ -1,0 +1,10 @@
+CPU limits проверяют не только чтением XML, но и статистикой во времени. `cpu-stats` показывает накопленные counters домена, а `domstats --vcpu` помогает посмотреть vCPU-specific состояние; при активной нагрузке counters должны изменяться.
+
+Цель шага — не точный benchmark, а подтверждение enforcement path: перед наблюдением нужно знать текущие quota/shares, затем собрать stats до и после короткой безопасной нагрузки или паузы наблюдения.
+
+:::{#exm-lab-libvirt-cpu-scheduling-cpu-limit-observe}
+```bash
+sudo -n virsh -c qemu:///system cpu-stats lab-vm --total
+sudo -n virsh -c qemu:///system domstats lab-vm --vcpu
+```
+:::

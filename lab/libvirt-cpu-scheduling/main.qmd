@@ -1,0 +1,59 @@
+---
+metadata-files:
+  - cpu-topology/step.yaml
+  - schedinfo-read/step.yaml
+  - vcpupin/step.yaml
+  - emulatorpin/step.yaml
+  - cpu-quota/step.yaml
+  - cpu-shares/step.yaml
+  - emulator-global-quota/step.yaml
+  - cpu-limit-observe/step.yaml
+  - cputune-xml/step.yaml
+  - scheduler-reset/step.yaml
+---
+
+# Libvirt/QEMU/KVM: CPU scheduling
+
+{{< include _assignment-description.qmd >}}
+
+## Задания
+
+### {{< meta cpu-topology.title >}}
+{{< include cpu-topology/_theory.qmd >}}
+{{< include cpu-topology/_task.qmd >}}
+
+### {{< meta schedinfo-read.title >}}
+{{< include schedinfo-read/_theory.qmd >}}
+{{< include schedinfo-read/_task.qmd >}}
+
+### {{< meta vcpupin.title >}}
+{{< include vcpupin/_theory.qmd >}}
+{{< include vcpupin/_task.qmd >}}
+
+### {{< meta emulatorpin.title >}}
+{{< include emulatorpin/_theory.qmd >}}
+{{< include emulatorpin/_task.qmd >}}
+
+### {{< meta cpu-quota.title >}}
+{{< include cpu-quota/_theory.qmd >}}
+{{< include cpu-quota/_task.qmd >}}
+
+### {{< meta cpu-shares.title >}}
+{{< include cpu-shares/_theory.qmd >}}
+{{< include cpu-shares/_task.qmd >}}
+
+### {{< meta emulator-global-quota.title >}}
+{{< include emulator-global-quota/_theory.qmd >}}
+{{< include emulator-global-quota/_task.qmd >}}
+
+### {{< meta cpu-limit-observe.title >}}
+{{< include cpu-limit-observe/_theory.qmd >}}
+{{< include cpu-limit-observe/_task.qmd >}}
+
+### {{< meta cputune-xml.title >}}
+{{< include cputune-xml/_theory.qmd >}}
+{{< include cputune-xml/_task.qmd >}}
+
+### {{< meta scheduler-reset.title >}}
+{{< include scheduler-reset/_theory.qmd >}}
+{{< include scheduler-reset/_task.qmd >}}

@@ -1,0 +1,14 @@
+Перейдите в каталог `~/vcpupin`. Подготовительный скрипт сохраняет безопасную маску в `/home/ubuntu/.libvirt-cpu-scheduling/baseline.env` как `LAB_PIN_MASK`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-vcpupin-pin-vcpu0}
+#### Закрепление vCPU 0
+
+Сохраните исходный и итоговый вывод:
+
+```bash
+sudo -n virsh -c qemu:///system vcpupin lab-vm > vcpupin-before.txt
+. /home/ubuntu/.libvirt-cpu-scheduling/baseline.env
+sudo -n virsh -c qemu:///system vcpupin lab-vm 0 "$LAB_PIN_MASK" --live --config
+sudo -n virsh -c qemu:///system vcpupin lab-vm > vcpupin-after.txt
+```
+:::

@@ -1,0 +1,14 @@
+Перейдите в каталог `~/cpu-quota`.
+
+:::{#exr-lab-libvirt-cpu-scheduling-cpu-quota-apply}
+#### Настройка vCPU quota
+
+Сохраните baseline, примените период и quota, затем сохраните итоговый `schedinfo` и XML:
+
+```bash
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo-before.txt
+sudo -n virsh -c qemu:///system schedinfo lab-vm --set vcpu_period=100000 --set vcpu_quota=50000 --live --config
+sudo -n virsh -c qemu:///system schedinfo lab-vm > schedinfo-after.txt
+sudo -n virsh -c qemu:///system dumpxml lab-vm > domain.xml
+```
+:::
