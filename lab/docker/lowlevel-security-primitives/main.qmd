@@ -1,0 +1,77 @@
+---
+metadata-files:
+  - 01-baseline/step.yaml
+  - 02-capabilities/step.yaml
+  - 03-cap-sys-admin/step.yaml
+  - 04-userns-remap/step.yaml
+  - 05-rootless-docker/step.yaml
+  - 06-seccomp/step.yaml
+  - 07-no-new-privileges/step.yaml
+  - 08-readonly-rootfs/step.yaml
+  - 09-privileged-mode/step.yaml
+  - 10-hardened-container/step.yaml
+---
+
+# User namespaces, capabilities и seccomp: минимизация привилегий контейнера
+
+{{< include _assignment-description.qmd >}}
+
+## {{< meta 01-baseline.title >}}
+
+{{< include 01-baseline/_theory.qmd >}}
+
+{{< include 01-baseline/_task.qmd >}}
+
+## {{< meta 02-capabilities.title >}}
+
+{{< include 02-capabilities/_theory.qmd >}}
+
+{{< include 02-capabilities/_task.qmd >}}
+
+## {{< meta 03-cap-sys-admin.title >}}
+
+{{< include 03-cap-sys-admin/_theory.qmd >}}
+
+{{< include 03-cap-sys-admin/_task.qmd >}}
+
+## {{< meta 04-userns-remap.title >}}
+
+{{< include 04-userns-remap/_theory.qmd >}}
+
+{{< include 04-userns-remap/_task.qmd >}}
+
+## {{< meta 05-rootless-docker.title >}}
+
+{{< include 05-rootless-docker/_theory.qmd >}}
+
+{{< include 05-rootless-docker/_task.qmd >}}
+
+## {{< meta 06-seccomp.title >}}
+
+{{< include 06-seccomp/_theory.qmd >}}
+
+{{< include 06-seccomp/_task.qmd >}}
+
+## {{< meta 07-no-new-privileges.title >}}
+
+{{< include 07-no-new-privileges/_theory.qmd >}}
+
+{{< include 07-no-new-privileges/_task.qmd >}}
+
+## {{< meta 08-readonly-rootfs.title >}}
+
+{{< include 08-readonly-rootfs/_theory.qmd >}}
+
+{{< include 08-readonly-rootfs/_task.qmd >}}
+
+## {{< meta 09-privileged-mode.title >}}
+
+{{< include 09-privileged-mode/_theory.qmd >}}
+
+{{< include 09-privileged-mode/_task.qmd >}}
+
+## {{< meta 10-hardened-container.title >}}
+
+{{< include 10-hardened-container/_theory.qmd >}}
+
+{{< include 10-hardened-container/_task.qmd >}}

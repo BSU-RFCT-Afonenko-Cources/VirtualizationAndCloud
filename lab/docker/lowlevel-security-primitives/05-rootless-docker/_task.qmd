@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-05}
+## Rootless Docker как архитектурный вариант
+
+Зафиксируйте, rootful или rootless Docker используется в лабораторной среде. Evidence должен включать Docker security options и структурированную классификацию режима.
+:::

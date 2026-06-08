@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-01}
+## Baseline privileges контейнера
+
+Запустите диагностический контейнер `sec-demo` в базовой конфигурации и сохраните machine-readable evidence о UID/GID, effective/bounding capabilities, состоянии seccomp, user namespace, mount namespace и устройствах контейнера.
+:::

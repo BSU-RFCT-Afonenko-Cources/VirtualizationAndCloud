@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-04}
+## User namespace remap
+
+Проверьте, доступна ли в среде user namespace remap/rootless-модель. Сохраните mapping evidence из `/proc/<pid>/uid_map` и `/proc/<pid>/gid_map` либо корректное machine-readable unsupported-evidence.
+:::

@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-10}
+## Итоговый hardened-контейнер
+
+Приведите сервис `sec-demo` к hardened-состоянию. Сохраните итоговый inspect JSON и health evidence работающего HTTP endpoint.
+:::

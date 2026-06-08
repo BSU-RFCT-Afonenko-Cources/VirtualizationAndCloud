@@ -1,0 +1,5 @@
+::: {#exr-lowlevel-security-07}
+## no-new-privileges
+
+Продемонстрируйте различие поведения тестового setuid helper при запуске контейнера с no-new-privileges и без него. Сохраните SecurityOpt и вывод helper в evidence.
+:::

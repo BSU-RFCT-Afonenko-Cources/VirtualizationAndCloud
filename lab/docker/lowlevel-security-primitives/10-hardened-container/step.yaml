@@ -1,0 +1,14 @@
+10-hardened-container:
+  title: "Итоговый hardened-контейнер"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - /workspace/VirtualizationAndCloud/lab/docker/lowlevel-security-primitives/assets/prepare.sh
+    check:
+      exec:
+        - check/check.sh
+    solution:
+      exec:
+        - solution/solution.sh

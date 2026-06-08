@@ -1,0 +1,15 @@
+title: "User namespaces, capabilities и seccomp: минимизация привилегий контейнера"
+description: _assignment-description.qmd
+time-limit-minutes: 180
+virtual-machine: "Ubuntu Docker Lab"
+steps:
+  - 01-baseline/step.yaml
+  - 02-capabilities/step.yaml
+  - 03-cap-sys-admin/step.yaml
+  - 04-userns-remap/step.yaml
+  - 05-rootless-docker/step.yaml
+  - 06-seccomp/step.yaml
+  - 07-no-new-privileges/step.yaml
+  - 08-readonly-rootfs/step.yaml
+  - 09-privileged-mode/step.yaml
+  - 10-hardened-container/step.yaml
