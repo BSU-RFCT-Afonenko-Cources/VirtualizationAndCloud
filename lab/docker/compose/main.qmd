@@ -1,0 +1,77 @@
+---
+metadata-files:
+    - 01-project/step.yaml
+    - 02-services/step.yaml
+    - 03-networks/step.yaml
+    - 04-volumes/step.yaml
+    - 05-environment/step.yaml
+    - 06-healthcheck/step.yaml
+    - 07-dependencies/step.yaml
+    - 08-scale/step.yaml
+    - 09-update/step.yaml
+    - 10-cleanup/step.yaml
+---
+
+# Docker Compose для многоконтейнерного приложения
+
+{{< include _assignment-description.qmd >}}
+
+## 01. Структура проекта
+
+{{< include 01-project/_theory.qmd >}}
+
+{{< include 01-project/_task.qmd >}}
+
+## 02. Сервисы
+
+{{< include 02-services/_theory.qmd >}}
+
+{{< include 02-services/_task.qmd >}}
+
+## 03. Networks
+
+{{< include 03-networks/_theory.qmd >}}
+
+{{< include 03-networks/_task.qmd >}}
+
+## 04. Volumes
+
+{{< include 04-volumes/_theory.qmd >}}
+
+{{< include 04-volumes/_task.qmd >}}
+
+## 05. Environment
+
+{{< include 05-environment/_theory.qmd >}}
+
+{{< include 05-environment/_task.qmd >}}
+
+## 06. Healthcheck
+
+{{< include 06-healthcheck/_theory.qmd >}}
+
+{{< include 06-healthcheck/_task.qmd >}}
+
+## 07. Порядок зависимостей
+
+{{< include 07-dependencies/_theory.qmd >}}
+
+{{< include 07-dependencies/_task.qmd >}}
+
+## 08. Scale stateless service
+
+{{< include 08-scale/_theory.qmd >}}
+
+{{< include 08-scale/_task.qmd >}}
+
+## 09. Update version
+
+{{< include 09-update/_theory.qmd >}}
+
+{{< include 09-update/_task.qmd >}}
+
+## 10. Compose cleanup
+
+{{< include 10-cleanup/_theory.qmd >}}
+
+{{< include 10-cleanup/_task.qmd >}}

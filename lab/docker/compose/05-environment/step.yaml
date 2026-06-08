@@ -1,0 +1,11 @@
+05-environment:
+  title: "05. Environment"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

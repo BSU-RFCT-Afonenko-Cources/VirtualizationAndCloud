@@ -5,9 +5,16 @@ start_date: "2026-05-01"
 end_date: "2026-06-30"
 assignments:
     - ubuntu/assignment.yaml
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
     - libvirt-storage-volumes/_assignment.yaml
     - docker/lowlevel-security-primitives/assignment.yaml
     - docker/compose-debugging/assignment.yaml
+||||||| 6df1dcb
+
+=======
+    - docker/compose/assignment.yaml
+
+>>>>>>> remotes/origin/codex/create-docker-compose-lab-for-multi-container-app

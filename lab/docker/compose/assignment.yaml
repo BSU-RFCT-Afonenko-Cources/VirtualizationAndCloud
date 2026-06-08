@@ -1,0 +1,15 @@
+title: "Docker Compose для многоконтейнерного приложения"
+description: _assignment-description.qmd
+time-limit-minutes: 180
+virtual-machine: "Ubuntu — Docker Lab"
+steps:
+  - 01-project/step.yaml
+  - 02-services/step.yaml
+  - 03-networks/step.yaml
+  - 04-volumes/step.yaml
+  - 05-environment/step.yaml
+  - 06-healthcheck/step.yaml
+  - 07-dependencies/step.yaml
+  - 08-scale/step.yaml
+  - 09-update/step.yaml
+  - 10-cleanup/step.yaml

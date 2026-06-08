@@ -1,0 +1,14 @@
+01-project:
+  title: "01. Структура проекта"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      pre-step:
+        exec:
+          - prepare.sh
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh
