@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+
+service_exists edge || fail "complete step 03 first"
+python3 - <<'PY' > /home/ubuntu/swarm-networking/isolation.json
+import json
+import subprocess
+
+def ports(service):
+    raw = subprocess.check_output([
+        "docker", "service", "inspect", "--format", "{{json .Endpoint.Spec.Ports}}", service
+    ], text=True).strip()
+    specs = json.loads(raw) if raw and raw != "null" else []
+    return sorted(item["PublishedPort"] for item in specs)
+
+print(json.dumps({
+    "edge_published_ports": ports("edge"),
+    "api_published_ports": ports("api"),
+    "db_published_ports": ports("db"),
+}, indent=2, sort_keys=True))
+PY
+chown ubuntu:ubuntu /home/ubuntu/swarm-networking/isolation.json

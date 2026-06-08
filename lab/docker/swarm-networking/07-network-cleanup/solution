@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+
+for service_name in edge api db; do
+    if service_exists "$service_name"; then
+        docker service rm "$service_name" >/dev/null
+    fi
+done
+for attempt in $(seq 1 60); do
+    remaining_tasks=0
+    for service_name in edge api db; do
+        if [ -n "$(docker ps -a --filter "label=com.docker.swarm.service.name=$service_name" --format '{{.ID}}')" ]; then
+            remaining_tasks=1
+        fi
+    done
+    [ "$remaining_tasks" = "0" ] && break
+    sleep 1
+done
+[ "$remaining_tasks" = "0" ] || fail "service task containers were not removed"
+for network_name in lab-front lab-back; do
+    if network_exists "$network_name"; then
+        docker network rm "$network_name" >/dev/null
+    fi
+done

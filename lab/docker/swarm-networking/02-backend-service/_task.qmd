@@ -1,0 +1,17 @@
+:::{#exr-swarm-backend-services}
+#### Backend-сервисы
+
+Разверните по одной реплике сервисов `db` и `api` с меткой `course.lab=swarm-networking`.
+
+- `db` использует образ `redis:7-alpine`, подключён только к `lab-back`, имеет healthcheck и хранит по ключу `lab:marker` значение `overlay-db-ok`.
+- `api` использует образ `swarm-lab-api:1.0`, подключён только к `lab-back`, получает имя базы через переменную `DB_HOST=db`, слушает порт `8080` внутри сети и имеет healthcheck.
+- Ни один backend-сервис пока не публикует порт на узле.
+:::
+
+:::{#exr-swarm-service-dns}
+#### Свидетельство service discovery
+
+Из работающей задачи `api` разрешите имя `db` средствами Python и сохраните результат в `/home/ubuntu/swarm-networking/service-dns.json`.
+
+JSON должен содержать строки `queried_service` со значением `db`, `from_service` со значением `api` и непустой массив `addresses` с полученными IP-адресами.
+:::

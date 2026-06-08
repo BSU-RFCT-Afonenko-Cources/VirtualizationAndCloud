@@ -1,0 +1,14 @@
+vip-vs-dnsrr:
+  title: "VIP vs DNSRR awareness"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - ../prepare
+    check:
+      exec:
+        - check
+    solution:
+      exec:
+        - solution

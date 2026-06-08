@@ -1,0 +1,14 @@
+edge-service:
+  title: "Edge service"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - ../prepare
+    check:
+      exec:
+        - check
+    solution:
+      exec:
+        - solution

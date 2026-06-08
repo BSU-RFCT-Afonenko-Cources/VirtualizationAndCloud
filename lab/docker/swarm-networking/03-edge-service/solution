@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+
+service_exists api || fail "complete step 02 first"
+if ! service_exists edge; then
+    docker service create --name edge --label "$LAB_LABEL" --network lab-front --network lab-back --replicas 1 \
+        --env API_HOST=api --env API_PORT=8080 \
+        --publish published=8080,target=8080,protocol=tcp,mode=ingress \
+        --health-cmd 'python -c "import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8080/health\", timeout=2)"' \
+        --health-interval 5s --health-timeout 3s --health-retries 12 \
+        swarm-lab-edge:1.0 >/dev/null
+fi
+wait_service edge
+wait_healthy edge

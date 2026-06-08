@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+readonly EVIDENCE=/home/ubuntu/swarm-networking/service-dns.json
+
+for service_name in db api; do
+    service_exists "$service_name" || fail "service $service_name does not exist"
+    [ "$(docker service inspect --format '{{index .Spec.Labels "course.lab"}}' "$service_name")" = "swarm-networking" ] || fail "$service_name has no lab label"
+    [ "$(docker service inspect --format '{{len .Endpoint.Spec.Ports}}' "$service_name")" = "0" ] || fail "$service_name must not publish ports"
+    wait_service "$service_name"
+    wait_healthy "$service_name"
+done
+[ "$(docker service inspect --format '{{.Spec.TaskTemplate.ContainerSpec.Image}}' db | cut -d@ -f1)" = "redis:7-alpine" ] || fail "db must use redis:7-alpine"
+[ "$(docker service inspect --format '{{.Spec.TaskTemplate.ContainerSpec.Image}}' api | cut -d@ -f1)" = "swarm-lab-api:1.0" ] || fail "api must use swarm-lab-api:1.0"
+[ "$(docker service inspect --format '{{.Spec.Mode.Replicated.Replicas}}' db)" = "1" ] || fail "db must have one replica"
+[ "$(docker service inspect --format '{{.Spec.Mode.Replicated.Replicas}}' api)" = "1" ] || fail "api must have one replica"
+assert_service_network db lab-back
+assert_service_network api lab-back
+! docker service inspect --format '{{range .Spec.TaskTemplate.Networks}}{{println .Target}}{{end}}' db | while read -r id; do [ -n "$id" ] && docker network inspect --format '{{.Name}}' "$id"; done | grep -Fxq lab-front || fail "db must not join lab-front"
+! docker service inspect --format '{{range .Spec.TaskTemplate.Networks}}{{println .Target}}{{end}}' api | while read -r id; do [ -n "$id" ] && docker network inspect --format '{{.Name}}' "$id"; done | grep -Fxq lab-front || fail "api must not join lab-front"
+[ "$(docker service inspect --format '{{range .Spec.TaskTemplate.ContainerSpec.Env}}{{println .}}{{end}}' api | grep -c '^DB_HOST=db$')" = "1" ] || fail "api must use DB_HOST=db"
+
+[ -f "$EVIDENCE" ] || fail "service-dns.json is missing"
+python3 - <<'PY'
+import json
+path = "/home/ubuntu/swarm-networking/service-dns.json"
+with open(path, encoding="utf-8") as source:
+    data = json.load(source)
+assert data.get("queried_service") == "db"
+assert data.get("from_service") == "api"
+assert isinstance(data.get("addresses"), list) and data["addresses"]
+assert all(isinstance(address, str) and address for address in data["addresses"])
+PY
+api_container=$(service_container api)
+[ -n "$api_container" ] || fail "api task container not found"
+db_container=$(service_container db)
+[ -n "$db_container" ] || fail "db task container not found"
+[ "$(docker exec "$db_container" redis-cli --raw GET lab:marker)" = "$MARKER" ] || fail "db marker is missing"
+docker exec "$api_container" python -c 'import socket; assert socket.getaddrinfo("db", 6379)'
+printf 'OK: backend services share lab-back and api resolves db.\n'

@@ -1,0 +1,11 @@
+:::{#exr-swarm-isolation-evidence}
+#### Доказательство отсутствия публикаций
+
+Исследуйте endpoint specifications сервисов `edge`, `api` и `db`. Сохраните результат в `/home/ubuntu/swarm-networking/isolation.json` со следующей структурой:
+
+- `edge_published_ports` — массив опубликованных портов `edge`;
+- `api_published_ports` — массив опубликованных портов `api`;
+- `db_published_ports` — массив опубликованных портов `db`.
+
+Ожидается, что первый массив содержит только `8080`, а два backend-массива пусты. Данные должны быть получены из текущих спецификаций Swarm services.
+:::

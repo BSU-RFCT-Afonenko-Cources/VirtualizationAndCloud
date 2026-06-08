@@ -20,6 +20,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -55,6 +56,10 @@ assignments:
 =======
     - docker/lowlevel-network-primitives/assignment.yaml
 >>>>>>> remotes/origin/codex/create-lab-on-low-level-network-primitives
+||||||| 6df1dcb
+=======
+    - docker/swarm-networking/assignment.yaml
+>>>>>>> remotes/origin/codex/create-lab-on-swarm-overlay-networks
 
 =======
     - docker/compose/assignment.yaml

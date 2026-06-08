@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+readonly EVIDENCE=/home/ubuntu/swarm-networking/endpoint-mode.json
+
+service_exists api || fail "service api does not exist"
+actual_mode=$(docker service inspect --format '{{.Spec.EndpointSpec.Mode}}' api)
+[ "$actual_mode" = "vip" ] || fail "api endpoint mode must remain vip"
+[ -f "$EVIDENCE" ] || fail "endpoint-mode.json is missing"
+ACTUAL_MODE="$actual_mode" python3 - <<'PY'
+import json
+import os
+with open("/home/ubuntu/swarm-networking/endpoint-mode.json", encoding="utf-8") as source:
+    data = json.load(source)
+assert data.get("service") == "api"
+assert data.get("endpoint_mode") == os.environ["ACTUAL_MODE"]
+PY
+printf 'OK: api EndpointSpec mode is vip.\n'

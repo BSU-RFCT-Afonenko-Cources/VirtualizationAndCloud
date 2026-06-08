@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+
+service_exists edge || fail "complete step 03 first"
+curl --fail --silent --show-error --retry 20 --retry-delay 1 --retry-all-errors \
+    http://127.0.0.1:8080/ > /home/ubuntu/swarm-networking/response.json
+chown ubuntu:ubuntu /home/ubuntu/swarm-networking/response.json

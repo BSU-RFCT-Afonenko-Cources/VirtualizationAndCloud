@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /opt/swarm-networking-lab/lib.sh
+
+for network_name in lab-front lab-back; do
+    network_exists "$network_name" || fail "network $network_name does not exist"
+    [ "$(docker network inspect --format '{{.Driver}}' "$network_name")" = "overlay" ] || fail "$network_name must use overlay driver"
+    [ "$(docker network inspect --format '{{.Attachable}}' "$network_name")" = "false" ] || fail "$network_name must not be attachable"
+    [ "$(docker network inspect --format '{{.Scope}}' "$network_name")" = "swarm" ] || fail "$network_name must have swarm scope"
+done
+printf 'OK: lab-front and lab-back are non-attachable overlay networks.\n'
