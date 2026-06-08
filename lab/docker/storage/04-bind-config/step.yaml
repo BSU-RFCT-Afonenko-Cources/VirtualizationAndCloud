@@ -1,0 +1,17 @@
+bind-config:
+  title: "Bind mount для конфигурации"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+    pre-step:
+      exec:
+        - pre-step.sh
+    check:
+      exec:
+        - check.sh
+    solution:
+      exec:
+        - solution.sh
+    post-step:
+      exec:
+        - post-step.sh

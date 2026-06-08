@@ -1,0 +1,7 @@
+:::{#exr-storage-restore}
+### Восстановление в новый volume
+
+Сначала проверьте checksum backup. Создайте volume `lab-data-restore` с label `course.lab=storage` и восстановите в него архив с помощью успешно завершившегося контейнера `storage-restore` с label `course.role=restore`.
+
+Запустите `storage-api-restore` с восстановленным volume и той же read-only конфигурацией. Опубликуйте API только на `127.0.0.1:8081`, добавьте healthcheck и label `course.lab=storage`. Сервис должен стать healthy, а `/records` — вернуть три seed-записи из нового volume.
+:::

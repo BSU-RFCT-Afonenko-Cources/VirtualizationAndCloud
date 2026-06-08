@@ -1,0 +1,7 @@
+:::{#exr-storage-named-volume}
+### Docker-managed хранилище
+
+Создайте volume `lab-data` с label `course.lab=storage`. Запустите stateful-контейнер `storage-db` из `alpine:3.20`, подключив volume в `/data` с правом записи. Контейнер должен оставаться в состоянии running.
+
+Проверьте средствами Docker, что volume имеет непустой host mountpoint, а у контейнера mount имеет тип `volume`, источник `lab-data` и назначение `/data`.
+:::

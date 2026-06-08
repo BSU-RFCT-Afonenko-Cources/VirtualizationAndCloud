@@ -1,0 +1,13 @@
+title: "Volumes, bind mounts и stateful-контейнеры"
+description: _assignment-description.qmd
+time-limit-minutes: 120
+virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+steps:
+  - 01-ephemeral-layer/step.yaml
+  - 02-named-volume/step.yaml
+  - 03-persistence/step.yaml
+  - 04-bind-config/step.yaml
+  - 05-seed-data/step.yaml
+  - 06-volume-backup/step.yaml
+  - 07-volume-restore/step.yaml
+  - 08-cleanup-volumes/step.yaml

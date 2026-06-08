@@ -1,0 +1,12 @@
+:::{#exr-storage-ephemeral}
+### Потеря данных writable layer
+
+В каталоге `/home/ubuntu/storage/evidence` создайте JSON-файлы `ephemeral-before.json` и `ephemeral-after.json`.
+
+1. Запустите контейнер `storage-ephemeral` из образа `alpine:3.20` без mounts и создайте внутри `/tmp/ephemeral-marker` со значением `writable-layer-data`.
+2. В evidence «до» зафиксируйте идентификатор контейнера, значение marker и признак его наличия.
+3. Удалите контейнер и создайте новый контейнер с тем же именем и образом, также без mounts.
+4. В evidence «после» зафиксируйте новый идентификатор и отсутствие marker.
+
+Оба evidence-файла должны быть валидными JSON-документами. Новый контейнер оставьте запущенным для проверки.
+:::
