@@ -1,0 +1,3 @@
+`docker stack deploy` применяет stack-файл к Swarm. Менеджер создаёт или обновляет services, overlay networks и связанные ресурсы, а scheduler запускает tasks. Повторный deploy той же модели идемпотентен: Swarm приводит фактическое состояние к описанному desired state.
+
+Успешное создание service ещё не означает готовность приложения. Следует проверять количество running tasks, health контейнеров и доступность опубликованного endpoint. Имена stack services имеют вид `shop_<service>`.

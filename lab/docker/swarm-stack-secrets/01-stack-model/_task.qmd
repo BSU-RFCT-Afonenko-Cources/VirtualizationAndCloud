@@ -1,0 +1,11 @@
+:::{#exr-swarm-stack-model}
+### Подготовьте модель stack
+
+В каталоге `/home/ubuntu/shop` создайте Compose-совместимый stack-файл `stack.yml` для stack `shop`.
+
+Модель должна описывать сервисы `web`, `api`, `db`, overlay-сеть `backend` и named volume `db_data`. Используйте подготовленные локальные образы `shop-api:v1`, `nginx:1.27-alpine` и `postgres:16-alpine`. Опубликуйте `web` на порту `8080` в режиме ingress.
+
+Объявите внешние объекты `shop_db_password_v1`, `shop_nginx_v1` и `shop_api_config_v1`. Подключите secret к `api` и `db`, nginx-config — к `web`, API-config — к `api`. Для всех сервисов задайте по одной реплике, restart policy, update policy и health check. Пароль не должен находиться в environment stack-файла.
+
+Проверяемый результат — валидная декларативная модель; разворачивать stack на этом шаге не нужно.
+:::
