@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-10}
+#### Проверяемое состояние
+
+Запустите долгоживущий контейнер с именем `ns-docker-demo`. Получите его host PID через Docker inspect и не останавливайте контейнер до проверки.
+
+Создайте `10-docker.json` с полями `container`, `running`, `host_pid`, `image` и объектом `namespaces`, содержащим handles контейнерного процесса. Сопоставьте их с host process namespaces.
+:::

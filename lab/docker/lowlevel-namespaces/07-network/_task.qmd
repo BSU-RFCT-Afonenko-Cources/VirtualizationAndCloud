@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-07}
+#### Проверяемое состояние
+
+Создайте именованный network namespace `ns-lab-net`, настройте loopback и veth-связь с адресом `10.203.0.2/24` на стороне namespace. Запустите там `ns-http` на TCP-порту 8080.
+
+Сохраните PID в `state/07-network.pid`. В `07-network.json` запишите `namespace`, `pid`, массивы `interfaces` и `routes`, а также `http_url` и `http_response`. Endpoint должен отвечать из network namespace.
+:::

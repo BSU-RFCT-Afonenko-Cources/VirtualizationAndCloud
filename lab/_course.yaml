@@ -17,6 +17,7 @@ assignments:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
@@ -74,3 +75,8 @@ assignments:
 =======
     - docker/basic-containers/assignment.yaml
 >>>>>>> remotes/origin/codex/create-lab-on-docker-container-management
+||||||| 6df1dcb
+
+=======
+    - docker/lowlevel-namespaces/assignment.yaml
+>>>>>>> remotes/origin/codex/create-lab-on-linux-namespaces-for-containers

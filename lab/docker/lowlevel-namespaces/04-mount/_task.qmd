@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-04}
+#### Проверяемое состояние
+
+Создайте долгоживущий процесс с отдельным mount namespace. Внутри него разместите временную файловую систему на `/home/ubuntu/ns-lab/mnt/private`, не допуская появления этого mount на хосте.
+
+Сохраните PID в `state/04-mount.pid`, а в `04-mount.json` — поля `pid`, `mountpoint`, `inside_present`, `host_present` и относящиеся к точке строки `inside_mountinfo`.
+:::

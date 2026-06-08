@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+out="${1:-/home/ubuntu/ns-lab/evidence/ns-demo.json}"
+mode="${2:-diagnostic}"
+/usr/bin/mkdir -p "$(/usr/bin/dirname "$out")"
+python_code='import json, os, pathlib, socket, sys
+out=sys.argv[1]; mode=sys.argv[2]
+status={}
+for line in pathlib.Path("/proc/self/status").read_text().splitlines():
+    if line.startswith(("Pid:","NSpid:","Uid:","Gid:","Seccomp:")):
+        k,v=line.split(":",1); status[k]=v.strip()
+data={"mode":mode,"pid":os.getpid(),"ppid":os.getppid(),"hostname":socket.gethostname(),"status":status,"namespaces":{p.name:os.readlink(p) for p in pathlib.Path("/proc/self/ns").iterdir()},"cgroup":pathlib.Path("/proc/self/cgroup").read_text().splitlines()}
+pathlib.Path(out).write_text(json.dumps(data,indent=2)+"\n")'
+/usr/bin/python3 -c "$python_code" "$out" "$mode"
+child=""
+term() {
+  if [[ -n "$child" ]]; then /bin/kill "$child" 2>/dev/null || true; fi
+  exit 0
+}
+trap term TERM INT
+while :; do
+  /usr/bin/sleep 30 & child=$!
+  wait "$child" || true
+  child=""
+done

@@ -1,0 +1,8 @@
+title: "10. Связь Docker container inspect с namespaces"
+theory: _theory.qmd
+task: _task.qmd
+actions:
+  - host:
+      pre-step: pre-step.bash
+      check: check.bash
+      solution: solution.bash

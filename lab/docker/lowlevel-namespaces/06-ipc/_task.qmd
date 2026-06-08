@@ -1,0 +1,7 @@
+:::{#exr-docker-lowlevel-namespaces-06}
+#### Проверяемое состояние
+
+Создайте System V message queue в отдельном IPC namespace и удерживайте процесс namespace живым. Запишите host PID процесса в `state/06-ipc.pid`.
+
+Evidence `06-ipc.json` должен содержать `pid`, `ipc_handle`, `queue_id`, `inside_visible` и `host_visible`. Очередь должна быть видна внутри и отсутствовать при host-side inspection.
+:::
