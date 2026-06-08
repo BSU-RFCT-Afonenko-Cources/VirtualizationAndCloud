@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+/usr/bin/test -d /home/ubuntu/netlab/evidence
+/usr/bin/test -d /home/ubuntu/netlab/run

@@ -1,0 +1,5 @@
+:::{#exr-netlab-namespaces}
+Создайте именованные network namespaces `net-api-ns` и `net-client-ns`, включите loopback в каждом и сохраните `/home/ubuntu/netlab/evidence/02-namespaces.json` с именами, состоянием loopback и идентификаторами сетевых namespace.
+
+Проверяемое состояние: обе entries существуют, их network namespace отличается от host namespace, а `lo` находится в состоянии UP.
+:::

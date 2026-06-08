@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+f="$EVIDENCE/10-cleanup.json"; json_valid "$f"
+! ip netns list | grep -Eq '^(net-api-ns|net-client-ns)\b' || fail "namespace leak"
+for i in br-netlab netlab-api-h netlab-client-h; do test ! -e "/sys/class/net/$i" || fail "$i leak"; done
+! iptables-save | grep -q 'netlab-' || fail "firewall rule leak"
+test ! -e /etc/netns/net-client-ns || fail "resolver file leak"
+if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+ ! docker network inspect netlab-docker >/dev/null 2>&1 || fail "Docker lab network leak"
+ jq -r '.docker_networks[]?.Name' "$EVIDENCE/01-baseline.json" | while read -r n; do test -z "$n" || docker network inspect "$n" >/dev/null || fail "baseline Docker network $n was removed"; done
+fi
+jq -e '.stage=="cleanup" and .matching_firewall_rules==""' "$f" >/dev/null || fail "cleanup evidence"
+pass "lab objects are removed and baseline Docker networks remain"

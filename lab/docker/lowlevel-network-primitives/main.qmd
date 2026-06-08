@@ -1,0 +1,79 @@
+---
+metadata-files:
+  - 01-host-baseline/step.yaml
+  - 02-network-namespaces/step.yaml
+  - 03-veth-pairs/step.yaml
+  - 04-linux-bridge/step.yaml
+  - 05-routing/step.yaml
+  - 06-nat-published-port/step.yaml
+  - 07-dns-discovery/step.yaml
+  - 08-docker-bridge/step.yaml
+  - 09-network-isolation/step.yaml
+  - 10-cleanup/step.yaml
+---
+
+# Network namespace, veth, bridge и NAT без Docker
+
+{{< include _description.md >}}
+
+## Шаги
+
+### Инвентаризация сетевого стека хоста
+
+{{< include 01-host-baseline/_theory.qmd >}}
+
+{{< include 01-host-baseline/_task.qmd >}}
+
+### Создание двух network namespaces
+
+{{< include 02-network-namespaces/_theory.qmd >}}
+
+{{< include 02-network-namespaces/_task.qmd >}}
+
+### veth pair как virtual cable
+
+{{< include 03-veth-pairs/_theory.qmd >}}
+
+{{< include 03-veth-pairs/_task.qmd >}}
+
+### Linux bridge как L2 segment
+
+{{< include 04-linux-bridge/_theory.qmd >}}
+
+{{< include 04-linux-bridge/_task.qmd >}}
+
+### Маршрутизация и default gateway
+
+{{< include 05-routing/_theory.qmd >}}
+
+{{< include 05-routing/_task.qmd >}}
+
+### NAT и published-port аналогия
+
+{{< include 06-nat-published-port/_theory.qmd >}}
+
+{{< include 06-nat-published-port/_task.qmd >}}
+
+### DNS/service discovery без Docker
+
+{{< include 07-dns-discovery/_theory.qmd >}}
+
+{{< include 07-dns-discovery/_task.qmd >}}
+
+### Сравнение с Docker bridge
+
+{{< include 08-docker-bridge/_theory.qmd >}}
+
+{{< include 08-docker-bridge/_task.qmd >}}
+
+### Сетевая изоляция
+
+{{< include 09-network-isolation/_theory.qmd >}}
+
+{{< include 09-network-isolation/_task.qmd >}}
+
+### Очистка сетевых объектов
+
+{{< include 10-cleanup/_theory.qmd >}}
+
+{{< include 10-cleanup/_task.qmd >}}

@@ -1,0 +1,5 @@
+:::{#exr-netlab-cleanup}
+Остановите HTTP-процессы и контейнеры лаборатории, удалите `netlab-docker`, оба network namespaces, veth, `br-netlab`, namespace-specific resolver files и все firewall/NAT rules лаборатории.
+
+Сохраните `/home/ubuntu/netlab/evidence/10-cleanup.json` с финальными interfaces, namespaces, matching firewall rules и Docker networks. Проверка ожидает отсутствие лабораторных объектов и наличие стандартных Docker networks, которые присутствовали в baseline.
+:::

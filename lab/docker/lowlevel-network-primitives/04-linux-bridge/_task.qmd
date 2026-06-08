@@ -1,0 +1,5 @@
+:::{#exr-netlab-bridge}
+Создайте bridge `br-netlab`, назначьте ему `10.203.0.1/24`, подключите host-концы обеих veth-пар и приведите bridge ports в рабочее состояние.
+
+Подтвердите двустороннюю связность между `10.203.0.10` и `10.203.0.20`. Сохраните bridge membership, FDB/links и результат controlled connectivity в `/home/ubuntu/netlab/evidence/04-bridge.json`.
+:::

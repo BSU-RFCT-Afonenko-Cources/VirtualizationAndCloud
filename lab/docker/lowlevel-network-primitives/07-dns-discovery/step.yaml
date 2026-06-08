@@ -1,0 +1,18 @@
+netlab-07:
+  title: "DNS/service discovery без Docker"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+    pre-step:
+      exec:
+        - prepare
+        - pre-step
+    check:
+      exec:
+        - check
+    solution:
+      exec:
+        - solution
+    post-step:
+      exec:
+        - post-step

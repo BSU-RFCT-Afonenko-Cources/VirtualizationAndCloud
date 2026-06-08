@@ -1,0 +1,5 @@
+:::{#exr-netlab-nat}
+Настройте DNAT для обращений хоста к `10.203.0.1:18080`, направляя их к API `10.203.0.10:8080`. Не открывайте дополнительные published ports и не изменяйте default route хоста.
+
+Сохраните NAT ruleset и результат HTTP-проверки published endpoint в `/home/ubuntu/netlab/evidence/06-nat.json`. Ответ должен идентифицировать процесс `net-api` и namespace `net-api-ns`.
+:::

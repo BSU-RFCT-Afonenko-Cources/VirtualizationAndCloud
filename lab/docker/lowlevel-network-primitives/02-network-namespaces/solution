@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+for ns in net-api-ns net-client-ns; do
+  ns_exists "$ns" || ip netns add "$ns"
+  ip -n "$ns" link set lo up
+done
+jq -n --arg stage namespaces   --arg api_ns "$(stat -Lc %d:%i /run/netns/net-api-ns)" --arg client_ns "$(stat -Lc %d:%i /run/netns/net-client-ns)"   --argjson api_lo "$(ip -n net-api-ns -j link show lo)" --argjson client_lo "$(ip -n net-client-ns -j link show lo)"   '{stage:$stage,namespaces:[{name:"net-api-ns",id:$api_ns,loopback:$api_lo[0]},{name:"net-client-ns",id:$client_ns,loopback:$client_lo[0]}]}' >"$EVIDENCE/02-namespaces.json"
+chown ubuntu:ubuntu "$EVIDENCE/02-namespaces.json"

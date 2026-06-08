@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+f="$EVIDENCE/04-bridge.json"; json_valid "$f"
+ip -j -details link show br-netlab | jq -e '.[0].linkinfo.info_kind=="bridge"' >/dev/null || fail "bridge missing"
+for i in netlab-api-h netlab-client-h; do test "$(basename "$(readlink /sys/class/net/$i/master)")" = br-netlab || fail "$i not enslaved"; done
+ip netns exec net-api-ns ping -c 1 -W 2 10.203.0.20 >/dev/null || fail "API to client connectivity"
+ip netns exec net-client-ns ping -c 1 -W 2 10.203.0.10 >/dev/null || fail "client to API connectivity"
+pass "bridge membership and L2 connectivity are correct"

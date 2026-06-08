@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+iptables -t mangle -C OUTPUT -p tcp -d 10.203.0.1 --dport 18080 -m comment --comment netlab-mark-published -j MARK --set-mark 0x203 2>/dev/null || iptables -t mangle -I OUTPUT 1 -p tcp -d 10.203.0.1 --dport 18080 -m comment --comment netlab-mark-published -j MARK --set-mark 0x203
+iptables -C OUTPUT -p tcp -d 10.203.0.10 --dport 8080 -m mark --mark 0x203 -m comment --comment netlab-allow-published -j ACCEPT 2>/dev/null || iptables -I OUTPUT 1 -p tcp -d 10.203.0.10 --dport 8080 -m mark --mark 0x203 -m comment --comment netlab-allow-published -j ACCEPT
+iptables -C OUTPUT -p tcp -d 10.203.0.10 --dport 8080 -m comment --comment netlab-block-direct -j REJECT --reject-with tcp-reset 2>/dev/null || iptables -I OUTPUT 2 -p tcp -d 10.203.0.10 --dport 8080 -m comment --comment netlab-block-direct -j REJECT --reject-with tcp-reset
+published=false; direct_blocked=false
+curl --noproxy '*' -fsS --max-time 3 http://10.203.0.1:18080/health >/dev/null && published=true
+if ! curl --noproxy '*' -fsS --max-time 2 http://10.203.0.10:8080/health >/dev/null 2>&1; then direct_blocked=true; fi
+client=false; ip netns exec net-client-ns curl --noproxy '*' -fsS --max-time 3 http://api.internal:8080/health >/dev/null && client=true
+jq -n --arg stage isolation --argjson published "$published" --argjson direct_blocked "$direct_blocked" --argjson client "$client" --arg rules "$(iptables-save | grep netlab- || true)" '{stage:$stage,tests:{published:$published,direct_host_to_api_blocked:$direct_blocked,client_to_api:$client},rules:$rules}' >"$EVIDENCE/09-isolation.json"
+chown ubuntu:ubuntu "$EVIDENCE/09-isolation.json"

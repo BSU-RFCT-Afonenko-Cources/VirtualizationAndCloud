@@ -21,6 +21,7 @@ book:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/libvirt/main.qmd
 ||||||| f589c88
 =======
@@ -62,6 +63,10 @@ book:
 =======
         - lab/docker/basic-containers/main.qmd
 >>>>>>> remotes/origin/codex/create-lab-on-docker-container-management
+||||||| 6df1dcb
+=======
+        - lab/docker/lowlevel-network-primitives/main.qmd
+>>>>>>> remotes/origin/codex/create-lab-on-low-level-network-primitives
 
   appendices:
     - part: "Командные оболочки"

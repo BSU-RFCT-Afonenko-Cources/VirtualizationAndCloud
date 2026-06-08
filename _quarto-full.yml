@@ -53,6 +53,7 @@ book:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         - lab/docker/compose/main.qmd
 ||||||| 6df1dcb
 =======
@@ -66,6 +67,10 @@ book:
 =======
         - lab/docker/capstone-compose/main.qmd
 >>>>>>> remotes/origin/codex/create-docker/compose-capstone-lab-assignment
+||||||| 6df1dcb
+=======
+        - lab/docker/lowlevel-network-primitives/main.qmd
+>>>>>>> remotes/origin/codex/create-lab-on-low-level-network-primitives
         - lab/libvirt/single/main.qmd
 
     - part: "Задания. Практика"

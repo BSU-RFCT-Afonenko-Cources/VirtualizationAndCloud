@@ -1,0 +1,5 @@
+:::{#exr-netlab-routing}
+Добавьте в оба namespace default route через `10.203.0.1`, не изменяя default routes хоста. Запустите HTTP API на `10.203.0.10:8080` и дополнительный client endpoint на `10.203.0.20:8081` как долгоживущие процессы.
+
+Добейтесь обращения client namespace к API по IP и сохраните routes, PID, ссылки `/proc/<pid>/ns/net` и HTTP-результат в `/home/ubuntu/netlab/evidence/05-routing.json`.
+:::

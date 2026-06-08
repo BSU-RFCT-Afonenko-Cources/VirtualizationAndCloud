@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+for spec in  'filter OUTPUT -p tcp -d 10.203.0.10 --dport 8080 -m mark --mark 0x203 -m comment --comment netlab-allow-published -j ACCEPT'  'filter OUTPUT -p tcp -d 10.203.0.10 --dport 8080 -m comment --comment netlab-block-direct -j REJECT --reject-with tcp-reset'  'mangle OUTPUT -p tcp -d 10.203.0.1 --dport 18080 -m comment --comment netlab-mark-published -j MARK --set-mark 0x203'  'nat OUTPUT -p tcp -d 10.203.0.1 --dport 18080 -m comment --comment netlab-published -j DNAT --to-destination 10.203.0.10:8080'; do
+ set -- $spec; table=$1; chain=$2; shift 2; while iptables -t "$table" -C "$chain" "$@" 2>/dev/null; do iptables -t "$table" -D "$chain" "$@"; done
+done
+for svc in api client; do if test -s /home/ubuntu/netlab/run/$svc.pid; then kill "$(cat /home/ubuntu/netlab/run/$svc.pid)" 2>/dev/null || true; fi; done
+command -v docker >/dev/null 2>&1 && docker rm -f netlab-docker-api netlab-docker-client >/dev/null 2>&1 || true
+command -v docker >/dev/null 2>&1 && docker network rm netlab-docker >/dev/null 2>&1 || true
+ip netns del net-api-ns 2>/dev/null || true
+ip netns del net-client-ns 2>/dev/null || true
+ip link del br-netlab 2>/dev/null || true
+ip link del netlab-api-h 2>/dev/null || true
+ip link del netlab-client-h 2>/dev/null || true
+rm -rf /etc/netns/net-client-ns
+links=$(mktemp); namespaces=$(mktemp); networks=$(mktemp)
+ip -j link show >"$links"; ip netns list | jq -Rsc 'split("\n")|map(select(length>0))' >"$namespaces"
+if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then docker network ls --format '{{json .}}' | jq -s . >"$networks"; else printf '[]\n' >"$networks"; fi
+jq -n --arg stage cleanup --slurpfile interfaces "$links" --slurpfile namespaces "$namespaces" --slurpfile docker_networks "$networks" --arg rules "$(iptables-save | grep netlab- || true)" '{stage:$stage,interfaces:$interfaces[0],namespaces:$namespaces[0],matching_firewall_rules:$rules,docker_networks:$docker_networks[0]}' >"$EVIDENCE/10-cleanup.json"
+chown ubuntu:ubuntu "$EVIDENCE/10-cleanup.json"; rm -f "$links" "$namespaces" "$networks"

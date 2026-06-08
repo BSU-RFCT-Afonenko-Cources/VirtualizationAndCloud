@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+f="$EVIDENCE/08-docker.json"; json_valid "$f"
+docker network inspect netlab-docker >/dev/null || fail "Docker network"
+for c in netlab-docker-api netlab-docker-client; do test "$(docker inspect -f '{{.State.Running}}' "$c")" = true || fail "$c not running"; done
+bridge_name=$(jq -r .linux_bridge "$f"); ip -j -details link show "$bridge_name" | jq -e '.[0].linkinfo.info_kind=="bridge"' >/dev/null || fail "Docker Linux bridge"
+test "$(ip -j link show master "$bridge_name" | jq length)" -ge 2 || fail "Docker bridge veth ports"
+docker exec netlab-docker-client wget -qO- http://api:8000 >/dev/null || fail "Docker DNS/HTTP"
+pass "Docker bridge maps to Linux bridge and veth ports"

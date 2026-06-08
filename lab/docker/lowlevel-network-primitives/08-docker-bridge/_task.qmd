@@ -1,0 +1,5 @@
+:::{#exr-netlab-docker-bridge}
+Создайте пользовательскую Docker bridge network `netlab-docker`, запустите в ней долгоживущие контейнеры `netlab-docker-api` и `netlab-docker-client` и обеспечьте обращение клиента к API по Docker DNS-имени.
+
+Сохраните Docker network inspect, container inspect, имя Linux bridge, host-side veth признаки и HTTP-результат в `/home/ubuntu/netlab/evidence/08-docker.json`. Ручная сеть `br-netlab` при этом должна продолжать работать.
+:::

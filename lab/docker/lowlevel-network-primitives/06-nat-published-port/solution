@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+iptables -t nat -C OUTPUT -p tcp -d 10.203.0.1 --dport 18080 -m comment --comment netlab-published -j DNAT --to-destination 10.203.0.10:8080 2>/dev/null || iptables -t nat -A OUTPUT -p tcp -d 10.203.0.1 --dport 18080 -m comment --comment netlab-published -j DNAT --to-destination 10.203.0.10:8080
+response=$(curl --noproxy '*' -fsS --max-time 3 http://10.203.0.1:18080/health)
+jq -n --arg stage nat --argjson response "$response" --arg rules "$(iptables-save -t nat | grep netlab- || true)" '{stage:$stage,published:{listen:"10.203.0.1:18080",target:"10.203.0.10:8080",response:$response},nat_rules:$rules}' >"$EVIDENCE/06-nat.json"
+chown ubuntu:ubuntu "$EVIDENCE/06-nat.json"

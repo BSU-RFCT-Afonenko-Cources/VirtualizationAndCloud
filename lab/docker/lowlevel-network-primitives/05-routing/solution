@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+EVIDENCE=/home/ubuntu/netlab/evidence
+mkdir -p "$EVIDENCE" /home/ubuntu/netlab/run
+fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+pass() { printf 'PASS: %s\n' "$*"; }
+json_valid() { jq -e . "$1" >/dev/null 2>&1 || fail "invalid or missing evidence: $1"; }
+ns_exists() { ip netns list | awk '{print $1}' | grep -Fxq "$1"; }
+ip -n net-api-ns route replace default via 10.203.0.1 dev netlab-api-n
+ip -n net-client-ns route replace default via 10.203.0.1 dev netlab-client-n
+cat >/home/ubuntu/netlab/run/api.py <<'PYAPI'
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import json, socket
+class H(BaseHTTPRequestHandler):
+ def do_GET(self):
+  body=json.dumps({"service":"net-api","namespace":"net-api-ns","host":socket.gethostname(),"path":self.path}).encode()
+  self.send_response(200); self.send_header("Content-Type","application/json"); self.send_header("Content-Length",str(len(body))); self.end_headers(); self.wfile.write(body)
+ def log_message(self,*args): pass
+HTTPServer(("10.203.0.10",8080),H).serve_forever()
+PYAPI
+cat >/home/ubuntu/netlab/run/client.py <<'PYCLIENT'
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import json
+class H(BaseHTTPRequestHandler):
+ def do_GET(self):
+  body=json.dumps({"service":"net-client","namespace":"net-client-ns"}).encode()
+  self.send_response(200); self.send_header("Content-Length",str(len(body))); self.end_headers(); self.wfile.write(body)
+ def log_message(self,*args): pass
+HTTPServer(("10.203.0.20",8081),H).serve_forever()
+PYCLIENT
+for svc in api client; do test ! -s /home/ubuntu/netlab/run/$svc.pid || kill "$(cat /home/ubuntu/netlab/run/$svc.pid)" 2>/dev/null || true; done
+ip netns exec net-api-ns python3 /home/ubuntu/netlab/run/api.py >/home/ubuntu/netlab/run/api.log 2>&1 & echo $! >/home/ubuntu/netlab/run/api.pid
+ip netns exec net-client-ns python3 /home/ubuntu/netlab/run/client.py >/home/ubuntu/netlab/run/client.log 2>&1 & echo $! >/home/ubuntu/netlab/run/client.pid
+sleep 1
+response=$(ip netns exec net-client-ns curl --noproxy '*' -fsS --max-time 3 http://10.203.0.10:8080/health)
+api_pid=$(cat /home/ubuntu/netlab/run/api.pid); client_pid=$(cat /home/ubuntu/netlab/run/client.pid)
+jq -n --arg stage routing --argjson api_routes "$(ip -n net-api-ns -j route)" --argjson client_routes "$(ip -n net-client-ns -j route)" --argjson response "$response" --arg api_pid "$api_pid" --arg client_pid "$client_pid" --arg api_ns "$(readlink /proc/$api_pid/ns/net)" --arg client_ns "$(readlink /proc/$client_pid/ns/net)" '{stage:$stage,routes:{api:$api_routes,client:$client_routes},processes:[{service:"net-api",pid:($api_pid|tonumber),netns:$api_ns},{service:"net-client",pid:($client_pid|tonumber),netns:$client_ns}],http:$response}' >"$EVIDENCE/05-routing.json"
+chown -R ubuntu:ubuntu /home/ubuntu/netlab
