@@ -1,0 +1,11 @@
+restore-instance:
+  title: "Restore после удаления runtime instance"
+  task: _task.qmd
+  theory: _theory.qmd
+  actions:
+      check:
+        exec:
+          - check.sh
+      solution:
+        exec:
+          - solution.sh

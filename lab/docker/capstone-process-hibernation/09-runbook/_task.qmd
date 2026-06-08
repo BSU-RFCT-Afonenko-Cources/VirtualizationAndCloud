@@ -1,0 +1,7 @@
+:::{#exr-hib-runbook}
+### Эксплуатационный runbook
+
+Создайте `runbook.yaml` или `runbook.json` без готовых команд. Включите выбранный режим, определения `freeze`, `checkpoint`, `restore` и `backup`, перечень сохранённых artifacts, обнаруженные ограничения среды, предусловия, recovery-процедуру как последовательность проверяемых состояний и критерии успеха.
+
+Runbook должен ссылаться на фактически существующие evidence и artifacts этой работы. Укажите финальные `instance_id`, Docker container ID и progress, а также отдельно отметьте, является ли выполненное восстановление process-level или application-level.
+:::

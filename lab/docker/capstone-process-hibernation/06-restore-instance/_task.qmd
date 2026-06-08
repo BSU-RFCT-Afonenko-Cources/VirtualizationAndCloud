@@ -1,0 +1,7 @@
+:::{#exr-hib-restore}
+### Восстановление без исходного runtime instance
+
+Удалите исходный контейнер и восстановите доступный workflow из artifact предыдущего шага. Для CRIU-mode используйте checkpoint/restore; для доказанного fallback-mode пересоздайте runtime instance и восстановите логическое состояние приложения.
+
+Endpoint должен снова отвечать, новый Docker container ID должен отличаться от сохранённого в pre-checkpoint evidence, а прогресс не должен начинаться с нуля или быть меньше checkpoint-прогресса. Сохраните `evidence/restore.json` с режимом, старыми и новыми идентификаторами, checkpoint- и restored-progress, PID, результатом проверки `/proc/<pid>/ns` и классификацией механизма восстановления.
+:::

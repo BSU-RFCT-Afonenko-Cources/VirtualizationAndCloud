@@ -1,0 +1,6 @@
+Решение первого пункта
+
+``` fish
+{{< include install/solution.fish >}}
+```
+

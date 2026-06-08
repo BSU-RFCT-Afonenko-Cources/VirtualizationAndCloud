@@ -1,0 +1,7 @@
+:::{#exr-hib-checkpoint}
+### Дисковый artifact состояния
+
+Подготовьте workload к согласованному сохранению и попытайтесь создать checkpoint с именем `hib-checkpoint`. Если среда поддерживает CRIU и Docker checkpoint/restore, сохраните настоящий checkpoint и evidence его структуры и размера.
+
+Fallback допускается только после диагностики среды. В этом случае создайте `checkpoints/fallback-state.json` и `evidence/checkpoint-diagnostics.json`, где указаны режим `fallback`, результаты проверки Docker, CRIU, ядра, cgroup и конкретная причина невозможности checkpoint. В обоих режимах создайте `evidence/checkpoint.json` с режимом, размером artifact, исходными `instance_id` и `progress`, а также списком artifact-файлов.
+:::

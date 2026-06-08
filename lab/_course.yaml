@@ -5,14 +5,8 @@ start_date: "2026-05-01"
 end_date: "2026-06-30"
 assignments:
     - ubuntu/assignment.yaml
-<<<<<<< ours
     - libvirt/assignment.yaml
     - libvirt-networking/_assignment.yaml
     - libvirt-storage-pools/_assignment.yaml
     - libvirt-storage-volumes/_assignment.yaml
-
-||||||| base
-
-=======
     - docker/lowlevel-security-primitives/assignment.yaml
->>>>>>> theirs
