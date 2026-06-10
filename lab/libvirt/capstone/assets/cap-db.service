@@ -1,10 +1,10 @@
 [Unit]
 Description=Capstone SQLite HTTP database
-After=network-online.target srv-cap\x2ddb.mount
+After=network-online.target home-ubuntu-capstone-07\x2ddatabase-data.mount
 Wants=network-online.target
 [Service]
-Environment=CAP_DB_PATH=/srv/cap-db/orders.sqlite3
-ExecStart=/usr/bin/python3 /opt/capstone/db_service.py
+Environment=CAP_DB_PATH=/home/ubuntu/capstone/07-database/data/orders.sqlite3
+ExecStart=/usr/bin/python3 /home/ubuntu/capstone/07-database/db_service.py
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target

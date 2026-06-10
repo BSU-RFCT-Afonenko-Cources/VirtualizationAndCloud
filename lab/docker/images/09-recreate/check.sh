@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PREVIOUS_FILE=/var/lib/image-lab/previous-container-id
+PREVIOUS_FILE=/home/ubuntu/image-lab/state/previous-container-id
 [[ -f "$PREVIOUS_FILE" ]] || { echo "Не сохранён ID исходного контейнера"; exit 1; }
 PREVIOUS=$(cat "$PREVIOUS_FILE")
 CURRENT=$(docker container inspect --format '{{.Id}}' image-lab-api)

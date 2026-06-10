@@ -10,7 +10,7 @@ r=ET.parse(sys.argv[1]).getroot()
 if r.findtext('name')!='lab-xml-001': raise SystemExit('Ошибка: неверное имя snapshot')
 d=next((x for x in r.findall('./disks/disk') if x.get('name')=='vda'),None)
 if d is None or d.get('snapshot')!='external': raise SystemExit('Ошибка: vda не external')
-if d.find('source') is None or d.find('source').get('file')!='/tmp/libvirt-snapshots/lab-xml-001.qcow2': raise SystemExit('Ошибка: неверный source')
+if d.find('source') is None or d.find('source').get('file')!='/home/ubuntu/snapshot-create-xml/libvirt-snapshots/lab-xml-001.qcow2': raise SystemExit('Ошибка: неверный source')
 PYXML
 if /usr/bin/test -s "$DIR/create-result.txt"; then
   /usr/bin/virsh -c qemu:///system snapshot-info lab-vm lab-xml-001 >/dev/null 2>&1 || fail 'заявлен успех, но metadata lab-xml-001 отсутствует'

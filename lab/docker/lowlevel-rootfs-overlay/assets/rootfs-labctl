@@ -48,8 +48,8 @@ cmd_init() {
   stop_pidfile "$HTTPPID"; stop_pidfile "$NSPID"
   mountpoint -q "$MERGED" && umount -l "$MERGED" || true
   rm -rf "$BASE" "$LAB/overlay" "$LAB/host-config" "$LAB/host-data" "$LAB/runtime"
-  mkdir -p "$BASE"/{bin,etc,proc,sys,dev,tmp,run,var/www,opt/config,opt/data} "$LAB/overlay"/{upper,work,merged} "$LAB/host-config" "$LAB/host-data" "$LAB/runtime"
-  chmod 1777 "$BASE/tmp"
+  mkdir -p "$BASE"/{bin,etc,proc,sys,dev,run,var/www,home,home/ubuntu,home/ubuntu/rootfs-lab,home/ubuntu/rootfs-lab/tmp,home/ubuntu/rootfs-lab/config,home/ubuntu/rootfs-lab/data} "$LAB/overlay"/{upper,work,merged} "$LAB/host-config" "$LAB/host-data" "$LAB/runtime"
+  chmod 1777 "$BASE/home/ubuntu/rootfs-lab/tmp"
   if command -v busybox >/dev/null 2>&1; then
     copy_binary "$(command -v busybox)" "$BASE/bin/busybox"
   elif command -v docker >/dev/null 2>&1; then
@@ -75,7 +75,7 @@ cmd_init() {
   chown -R root:root "$BASE"
   find "$BASE" -type f -exec chmod a-w {} +
   find "$BASE" -type d -exec chmod 0555 {} +
-  chmod 1777 "$BASE/tmp"
+  chmod 1777 "$BASE/home/ubuntu/rootfs-lab/tmp"
   ln -s ../rootfs-lab-base "$LOWER"
   rm -f "$EVIDENCE"/*
   (cd "$BASE" && find . -printf '%M %u:%g %p\n' | LC_ALL=C sort) > "$EVIDENCE/base-inventory.txt"
@@ -111,11 +111,11 @@ cmd_mountns() {
 cmd_binds() {
   mountns_alive || cmd_mountns
   local pid; pid=$(cat "$NSPID")
-  nsenter -t "$pid" -m mount --bind "$LAB/host-config" "$LAB/runtime/rootfs/opt/config"
-  nsenter -t "$pid" -m mount -o remount,bind,ro "$LAB/runtime/rootfs/opt/config"
-  nsenter -t "$pid" -m mount --bind "$LAB/host-data" "$LAB/runtime/rootfs/opt/data"
-  if nsenter -t "$pid" -m sh -c "printf denied >> '$LAB/runtime/rootfs/opt/config/app.env'" 2>/dev/null; then ro=false; else ro=true; fi
-  nsenter -t "$pid" -m sh -c "printf 'rw-write\\n' >> '$LAB/runtime/rootfs/opt/data/events.log'"
+  nsenter -t "$pid" -m mount --bind "$LAB/host-config" "$LAB/runtime/rootfs/home/ubuntu/rootfs-lab/config"
+  nsenter -t "$pid" -m mount -o remount,bind,ro "$LAB/runtime/rootfs/home/ubuntu/rootfs-lab/config"
+  nsenter -t "$pid" -m mount --bind "$LAB/host-data" "$LAB/runtime/rootfs/home/ubuntu/rootfs-lab/data"
+  if nsenter -t "$pid" -m sh -c "printf denied >> '$LAB/runtime/rootfs/home/ubuntu/rootfs-lab/config/app.env'" 2>/dev/null; then ro=false; else ro=true; fi
+  nsenter -t "$pid" -m sh -c "printf 'rw-write\\n' >> '$LAB/runtime/rootfs/home/ubuntu/rootfs-lab/data/events.log'"
   nsenter -t "$pid" -m cat /proc/self/mountinfo > "$EVIDENCE/binds.mountinfo"
   printf '{"readonly_write_denied":%s,"readwrite_write_succeeded":true}\n' "$ro" > "$EVIDENCE/binds.json"
   owner
@@ -123,14 +123,14 @@ cmd_binds() {
 
 cmd_tmpfs() {
   mountns_alive || cmd_mountns
-  local pid; pid=$(cat "$NSPID") target=$LAB/runtime/rootfs/run/lab
+  local pid; pid=$(cat "$NSPID") target=$LAB/runtime/rootfs/home/ubuntu/rootfs-lab/run
   nsenter -t "$pid" -m mkdir -p "$target"
   nsenter -t "$pid" -m mount -t tmpfs -o size=4m,nosuid,nodev tmpfs "$target"
   nsenter -t "$pid" -m sh -c "printf ephemeral > '$target/process.state'"
   nsenter -t "$pid" -m umount "$target"
   nsenter -t "$pid" -m mount -t tmpfs -o size=4m,nosuid,nodev tmpfs "$target"
   local absent=false; nsenter -t "$pid" -m test ! -e "$target/process.state" && absent=true
-  printf '{"mount_type":"tmpfs","state_absent_after_remount":%s,"base_artifact_absent":%s}\n' "$absent" "$(test ! -e "$BASE/run/lab/process.state" && echo true || echo false)" > "$EVIDENCE/tmpfs.json"
+  printf '{"mount_type":"tmpfs","state_absent_after_remount":%s,"base_artifact_absent":%s}\n' "$absent" "$(test ! -e "$BASE/home/ubuntu/rootfs-lab/run/process.state" && echo true || echo false)" > "$EVIDENCE/tmpfs.json"
   nsenter -t "$pid" -m cat /proc/self/mountinfo > "$EVIDENCE/tmpfs.mountinfo"
   owner
 }

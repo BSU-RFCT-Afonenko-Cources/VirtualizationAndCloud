@@ -3,14 +3,14 @@ set -euo pipefail
 VM=lab-vm
 DIR=/home/ubuntu/backup-exclude-disk
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
-/usr/bin/install -d -m 0777 /tmp/libvirt-backups
+/usr/bin/install -d -m 0777 /home/ubuntu/backup-exclude-disk/libvirt-backups
 /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system domblklist "$VM" --details >"$DIR/domblklist.txt" 2>&1 || /usr/bin/printf 'domblklist failed\n' >"$DIR/domblklist.txt"
 /usr/bin/cat >"$DIR/exclude-disk.xml" <<'XML'
 <domainbackup mode='push'>
   <disks>
     <disk name='vda' backup='yes' type='file'>
       <driver type='qcow2'/>
-      <target file='/tmp/libvirt-backups/lab-vm-vda-exclude-demo.qcow2'/>
+      <target file='/home/ubuntu/backup-exclude-disk/libvirt-backups/lab-vm-vda-exclude-demo.qcow2'/>
     </disk>
     <disk name='vdb' backup='no'/>
   </disks>
@@ -22,4 +22,4 @@ if /usr/bin/grep -Eq '(^|[[:space:]])vdb([[:space:]]|$)' "$DIR/domblklist.txt"; 
 else
   /usr/bin/printf 'vdb is absent; template only\n' >"$DIR/diagnostics.txt"
 fi
-/usr/bin/chown -R ubuntu:ubuntu "$DIR" /tmp/libvirt-backups
+/usr/bin/chown -R ubuntu:ubuntu "$DIR" /home/ubuntu/backup-exclude-disk/libvirt-backups

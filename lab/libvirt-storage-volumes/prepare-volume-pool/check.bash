@@ -9,5 +9,5 @@ TYPE=$(/usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-dumpxml --xpath 's
 TARGET=$(/usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-dumpxml --xpath 'string(/pool/target/path)' lab-pool)
 /usr/bin/test "$STATE" = "running" || fail "lab-pool должен быть active/running"
 /usr/bin/test "$TYPE" = "dir" || fail "lab-pool должен иметь type dir"
-/usr/bin/test "$TARGET" = "/tmp/libvirt-lab-pool" || fail "target path должен быть /tmp/libvirt-lab-pool"
-/usr/bin/test -d /tmp/libvirt-lab-pool || fail "target path недоступен"
+/usr/bin/test "$TARGET" = "/home/ubuntu/prepare-volume-pool/libvirt-lab-pool" || fail "target path должен быть /home/ubuntu/prepare-volume-pool/libvirt-lab-pool"
+/usr/bin/test -d /home/ubuntu/prepare-volume-pool/libvirt-lab-pool || fail "target path недоступен"

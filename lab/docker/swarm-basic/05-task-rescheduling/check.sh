@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-BASELINE=/var/lib/swarm-basic-task-before.txt
-CURRENT=/tmp/swarm-basic-task-current.txt
+BASELINE=/home/ubuntu/swarm-basic/swarm-basic-task-before.txt
+CURRENT=/home/ubuntu/swarm-basic/swarm-basic-task-current.txt
 [ -s "$BASELINE" ] || { echo 'Task baseline is missing; reopen the step'; exit 1; }
 docker service ps --filter desired-state=running --format '{{.ID}}' lab-api | sort > "$CURRENT"
 [ "$(wc -l < "$CURRENT")" -eq 3 ] || { echo 'Service has not recovered to three desired tasks'; exit 1; }

@@ -7,7 +7,9 @@ for path in "$PROJECT/app.py" "$PROJECT/requirements.txt" "$PROJECT/VERSION" "$I
   [[ -f "$path" ]] || { echo "Отсутствует $path"; exit 1; }
 done
 
-TMP=$(mktemp -d /tmp/image-context-check.XXXXXX)
+TMP_PARENT=/home/ubuntu/image-lab/tmp
+mkdir -p "$TMP_PARENT"
+TMP=$(mktemp -d "$TMP_PARENT/image-context-check.XXXXXX")
 IMAGE=image-lab-context-check:temporary
 cleanup() {
   docker image rm -f "$IMAGE" >/dev/null 2>&1 || true

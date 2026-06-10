@@ -2,14 +2,14 @@
 set -euo pipefail
 CONTAINER=security-api
 [ "$(docker inspect -f '{{.HostConfig.ReadonlyRootfs}}' "$CONTAINER" 2>/dev/null)" = true ] || { echo "Root filesystem не переведена в read-only"; exit 1; }
-TMPFS=$(docker inspect -f '{{index .HostConfig.Tmpfs "/var/lib/hardened-api"}}' "$CONTAINER")
+TMPFS=$(docker inspect -f '{{index .HostConfig.Tmpfs "/home/ubuntu/docker-security/state"}}' "$CONTAINER")
 for option in rw noexec nosuid nodev uid=10001 gid=10001; do
   [[ ",$TMPFS," == *",$option,"* ]] || { echo "Для tmpfs отсутствует параметр $option"; exit 1; }
 done
-if docker exec "$CONTAINER" python -c "open('/opt/app/probe','w')" >/dev/null 2>&1; then
+if docker exec "$CONTAINER" python -c "open('/home/ubuntu/docker-security/app/probe','w')" >/dev/null 2>&1; then
   echo "Запись в rootfs неожиданно разрешена"; exit 1
 fi
-docker exec "$CONTAINER" python -c "open('/var/lib/hardened-api/probe','w').write('ok')"
+docker exec "$CONTAINER" python -c "open('/home/ubuntu/docker-security/state/probe','w').write('ok')"
 python3 - <<'PY'
 import json, urllib.request
 for path in ('/health', '/api/status'):

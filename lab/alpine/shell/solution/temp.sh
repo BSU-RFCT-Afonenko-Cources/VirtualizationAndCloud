@@ -1,2 +1,2 @@
-echo "data string" > /tmp/tempfile
-cat /tmp/tempfile
+echo "data string" > /home/ubuntu/shell/tempfile
+cat /home/ubuntu/shell/tempfile

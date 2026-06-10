@@ -2,8 +2,8 @@
 set -euo pipefail
 DIR=/home/ubuntu/dual-network-vm
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
-/usr/bin/sudo -n /usr/bin/virsh -c qemu:///system dumpxml lab-vm --config >/var/tmp/lab-vm-config.xml
-if ! /usr/bin/grep -q '52:54:00:aa:20:01' /var/tmp/lab-vm-config.xml; then
+/usr/bin/sudo -n /usr/bin/virsh -c qemu:///system dumpxml lab-vm --config >/home/ubuntu/dual-network-vm/lab-vm-config.xml
+if ! /usr/bin/grep -q '52:54:00:aa:20:01' /home/ubuntu/dual-network-vm/lab-vm-config.xml; then
   if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system domstate lab-vm | /usr/bin/grep -Eq 'running|работает'; then
     /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system attach-interface lab-vm --type network --source lab-private --model virtio --mac 52:54:00:aa:20:01 --live --config
   else

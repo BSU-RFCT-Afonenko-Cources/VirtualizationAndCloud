@@ -3,7 +3,7 @@ set -euo pipefail
 DIR=/home/ubuntu/network-cleanup
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
 for mac in 52:54:00:aa:10:01 52:54:00:aa:20:01; do
-  if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system dumpxml lab-vm --config >/var/tmp/lab-vm-clean.xml 2>/dev/null && /usr/bin/grep -q "$mac" /var/tmp/lab-vm-clean.xml; then
+  if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system dumpxml lab-vm --config >/home/ubuntu/network-cleanup/lab-vm-clean.xml 2>/dev/null && /usr/bin/grep -q "$mac" /home/ubuntu/network-cleanup/lab-vm-clean.xml; then
     /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system detach-interface lab-vm --type network --mac "$mac" --config || true
   fi
   if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system domstate lab-vm 2>/dev/null | /usr/bin/grep -Eq 'running|работает'; then

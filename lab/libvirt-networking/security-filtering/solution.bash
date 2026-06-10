@@ -12,7 +12,7 @@ if port is None:
     port = ET.SubElement(root, 'port')
 port.set('isolated', 'yes')
 ET.indent(root, space='  ')
-ET.ElementTree(root).write('/var/tmp/lab-private-isolated.xml', encoding='unicode')
+ET.ElementTree(root).write('/home/ubuntu/security-filtering/lab-private-isolated.xml', encoding='unicode')
 PY
 if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system net-info lab-private | /usr/bin/grep -Eq 'Active:[[:space:]]+yes|Активна:[[:space:]]+да|Активна:[[:space:]]+yes'; then
   /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system net-destroy lab-private
@@ -20,7 +20,7 @@ if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system net-info lab-private | /usr
 else
   active=0
 fi
-/usr/bin/sudo -n /usr/bin/virsh -c qemu:///system net-define /var/tmp/lab-private-isolated.xml
+/usr/bin/sudo -n /usr/bin/virsh -c qemu:///system net-define /home/ubuntu/security-filtering/lab-private-isolated.xml
 if /usr/bin/test "$active" = 1; then /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system net-start lab-private; fi
 /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system net-dumpxml lab-private >"$DIR/after.xml"
 /usr/bin/chown -R ubuntu:ubuntu "$DIR"

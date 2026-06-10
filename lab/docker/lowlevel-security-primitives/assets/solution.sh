@@ -20,7 +20,7 @@ case "$STEP" in
   docker rm -f lsp-baseline >/dev/null 2>&1 || true
   docker run -d --name lsp-baseline sec-demo:lab >/dev/null
   inspect_status lsp-baseline baseline
-  docker exec lsp-baseline python3 /opt/sec-demo/sec_demo.py diag > "$E/baseline-diag.json"
+  docker exec lsp-baseline python3 /home/ubuntu/lowlevel-security-primitives/sec-demo/sec_demo.py diag > "$E/baseline-diag.json"
   docker exec lsp-baseline find /dev -maxdepth 2 -printf '%y %p %m\n' > "$E/baseline-devices.txt"
   ;;
 02)
@@ -32,8 +32,8 @@ case "$STEP" in
   ;;
 03)
   docker rm -f lsp-sysadmin >/dev/null 2>&1 || true
-  docker run --rm --cap-drop ALL sec-demo:lab python3 /opt/sec-demo/sec_demo.py diag > "$E/sysadmin-denied.json"
-  docker run --name lsp-sysadmin --cap-drop ALL --cap-add SYS_ADMIN --security-opt seccomp=unconfined --security-opt apparmor=unconfined sec-demo:lab python3 /opt/sec-demo/sec_demo.py diag > "$E/sysadmin-allowed.json" || true
+  docker run --rm --cap-drop ALL sec-demo:lab python3 /home/ubuntu/lowlevel-security-primitives/sec-demo/sec_demo.py diag > "$E/sysadmin-denied.json"
+  docker run --name lsp-sysadmin --cap-drop ALL --cap-add SYS_ADMIN --security-opt seccomp=unconfined --security-opt apparmor=unconfined sec-demo:lab python3 /home/ubuntu/lowlevel-security-primitives/sec-demo/sec_demo.py diag > "$E/sysadmin-allowed.json" || true
   docker inspect lsp-sysadmin > "$E/sysadmin-inspect.json"
   docker rm -f lsp-sysadmin >/dev/null
   ;;
@@ -70,8 +70,8 @@ PY
   docker run -d --name lsp-seccomp-custom --security-opt "seccomp=$P" sec-demo:lab >/dev/null
   inspect_status lsp-seccomp-default seccomp-default
   inspect_status lsp-seccomp-custom seccomp-custom
-  docker exec lsp-seccomp-default python3 /opt/sec-demo/sec_demo.py diag > "$E/seccomp-default-diag.json"
-  docker exec lsp-seccomp-custom python3 /opt/sec-demo/sec_demo.py diag > "$E/seccomp-custom-diag.json"
+  docker exec lsp-seccomp-default python3 /home/ubuntu/lowlevel-security-primitives/sec-demo/sec_demo.py diag > "$E/seccomp-default-diag.json"
+  docker exec lsp-seccomp-custom python3 /home/ubuntu/lowlevel-security-primitives/sec-demo/sec_demo.py diag > "$E/seccomp-custom-diag.json"
   ;;
 07)
   docker rm -f lsp-nnp-off lsp-nnp-on >/dev/null 2>&1 || true
@@ -84,20 +84,20 @@ PY
   ;;
 08)
   docker rm -f lsp-readonly >/dev/null 2>&1 || true
-  docker run -d --name lsp-readonly --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --tmpfs /run/sec-demo:rw,noexec,nosuid,size=16m sec-demo:lab >/dev/null
+  docker run -d --name lsp-readonly --read-only --tmpfs /home/ubuntu/lowlevel-security-primitives/tmp:rw,noexec,nosuid,size=16m --tmpfs /home/ubuntu/lowlevel-security-primitives/run:rw,noexec,nosuid,size=16m sec-demo:lab >/dev/null
   inspect_status lsp-readonly readonly
-  docker exec lsp-readonly python3 /opt/sec-demo/sec_demo.py diag > "$E/readonly-diag.json"
+  docker exec lsp-readonly python3 /home/ubuntu/lowlevel-security-primitives/sec-demo/sec_demo.py diag > "$E/readonly-diag.json"
   ;;
 09)
   docker rm -f lsp-privileged >/dev/null 2>&1 || true
-  docker run --name lsp-privileged --privileged sec-demo:lab python3 /opt/sec-demo/sec_demo.py diag > "$E/privileged-diag.json" || true
+  docker run --name lsp-privileged --privileged sec-demo:lab python3 /home/ubuntu/lowlevel-security-primitives/sec-demo/sec_demo.py diag > "$E/privileged-diag.json" || true
   docker inspect lsp-privileged > "$E/privileged-inspect.json"
   docker rm -f lsp-privileged >/dev/null
-  docker run --rm sec-demo:lab python3 /opt/sec-demo/sec_demo.py diag > "$E/ordinary-diag.json"
+  docker run --rm sec-demo:lab python3 /home/ubuntu/lowlevel-security-primitives/sec-demo/sec_demo.py diag > "$E/ordinary-diag.json"
   ;;
 10)
   docker rm -f lsp-hardened >/dev/null 2>&1 || true
-  docker run -d --name lsp-hardened -p 127.0.0.1::8080 --user 10001:10001 --cap-drop ALL --security-opt no-new-privileges --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --tmpfs /run/sec-demo:rw,noexec,nosuid,size=16m --health-cmd 'python3 -c "import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8080/health\")"' --health-interval 2s --health-timeout 2s --health-retries 10 sec-demo:lab >/dev/null
+  docker run -d --name lsp-hardened -p 127.0.0.1::8080 --user 10001:10001 --cap-drop ALL --security-opt no-new-privileges --read-only --tmpfs /home/ubuntu/lowlevel-security-primitives/tmp:rw,noexec,nosuid,size=16m --tmpfs /home/ubuntu/lowlevel-security-primitives/run:rw,noexec,nosuid,size=16m --health-cmd 'python3 -c "import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8080/health\")"' --health-interval 2s --health-timeout 2s --health-retries 10 sec-demo:lab >/dev/null
   inspect_status lsp-hardened hardened
   docker inspect lsp-hardened > "$E/hardened-final-inspect.json"
   port=$(docker port lsp-hardened 8080/tcp | awk -F: 'END{print $NF}')

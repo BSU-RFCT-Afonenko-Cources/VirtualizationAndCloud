@@ -44,7 +44,7 @@ remove_container() {
 build_rootfs() {
   ensure_layout
   rm -rf "$ROOTFS"
-  install -d -m 0755 "$ROOTFS"/{bin,dev,dev/pts,dev/shm,etc,proc,sys,tmp,run,opt,data}
+  install -d -m 0755 "$ROOTFS"/{bin,dev,dev/pts,dev/shm,etc,proc,sys,tmp,run,opt,data,home,home/ubuntu,home/ubuntu/oci-runc-lab}
   local busybox
   busybox="$(command -v busybox)"
   cp "$busybox" "$ROOTFS/bin/busybox"
@@ -53,7 +53,7 @@ build_rootfs() {
   for applet in sh sleep date mkdir cat hostname mount ps nc uname id; do
     ln -sf busybox "$ROOTFS/bin/$applet"
   done
-  cat > "$ROOTFS/opt/workload.sh" <<'WORKLOAD'
+  cat > "$ROOTFS/home/ubuntu/oci-runc-lab/workload.sh" <<'WORKLOAD'
 #!/bin/sh
 set -eu
 mkdir -p /run/oci-lab /data
@@ -72,7 +72,7 @@ heartbeat &
 serve &
 wait
 WORKLOAD
-  chmod 0755 "$ROOTFS/opt/workload.sh"
+  chmod 0755 "$ROOTFS/home/ubuntu/oci-runc-lab/workload.sh"
   printf 'shared OCI bind mount\n' > "$SHARED/source.txt"
   chown -R ubuntu:ubuntu "$LAB_HOME"
 }
@@ -83,7 +83,7 @@ write_config() {
   local mounts='[
     {"destination":"/proc","type":"proc","source":"proc"},
     {"destination":"/dev","type":"tmpfs","source":"tmpfs","options":["nosuid","strictatime","mode=755","size=65536k"]},
-    {"destination":"/tmp","type":"tmpfs","source":"tmpfs","options":["nosuid","nodev","mode=1777","size=16m"]},
+    {"destination":"/home/ubuntu/oci-runc-lab/tmp","type":"tmpfs","source":"tmpfs","options":["nosuid","nodev","mode=1777","size=16m"]},
     {"destination":"/data","type":"bind","source":"/home/ubuntu/oci-runc-lab/shared","options":["rbind","rw"]}
   ]'
   local namespaces='[
@@ -120,7 +120,7 @@ write_config() {
       process:{
         terminal:false,
         user:{uid:0,gid:0},
-        args:["/bin/sh","/opt/workload.sh"],
+        args:["/bin/sh","/home/ubuntu/oci-runc-lab/workload.sh"],
         env:["PATH=/bin","HOSTNAME=oci-lowlevel","OCI_LAB=1"],
         cwd:"/",
         capabilities:{bounding:$caps,effective:$caps,inheritable:[],permitted:$caps,ambient:[]},

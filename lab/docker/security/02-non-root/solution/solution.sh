@@ -7,14 +7,14 @@ LABEL org.opencontainers.image.title="hardened-api" \
       org.opencontainers.image.version="1.0.0" \
       org.opencontainers.image.base.name="python:3.13-alpine"
 RUN addgroup -g 10001 app && adduser -D -H -u 10001 -G app app \
-    && mkdir -p /var/lib/hardened-api && chown app:app /var/lib/hardened-api
-WORKDIR /opt/app
-COPY --chown=10001:10001 app.py /opt/app/app.py
+    && mkdir -p /home/ubuntu/docker-security/state && chown app:app /home/ubuntu/docker-security/state
+WORKDIR /home/ubuntu/docker-security/app
+COPY --chown=10001:10001 app.py /home/ubuntu/docker-security/app/app.py
 USER 10001:10001
 EXPOSE 8080
 HEALTHCHECK --interval=5s --timeout=2s --start-period=2s --retries=5 \
   CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=1)"]
-CMD ["python", "/opt/app/app.py"]
+CMD ["python", "/home/ubuntu/docker-security/app/app.py"]
 DOCKERFILE
 chown ubuntu:ubuntu "$WORKDIR/Dockerfile"
 docker build -t security-api:lab "$WORKDIR"

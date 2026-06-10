@@ -2,7 +2,7 @@
 set -euo pipefail
 DIR=/home/ubuntu/snapshot-baseline
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
-/usr/bin/install -d -o root -g root -m 1777 /tmp/libvirt-snapshots
+/usr/bin/install -d -o root -g root -m 1777 /home/ubuntu/snapshot-baseline/libvirt-snapshots
 /usr/bin/virsh -c qemu:///system dominfo lab-vm >/dev/null
 /usr/bin/virsh -c qemu:///system domstate lab-vm >"$DIR/domstate.txt"
 /usr/bin/virsh -c qemu:///system domblklist lab-vm --details >"$DIR/domblklist.txt"

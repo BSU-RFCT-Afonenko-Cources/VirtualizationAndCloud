@@ -6,5 +6,5 @@ if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-info lab-pool >/dev/nu
   /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-destroy lab-pool >/dev/null 2>&1 || true
   /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-undefine lab-pool >/dev/null 2>&1 || true
 fi
-/usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-define-as lab-pool dir --target /tmp/libvirt-lab-pool --print-xml >"$DIR/lab-pool-preview.xml"
+/usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-define-as lab-pool dir --target /home/ubuntu/pool-preview-xml/libvirt-lab-pool --print-xml >"$DIR/lab-pool-preview.xml"
 /usr/bin/chown -R ubuntu:ubuntu "$DIR"

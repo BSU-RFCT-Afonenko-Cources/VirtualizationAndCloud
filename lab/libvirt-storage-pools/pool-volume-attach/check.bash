@@ -5,7 +5,7 @@ fail(){ /usr/bin/printf 'Ошибка: %s\n' "$1" >&2; exit 1; }
 if /usr/bin/test -s "$DIR/domblklist-lab-vm.txt" && /usr/bin/grep -Eq '(^|[[:space:]])vdb([[:space:]]|$)' "$DIR/domblklist-lab-vm.txt"; then
   exit 0
 fi
-if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system domblklist lab-vm >/var/tmp/lab-vm-blk 2>/dev/null && /usr/bin/grep -Eq '(^|[[:space:]])vdb([[:space:]]|$)' /var/tmp/lab-vm-blk; then
+if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system domblklist lab-vm >/home/ubuntu/pool-volume-attach/lab-vm-blk 2>/dev/null && /usr/bin/grep -Eq '(^|[[:space:]])vdb([[:space:]]|$)' /home/ubuntu/pool-volume-attach/lab-vm-blk; then
   exit 0
 fi
 XML=$DIR/lab-disk-volume-fragment.xml

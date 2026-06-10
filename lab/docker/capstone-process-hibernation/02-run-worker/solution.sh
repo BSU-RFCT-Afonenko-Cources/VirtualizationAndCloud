@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 LAB=/home/ubuntu/capstone-process-hibernation
-ASSETS=/opt/capstone-process-hibernation/assets
+ASSETS=/home/ubuntu/capstone-process-hibernation/assets
 install -m 0644 "${ASSETS}/Dockerfile.hib" "${LAB}/src/Dockerfile"
 install -m 0755 "${ASSETS}/hib_worker.py" "${LAB}/src/hib_worker.py"
 docker rm -f hib-worker >/dev/null 2>&1 || true

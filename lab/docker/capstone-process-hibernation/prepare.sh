@@ -3,7 +3,7 @@ set -euo pipefail
 LAB_DIR=/home/ubuntu/capstone-process-hibernation
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 SOURCE_ASSETS="${SCRIPT_DIR}/assets"
-ASSET_SRC=/opt/capstone-process-hibernation/assets
+ASSET_SRC=/home/ubuntu/capstone-process-hibernation/assets
 mkdir -p "${LAB_DIR}/src" "${LAB_DIR}/data" "${LAB_DIR}/evidence" "${LAB_DIR}/backups" "${LAB_DIR}/checkpoints" "${ASSET_SRC}"
 cp "${SOURCE_ASSETS}/hib_worker.py" "${ASSET_SRC}/hib_worker.py"
 cp "${SOURCE_ASSETS}/Dockerfile.hib" "${ASSET_SRC}/Dockerfile.hib"

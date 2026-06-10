@@ -10,7 +10,7 @@ try:
     root=ET.parse(sys.argv[1]).getroot()
 except Exception as e:
     print(f"Ошибка: XML не разбирается: {e}", file=sys.stderr); sys.exit(1)
-for ok,msg in [(root.tag=='pool','root должен быть <pool>'),(root.get('type')=='dir','pool type должен быть dir'),(root.findtext('name')=='lab-pool','name должен быть lab-pool'),(root.findtext('target/path')=='/tmp/libvirt-lab-pool','target path должен быть /tmp/libvirt-lab-pool')]:
+for ok,msg in [(root.tag=='pool','root должен быть <pool>'),(root.get('type')=='dir','pool type должен быть dir'),(root.findtext('name')=='lab-pool','name должен быть lab-pool'),(root.findtext('target/path')=='/home/ubuntu/pool-preview-xml/libvirt-lab-pool','target path должен быть /home/ubuntu/pool-preview-xml/libvirt-lab-pool')]:
     if not ok:
         print('Ошибка: '+msg, file=sys.stderr); sys.exit(1)
 PYCHECK

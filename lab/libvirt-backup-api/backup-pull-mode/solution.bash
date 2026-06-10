@@ -2,14 +2,14 @@
 set -euo pipefail
 DIR=/home/ubuntu/backup-pull-mode
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
-/usr/bin/install -d -m 0777 /tmp/libvirt-backups
+/usr/bin/install -d -m 0777 /home/ubuntu/backup-pull-mode/libvirt-backups
 /usr/bin/cat >"$DIR/pull-backup.xml" <<'XML'
 <domainbackup mode='pull'>
-  <server transport='unix' socket='/tmp/libvirt-backups/lab-vm-backup.sock'/>
+  <server transport='unix' socket='/home/ubuntu/backup-pull-mode/libvirt-backups/lab-vm-backup.sock'/>
   <disks>
     <disk name='vda' backup='yes' type='file'>
       <driver type='qcow2'/>
-      <scratch file='/tmp/libvirt-backups/lab-vm-vda-pull-scratch.qcow2'/>
+      <scratch file='/home/ubuntu/backup-pull-mode/libvirt-backups/lab-vm-vda-pull-scratch.qcow2'/>
     </disk>
   </disks>
 </domainbackup>

@@ -19,7 +19,7 @@ fi
 
 probe() {
   local name="$1"; shift
-  local err="/tmp/ns-lab-probe-${name}.err"
+  local err="/home/ubuntu/ns-lab/state/ns-lab-probe-${name}.err"
   if "$@" 2>"$err"; then
     /usr/bin/jq -n --arg status supported '{status:$status}'
   else

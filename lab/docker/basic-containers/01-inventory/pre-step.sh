@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 /usr/bin/install -d -m 0755 -o ubuntu -g ubuntu /home/ubuntu/basic-containers /home/ubuntu/basic-containers/evidence
-/usr/bin/install -d -m 0755 /var/lib/basic-containers/image
-/usr/bin/tee /var/lib/basic-containers/image/app.py >/dev/null <<'PYAPP'
+/usr/bin/install -d -m 0755 /home/ubuntu/basic-containers/image
+/usr/bin/tee /home/ubuntu/basic-containers/image/app.py >/dev/null <<'PYAPP'
 import json
 import logging
 import os
@@ -33,15 +33,15 @@ class Handler(BaseHTTPRequestHandler):
 
 ThreadingHTTPServer(("0.0.0.0", 8080), Handler).serve_forever()
 PYAPP
-/usr/bin/tee /var/lib/basic-containers/image/Dockerfile >/dev/null <<'DOCKERFILE'
+/usr/bin/tee /home/ubuntu/basic-containers/image/Dockerfile >/dev/null <<'DOCKERFILE'
 FROM python:3.12-alpine
-WORKDIR /opt/lab
-COPY app.py /opt/lab/app.py
+WORKDIR /home/ubuntu/basic-containers/app
+COPY app.py /home/ubuntu/basic-containers/app/app.py
 EXPOSE 8080
 HEALTHCHECK --interval=2s --timeout=2s --retries=10 CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=1)"
-CMD ["python", "-u", "/opt/lab/app.py"]
+CMD ["python", "-u", "/home/ubuntu/basic-containers/app/app.py"]
 DOCKERFILE
 /usr/bin/docker info >/dev/null
-/usr/bin/docker build --label com.course.lab=basic-containers --tag lab-http-image:1.0 /var/lib/basic-containers/image
+/usr/bin/docker build --label com.course.lab=basic-containers --tag lab-http-image:1.0 /home/ubuntu/basic-containers/image
 /usr/bin/docker pull curlimages/curl:8.12.1
 /usr/bin/chown -R ubuntu:ubuntu /home/ubuntu/basic-containers

@@ -68,8 +68,9 @@ services:
       POSTGRES_DB: shop
       POSTGRES_USER: shop_user
       POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      PGDATA: /home/ubuntu/shop/postgresql-data
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/home/ubuntu/shop/postgresql-data
     networks:
       - backend
     secrets:

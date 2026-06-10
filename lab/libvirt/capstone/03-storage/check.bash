@@ -8,5 +8,5 @@ DIR=/home/ubuntu/capstone/03-storage; need_file "$DIR/pool.xml"; need_file "$DIR
 info=$(virsh pool-info capstone-pool) || fail 'pool capstone-pool не существует'
 /usr/bin/grep -Eq 'running|активен|работает' <<<"$info" || fail 'pool не активен'; /usr/bin/grep -Eq 'yes|да' <<<"$info" || fail 'pool не persistent/autostart'
 xml=$(virsh pool-dumpxml capstone-pool); /usr/bin/grep -q "<pool type='dir'>" <<<"$xml" || fail 'pool должен быть directory-backed'
-/usr/bin/grep -q '<path>/var/lib/libvirt/capstone</path>' <<<"$xml" || fail 'неверный target pool'
+/usr/bin/grep -q '<path>/home/ubuntu/capstone/03-storage/libvirt-capstone</path>' <<<"$xml" || fail 'неверный target pool'
 for v in cap-edge.qcow2 cap-app.qcow2 cap-db.qcow2 cap-db-data.qcow2; do virsh vol-info --pool capstone-pool "$v" >/dev/null || fail "нет volume $v"; done

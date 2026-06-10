@@ -10,7 +10,7 @@ DIR=/home/ubuntu/snapshot-create-xml
   <disks>
     <disk name='vda' snapshot='external'>
       <driver type='qcow2'/>
-      <source file='/tmp/libvirt-snapshots/lab-xml-001.qcow2'/>
+      <source file='/home/ubuntu/snapshot-create-xml/libvirt-snapshots/lab-xml-001.qcow2'/>
     </disk>
   </disks>
 </domainsnapshot>
@@ -20,7 +20,7 @@ if /usr/bin/virsh -c qemu:///system snapshot-info lab-vm lab-xml-001 >/dev/null 
   /usr/bin/printf 'lab-xml-001 already exists\n' >"$DIR/create-result.txt"
 else
   ACTIVE=$(/usr/bin/virsh -c qemu:///system domblklist lab-vm --details | /usr/bin/awk '$3=="vda"{print $4; exit}')
-  if /usr/bin/test "$ACTIVE" != /tmp/libvirt-snapshots/lab-xml-001.qcow2; then /usr/bin/rm -f /tmp/libvirt-snapshots/lab-xml-001.qcow2; fi
+  if /usr/bin/test "$ACTIVE" != /home/ubuntu/snapshot-create-xml/libvirt-snapshots/lab-xml-001.qcow2; then /usr/bin/rm -f /home/ubuntu/snapshot-create-xml/libvirt-snapshots/lab-xml-001.qcow2; fi
   if /usr/bin/virsh -c qemu:///system snapshot-create lab-vm "$DIR/lab-xml-001.xml" --disk-only --atomic --validate >"$DIR/create-result.txt" 2>"$DIR/create-error.txt"; then
     /usr/bin/rm -f "$DIR/create-error.txt"
   elif /usr/bin/grep -Eqi 'validate|option' "$DIR/create-error.txt" && /usr/bin/virsh -c qemu:///system snapshot-create lab-vm "$DIR/lab-xml-001.xml" --disk-only --atomic >"$DIR/create-result.txt" 2>"$DIR/create-error.txt"; then
