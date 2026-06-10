@@ -14,7 +14,7 @@ PYJSON
 current_id=$(/usr/bin/docker inspect --format '{{.Id}}' storage-ephemeral)
 after_id=$(/usr/bin/python3 -c 'import json; print(json.load(open("/home/ubuntu/storage/evidence/ephemeral-after.json"))["container_id"])')
 [ "$current_id" = "$after_id" ] || { /usr/bin/echo 'Запущен не тот контейнер, который указан в evidence после'; exit 1; }
-if /usr/bin/docker exec storage-ephemeral /usr/bin/test -e /tmp/ephemeral-marker; then
+if /usr/bin/docker exec storage-ephemeral /usr/bin/test -e /home/ubuntu/storage/ephemeral-marker; then
   /usr/bin/echo 'Marker сохранился в новом writable layer'
   exit 1
 fi

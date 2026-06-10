@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 LAB_DIR=/home/ubuntu/capstone-process-hibernation
-ASSET_DIR=/opt/capstone-process-hibernation/assets
+ASSET_DIR=/home/ubuntu/capstone-process-hibernation/assets
 DATA_DIR=${LAB_DIR}/data
 EVIDENCE_DIR=${LAB_DIR}/evidence
 BACKUP_DIR=${LAB_DIR}/backups

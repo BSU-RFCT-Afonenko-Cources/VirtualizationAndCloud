@@ -8,4 +8,4 @@ ACTIVE=$(/usr/bin/virsh -c qemu:///system domblklist lab-vm --details | /usr/bin
 /usr/bin/test "$ACTIVE" = "$BASE" || fail "active source $ACTIVE не равен исходному $BASE"
 LEFT=$(/usr/bin/virsh -c qemu:///system snapshot-list lab-vm --name | /usr/bin/grep '^lab-' || true)
 /usr/bin/test -z "$LEFT" || fail 'остались snapshot metadata с префиксом lab-'
-if /usr/bin/find /tmp/libvirt-snapshots -maxdepth 1 -type f \( -name 'lab-*.qcow2' -o -name 'lab-*.memory' \) -print -quit | /usr/bin/grep -q .; then fail 'остались временные overlay/memory files'; fi
+if /usr/bin/find /home/ubuntu/snapshot-cleanup/libvirt-snapshots -maxdepth 1 -type f \( -name 'lab-*.qcow2' -o -name 'lab-*.memory' \) -print -quit | /usr/bin/grep -q .; then fail 'остались временные overlay/memory files'; fi

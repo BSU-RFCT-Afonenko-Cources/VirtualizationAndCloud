@@ -11,6 +11,6 @@ if root.findtext('name')!='lab-preview': raise SystemExit('Ошибка: snapsho
 disk=next((d for d in root.findall('./disks/disk') if d.get('name')=='vda'),None)
 if disk is None or disk.get('snapshot')!='external': raise SystemExit('Ошибка: vda должен иметь snapshot=external')
 source=disk.find('source')
-if source is None or source.get('file')!='/tmp/libvirt-snapshots/lab-preview.qcow2': raise SystemExit('Ошибка: неверный source preview overlay')
+if source is None or source.get('file')!='/home/ubuntu/snapshot-preview/libvirt-snapshots/lab-preview.qcow2': raise SystemExit('Ошибка: неверный source preview overlay')
 PYXML
-/usr/bin/test ! -e /tmp/libvirt-snapshots/lab-preview.qcow2 || fail '--print-xml не должен создавать lab-preview.qcow2'
+/usr/bin/test ! -e /home/ubuntu/snapshot-preview/libvirt-snapshots/lab-preview.qcow2 || fail '--print-xml не должен создавать lab-preview.qcow2'

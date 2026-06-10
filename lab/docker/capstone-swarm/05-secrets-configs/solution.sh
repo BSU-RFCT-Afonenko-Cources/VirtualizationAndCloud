@@ -79,12 +79,13 @@ services:
       POSTGRES_DB: market
       POSTGRES_USER: market
       POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      PGDATA: /home/ubuntu/capstone-swarm/postgresql-data
     networks: [data]
     secrets:
       - source: db_password
         target: db_password
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/home/ubuntu/capstone-swarm/postgresql-data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U market -d market"]
       interval: 10s

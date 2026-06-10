@@ -4,8 +4,8 @@ After=network-online.target
 Wants=network-online.target
 [Service]
 Environment=CAP_DB_URL=http://192.168.151.30:54321
-Environment=CAP_VERSION_FILE=/etc/cap-app-version
-ExecStart=/usr/bin/python3 /opt/capstone/app_service.py
+Environment=CAP_VERSION_FILE=/home/ubuntu/capstone/08-api/cap-app-version
+ExecStart=/usr/bin/python3 /home/ubuntu/capstone/08-api/app_service.py
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target

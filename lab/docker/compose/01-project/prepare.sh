@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-install -d -m 0755 /opt/compose-lab-starter/api /opt/compose-lab-starter/web
-cat > /opt/compose-lab-starter/api/app.py <<'PYAPP'
+install -d -m 0755 /home/ubuntu/compose-lab/starter/api /home/ubuntu/compose-lab/starter/web
+cat > /home/ubuntu/compose-lab/starter/api/app.py <<'PYAPP'
 import json
 import os
 import socket
@@ -50,15 +50,15 @@ class Handler(BaseHTTPRequestHandler):
 
 ThreadingHTTPServer(("0.0.0.0", 8080), Handler).serve_forever()
 PYAPP
-cat > /opt/compose-lab-starter/api/Dockerfile <<'DOCKERFILE'
+cat > /home/ubuntu/compose-lab/starter/api/Dockerfile <<'DOCKERFILE'
 FROM python:3.13-alpine
 WORKDIR /app
 COPY app.py version.txt ./
 EXPOSE 8080
 CMD ["python", "app.py"]
 DOCKERFILE
-printf '1.0\n' > /opt/compose-lab-starter/api/version.txt
-cat > /opt/compose-lab-starter/web/default.conf.template <<'NGINX'
+printf '1.0\n' > /home/ubuntu/compose-lab/starter/api/version.txt
+cat > /home/ubuntu/compose-lab/starter/web/default.conf.template <<'NGINX'
 server {
     listen 80;
     resolver 127.0.0.11 valid=2s ipv6=off;
@@ -69,5 +69,5 @@ server {
     }
 }
 NGINX
-chmod -R a+rX /opt/compose-lab-starter
+chmod -R a+rX /home/ubuntu/compose-lab/starter
 rm -rf /home/ubuntu/compose-lab

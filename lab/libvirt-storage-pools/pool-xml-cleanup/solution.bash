@@ -6,7 +6,7 @@ DIR=/home/ubuntu/pool-xml-cleanup
 <pool type='dir'>
   <name>lab-pool-xml</name>
   <target>
-    <path>/tmp/libvirt-lab-pool-xml</path>
+    <path>/home/ubuntu/pool-xml-cleanup/libvirt-lab-pool-xml</path>
   </target>
 </pool>
 XML
@@ -23,6 +23,6 @@ for P in lab-pool lab-pool-xml; do
     /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-undefine "$P" >/dev/null 2>&1 || true
   fi
 done
-/usr/bin/sudo -n /usr/bin/rm -rf /tmp/libvirt-lab-pool /tmp/libvirt-lab-pool-xml
+/usr/bin/sudo -n /usr/bin/rm -rf /home/ubuntu/pool-xml-cleanup/libvirt-lab-pool /home/ubuntu/pool-xml-cleanup/libvirt-lab-pool-xml
 /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system pool-list --all >"$DIR/pool-list-final.txt"
 /usr/bin/chown -R ubuntu:ubuntu "$DIR"

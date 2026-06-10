@@ -2,7 +2,7 @@
 set -euo pipefail
 VM=lab-vm
 DIR=/home/ubuntu/backup-baseline
-BACKUPDIR=/tmp/libvirt-backups
+BACKUPDIR=/home/ubuntu/backup-baseline/libvirt-backups
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
 /usr/bin/install -d -m 0777 "$BACKUPDIR"
 /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system domstate "$VM" >"$DIR/domstate.txt" 2>&1 || /usr/bin/printf 'domain lab-vm is absent or unavailable\n' >"$DIR/domstate.txt"

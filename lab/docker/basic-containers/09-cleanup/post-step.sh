@@ -1,3 +1,3 @@
 #!/bin/bash
 set -euo pipefail
-/usr/bin/rm -rf /var/lib/basic-containers/image
+/usr/bin/rm -rf /home/ubuntu/basic-containers/image

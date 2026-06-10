@@ -5,7 +5,7 @@ curl -fsS -X POST http://127.0.0.1:18080/resume >/dev/null
 sleep 1
 python3 - <<'PY'
 import json,urllib.request,pathlib
-path=pathlib.Path('/tmp/hib-freeze-before.json'); path.write_text(json.dumps(json.load(urllib.request.urlopen('http://127.0.0.1:18080/hib-status'))))
+path=pathlib.Path('/home/ubuntu/capstone-process-hibernation/evidence/hib-freeze-before.json'); path.write_text(json.dumps(json.load(urllib.request.urlopen('http://127.0.0.1:18080/hib-status'))))
 PY
 CID=$(docker inspect -f '{{.Id}}' hib-worker); PID=$(docker inspect -f '{{.State.Pid}}' hib-worker)
 docker pause hib-worker >/dev/null

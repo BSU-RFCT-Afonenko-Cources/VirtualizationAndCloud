@@ -12,7 +12,7 @@ while /usr/bin/test "$COUNT" -lt 32; do
   ACTIVE=$(/usr/bin/virsh -c qemu:///system domblklist lab-vm --details | /usr/bin/awk '$3=="vda"{print $4; exit}')
   /usr/bin/test -n "$ACTIVE"
   if /usr/bin/test "$ACTIVE" = "$BASE"; then break; fi
-  case "$ACTIVE" in /tmp/libvirt-snapshots/lab-*.qcow2) ;; *) /usr/bin/printf 'refusing to commit unexpected active source %s\n' "$ACTIVE" >&2; exit 1;; esac
+  case "$ACTIVE" in /home/ubuntu/snapshot-cleanup/libvirt-snapshots/lab-*.qcow2) ;; *) /usr/bin/printf 'refusing to commit unexpected active source %s\n' "$ACTIVE" >&2; exit 1;; esac
   /usr/bin/virsh -c qemu:///system blockcommit lab-vm vda --active --pivot --verbose >>"$DIR/cleanup-results.txt" 2>&1
   COUNT=$((COUNT+1))
 done
@@ -26,7 +26,7 @@ while /usr/bin/test "$COUNT" -lt 64; do
   /usr/bin/virsh -c qemu:///system snapshot-delete lab-vm "$NAME" --metadata >>"$DIR/cleanup-results.txt" 2>&1
   COUNT=$((COUNT+1))
 done
-while IFS= read -r FILE; do /usr/bin/test "$FILE" = "$ACTIVE" || /usr/bin/rm -f -- "$FILE"; done < <(/usr/bin/find /tmp/libvirt-snapshots -maxdepth 1 -type f \( -name 'lab-*.qcow2' -o -name 'lab-*.memory' \) -print)
+while IFS= read -r FILE; do /usr/bin/test "$FILE" = "$ACTIVE" || /usr/bin/rm -f -- "$FILE"; done < <(/usr/bin/find /home/ubuntu/snapshot-cleanup/libvirt-snapshots -maxdepth 1 -type f \( -name 'lab-*.qcow2' -o -name 'lab-*.memory' \) -print)
 /usr/bin/virsh -c qemu:///system snapshot-list lab-vm --name >"$DIR/snapshot-list-final.txt"
 /usr/bin/test -s "$DIR/snapshot-list-final.txt" || /usr/bin/printf '(no snapshots)\n' >"$DIR/snapshot-list-final.txt"
 /usr/bin/virsh -c qemu:///system domblklist lab-vm --details >"$DIR/domblklist-final.txt"

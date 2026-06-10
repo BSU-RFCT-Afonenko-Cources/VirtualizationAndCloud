@@ -3,7 +3,7 @@ set -euo pipefail
 VM=lab-vm
 DIR=/home/ubuntu/backup-default-full
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
-/usr/bin/install -d -m 0777 /tmp/libvirt-backups
+/usr/bin/install -d -m 0777 /home/ubuntu/backup-default-full/libvirt-backups
 if /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system backup-begin "$VM" >"$DIR/backup-begin.txt" 2>&1; then
   /usr/bin/printf 'started-or-completed\n' >"$DIR/result.txt"
 else

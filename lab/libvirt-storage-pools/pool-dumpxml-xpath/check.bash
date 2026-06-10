@@ -7,9 +7,9 @@ for f in lab-pool.xml xpath-name.txt xpath-type.txt xpath-target-path.txt; do /u
 import sys, xml.etree.ElementTree as ET
 r=ET.parse(sys.argv[1]).getroot()
 vals=(r.findtext('name'), r.get('type'), r.findtext('target/path'))
-if vals != ('lab-pool','dir','/tmp/libvirt-lab-pool'):
+if vals != ('lab-pool','dir','/home/ubuntu/pool-dumpxml-xpath/libvirt-lab-pool'):
     print(f'Ошибка: неверный XML pool: {vals}', file=sys.stderr); sys.exit(1)
 PYCHECK
 /usr/bin/test "$(/usr/bin/tr -d '\n\r ' <"$DIR/xpath-name.txt")" = lab-pool || fail "xpath-name.txt должен содержать lab-pool"
 /usr/bin/test "$(/usr/bin/tr -d '\n\r ' <"$DIR/xpath-type.txt")" = dir || fail "xpath-type.txt должен содержать dir"
-/usr/bin/test "$(/usr/bin/tr -d '\n\r ' <"$DIR/xpath-target-path.txt")" = /tmp/libvirt-lab-pool || fail "xpath-target-path.txt должен содержать /tmp/libvirt-lab-pool"
+/usr/bin/test "$(/usr/bin/tr -d '\n\r ' <"$DIR/xpath-target-path.txt")" = /home/ubuntu/pool-dumpxml-xpath/libvirt-lab-pool || fail "xpath-target-path.txt должен содержать /home/ubuntu/pool-dumpxml-xpath/libvirt-lab-pool"

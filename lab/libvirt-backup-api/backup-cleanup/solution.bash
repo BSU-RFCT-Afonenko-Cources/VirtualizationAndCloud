@@ -2,7 +2,7 @@
 set -euo pipefail
 VM=lab-vm
 DIR=/home/ubuntu/backup-cleanup
-BACKUPDIR=/tmp/libvirt-backups
+BACKUPDIR=/home/ubuntu/backup-cleanup/libvirt-backups
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
 /usr/bin/install -d -m 0777 "$BACKUPDIR"
 while IFS= read -r CHECKPOINT; do

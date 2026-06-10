@@ -6,7 +6,7 @@ from pathlib import Path
 ENDPOINT = os.environ.get("APP_ENDPOINT", "/api/status")
 VERSION = os.environ.get("APP_VERSION", "development")
 SECRET_FILE = Path(os.environ.get("DB_SECRET_FILE", "/run/secrets/db_password"))
-STATE_FILE = Path("/var/lib/hardened-api/request-count.txt")
+STATE_FILE = Path("/home/ubuntu/docker-security/state/request-count.txt")
 
 
 def load_secret():

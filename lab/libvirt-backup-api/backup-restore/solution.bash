@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 DIR=/home/ubuntu/backup-restore
-BACKUPDIR=/tmp/libvirt-backups
+BACKUPDIR=/home/ubuntu/backup-restore/libvirt-backups
 SOURCE=$BACKUPDIR/lab-vm-vda-full.qcow2
 RESTORE=$BACKUPDIR/lab-vm-restore.qcow2
 DOMAINXML=$BACKUPDIR/lab-vm.xml
@@ -18,7 +18,7 @@ else
   /usr/bin/printf 'skeleton XML only\n' >"$DIR/restore-status.txt"
 fi
 if ! /usr/bin/test -s "$DOMAINXML"; then
-  /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system dumpxml lab-vm >"$DOMAINXML" 2>/dev/null || /usr/bin/printf '<domain type="qemu"><name>lab-vm</name><devices><disk type="file" device="disk"><target dev="vda" bus="virtio"/><source file="/var/lib/libvirt/images/lab-vm.qcow2"/></disk></devices></domain>\n' >"$DOMAINXML"
+  /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system dumpxml lab-vm >"$DOMAINXML" 2>/dev/null || /usr/bin/printf '<domain type="qemu"><name>lab-vm</name><devices><disk type="file" device="disk"><target dev="vda" bus="virtio"/><source file="/home/ubuntu/backup-restore/libvirt-images/lab-vm.qcow2"/></disk></devices></domain>\n' >"$DOMAINXML"
 fi
 /usr/bin/python3 - "$DOMAINXML" "$RESTOREXML" <<'PYXML'
 import sys
@@ -48,7 +48,7 @@ source = disk.find('source')
 if source is None:
     source = ET.SubElement(disk, 'source')
 source.attrib.clear()
-source.set('file', '/tmp/libvirt-backups/lab-vm-restore.qcow2')
+source.set('file', '/home/ubuntu/backup-restore/libvirt-backups/lab-vm-restore.qcow2')
 ET.indent(root, space='  ')
 ET.ElementTree(root).write(dst, encoding='unicode', xml_declaration=False)
 with open(dst, 'a', encoding='utf-8') as out:

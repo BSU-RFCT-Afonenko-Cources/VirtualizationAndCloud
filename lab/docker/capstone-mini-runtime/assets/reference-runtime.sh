@@ -27,7 +27,7 @@ make_spec() {
 
 make_rootfs() {
     rm -rf "$ROOTFS"
-    install -d -o root -g root -m 0755 "$ROOTFS"/{bin,etc,proc,sys/fs/cgroup,run/mini-runtime,opt/mini-runtime,usr/bin,usr/lib,lib,lib64}
+    install -d -o root -g root -m 0755 "$ROOTFS"/{bin,etc,proc,sys/fs/cgroup,run/mini-runtime,home/ubuntu/mini-runtime,usr/bin,usr/lib,lib,lib64}
     for binary in /bin/sh /usr/bin/mount /bin/hostname /usr/bin/setpriv /usr/bin/python3; do copy_binary "$binary"; done
     local pyver
     pyver=$(/usr/bin/python3 -c 'import sys; print(f"python{sys.version_info.major}.{sys.version_info.minor}")')
@@ -39,7 +39,7 @@ make_rootfs() {
     printf 'root:x:0:0:root:/root:/bin/sh\nnobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin\n' > "$ROOTFS/etc/passwd"
     printf 'root:x:0:\nnogroup:x:65534:\n' > "$ROOTFS/etc/group"
     printf 'mini-runtime-rootfs-v1\n' > "$ROOTFS/.mini-runtime-rootfs"
-    install -m 0755 "$API_SOURCE" "$ROOTFS/opt/mini-runtime/mini-runtime-api.py"
+    install -m 0755 "$API_SOURCE" "$ROOTFS/home/ubuntu/mini-runtime/mini-runtime-api.py"
     chown -R root:root "$ROOTFS"
     chmod -R a-w "$ROOTFS"
     chmod 0555 "$ROOTFS" "$ROOTFS/proc" "$ROOTFS/sys" "$ROOTFS/sys/fs" "$ROOTFS/sys/fs/cgroup" "$ROOTFS/run" "$ROOTFS/run/mini-runtime"
@@ -57,7 +57,7 @@ mount --rbind /sys/fs/cgroup '$ROOTFS/sys/fs/cgroup'
 mount -o remount,bind,ro '$ROOTFS/sys/fs/cgroup'
 mount -t proc proc '$ROOTFS/proc'
 hostname mini-runtime
-exec chroot '$ROOTFS' /usr/bin/setpriv --reuid=65534 --regid=65534 --clear-groups --bounding-set=-all --inh-caps=-all --ambient-caps=-all --no-new-privs /usr/bin/python3 -B /opt/mini-runtime/mini-runtime-api.py
+exec chroot '$ROOTFS' /usr/bin/setpriv --reuid=65534 --regid=65534 --clear-groups --bounding-set=-all --inh-caps=-all --ambient-caps=-all --no-new-privs /usr/bin/python3 -B /home/ubuntu/mini-runtime/mini-runtime-api.py
 INNER
 }
 
@@ -70,7 +70,7 @@ find_api_pid() {
                 return 0
             fi
         done < <(pgrep -P "$(cat "$PID_FILE")" -a 2>/dev/null | awk '{print $1}')
-        candidate=$(pgrep -f '/opt/mini-runtime/mini-runtime-api.py' | tail -n1 || true)
+        candidate=$(pgrep -f '/home/ubuntu/mini-runtime/mini-runtime-api.py' | tail -n1 || true)
         if [ -n "$candidate" ] && awk '/^NSpid:/ {exit !($NF == 1)}' "/proc/$candidate/status" 2>/dev/null; then
             printf '%s\n' "$candidate"
             return 0

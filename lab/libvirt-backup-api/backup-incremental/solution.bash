@@ -3,14 +3,14 @@ set -euo pipefail
 VM=lab-vm
 DIR=/home/ubuntu/backup-incremental
 /usr/bin/install -d -o ubuntu -g ubuntu -m 0755 "$DIR"
-/usr/bin/install -d -m 0777 /tmp/libvirt-backups
+/usr/bin/install -d -m 0777 /home/ubuntu/backup-incremental/libvirt-backups
 /usr/bin/cat >"$DIR/incremental-backup.xml" <<'XML'
 <domainbackup mode='push'>
   <incremental>lab-full-001</incremental>
   <disks>
     <disk name='vda' backup='yes' type='file'>
       <driver type='qcow2'/>
-      <target file='/tmp/libvirt-backups/lab-vm-vda-inc-001.qcow2'/>
+      <target file='/home/ubuntu/backup-incremental/libvirt-backups/lab-vm-vda-inc-001.qcow2'/>
     </disk>
   </disks>
 </domainbackup>
@@ -28,4 +28,4 @@ else
   /usr/bin/printf 'unsupported\n' >"$DIR/result.txt"
 fi
 /usr/bin/sudo -n /usr/bin/virsh -c qemu:///system checkpoint-list "$VM" >"$DIR/checkpoint-list-after.txt" 2>&1 || /usr/bin/printf 'checkpoint-list unavailable\n' >"$DIR/checkpoint-list-after.txt"
-/usr/bin/chown -R ubuntu:ubuntu "$DIR" /tmp/libvirt-backups
+/usr/bin/chown -R ubuntu:ubuntu "$DIR" /home/ubuntu/backup-incremental/libvirt-backups

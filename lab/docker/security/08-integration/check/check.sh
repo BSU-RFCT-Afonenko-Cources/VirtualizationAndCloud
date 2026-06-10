@@ -17,7 +17,7 @@ opts = h.get('SecurityOpt') or []
 if 'no-new-privileges:true' not in opts: errors.append('no-new-privileges is absent')
 if any('seccomp' in x and 'unconfined' in x for x in opts): errors.append('seccomp is unconfined')
 if h.get('RestartPolicy', {}).get('Name') != 'unless-stopped': errors.append('restart policy is not unless-stopped')
-tmpfs = h.get('Tmpfs', {}).get('/var/lib/hardened-api', '')
+tmpfs = h.get('Tmpfs', {}).get('/home/ubuntu/docker-security/state', '')
 for option in ('rw','noexec','nosuid','nodev','uid=10001','gid=10001'):
     if option not in tmpfs.split(','): errors.append(f'tmpfs misses {option}')
 ports = c['NetworkSettings']['Ports'].get('8080/tcp') or []

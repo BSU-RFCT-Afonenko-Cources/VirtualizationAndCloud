@@ -8,7 +8,7 @@ start_container
 wait_for_heartbeat
 docker rm -f "$DOCKER_NAME" >/dev/null 2>&1 || true
 tar -C "$ROOTFS" -c . | docker import - oci-lowlevel-lab:local >/dev/null
-docker run -d --name "$DOCKER_NAME" --hostname docker-lowlevel --network none oci-lowlevel-lab:local /bin/sh /opt/workload.sh >/dev/null
+docker run -d --name "$DOCKER_NAME" --hostname docker-lowlevel --network none oci-lowlevel-lab:local /bin/sh /home/ubuntu/oci-runc-lab/workload.sh >/dev/null
 oci_pid="$(container_pid)"
 docker_pid="$(docker inspect -f '{{.State.Pid}}' "$DOCKER_NAME")"
 proc_json() {
