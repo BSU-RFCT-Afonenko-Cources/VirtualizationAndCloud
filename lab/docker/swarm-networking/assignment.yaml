@@ -1,7 +1,7 @@
 title: "Swarm overlay networks и сервисное взаимодействие"
 description: _assignment-description.qmd
 time-limit-minutes: 90
-virtual-machine: "Ubuntu с Docker Engine в режиме Swarm"
+virtual-machine: "Ubuntu 26.04 LTS — Docker Lab"
 steps:
   - 01-overlay-concept/step.yaml
   - 02-backend-service/step.yaml

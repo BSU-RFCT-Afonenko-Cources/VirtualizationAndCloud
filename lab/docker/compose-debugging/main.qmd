@@ -6,7 +6,6 @@ metadata-files:
   - 04-stats/step.yaml
   - 05-dns/step.yaml
   - 06-health/step.yaml
-  - 07-resources/step.yaml
   - 08-incident/step.yaml
 ---
 
@@ -39,10 +38,6 @@ metadata-files:
 ### {{< meta health.title >}}
 {{< include 06-health/_theory.qmd >}}
 {{< include 06-health/_task.qmd >}}
-
-### {{< meta resources.title >}}
-{{< include 07-resources/_theory.qmd >}}
-{{< include 07-resources/_task.qmd >}}
 
 ### {{< meta incident.title >}}
 {{< include 08-incident/_theory.qmd >}}

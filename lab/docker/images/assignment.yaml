@@ -1,7 +1,7 @@
 title: "Образы, Dockerfile и воспроизводимая сборка"
 description: _assignment-description.qmd
 time-limit-minutes: 120
-virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+virtual-machine: "Ubuntu 26.04 LTS — Docker Lab"
 steps:
   - 01-build-context/step.yaml
   - 02-minimal-dockerfile/step.yaml

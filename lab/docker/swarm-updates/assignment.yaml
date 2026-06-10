@@ -1,7 +1,7 @@
 title: "Swarm scaling, rolling update и rollback"
 description: _description.qmd
 time-limit-minutes: 90
-virtual-machine: "Ubuntu — Docker Swarm Lab"
+virtual-machine: "Ubuntu 26.04 LTS — Docker Lab"
 steps:
   - 01-baseline/step.yaml
   - 02-scaling/step.yaml

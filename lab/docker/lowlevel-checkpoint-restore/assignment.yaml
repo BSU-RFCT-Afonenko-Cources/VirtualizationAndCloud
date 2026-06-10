@@ -1,7 +1,7 @@
 title: "Checkpoint/Restore, гибернация контейнеров и сохранение процессов"
 description: _assignment-description.qmd
 time-limit-minutes: 240
-virtual-machine: "Ubuntu — Docker/CRIU Lab"
+virtual-machine: "Ubuntu 26.04 LTS — Docker Lab"
 steps:
   - 01-terms/step.yaml
   - 02-support/step.yaml

@@ -2,6 +2,12 @@
 title: "Laboratory Work 2. VM Interaction"
 ---
 
+
+```{fish}
+echo 1
+```
+
+
 # Introduction
 
 In this laboratory work, the approach to using virtualization to application isolation and resource management will be considered. For this purpose, two services that interact via REST API will be used as an example. The first service emulates the logic of a server application that requests data from the second service (database) via HTTP. Both services run on separate virtual machines, which allows flexible configuration of resource allocation policies and snapshots. The lab work contains the following tasks:

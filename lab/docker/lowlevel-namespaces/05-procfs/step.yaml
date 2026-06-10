@@ -1,8 +1,14 @@
-title: "05. procfs внутри PID namespace"
-theory: _theory.qmd
-task: _task.qmd
-actions:
-  - host:
-      pre-step: pre-step.bash
-      check: check.bash
-      solution: solution.bash
+05-procfs:
+  title: "05. procfs внутри PID namespace"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+        pre-step:
+          exec:
+            - pre-step.bash
+        check:
+          exec: 
+            - check.bash
+        solution: 
+          exec:
+            - solution.bash

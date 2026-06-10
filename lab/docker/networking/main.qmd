@@ -5,7 +5,6 @@ metadata-files:
     - 03-client/step.yaml
     - 04-publish/step.yaml
     - 05-isolation/step.yaml
-    - 06-aliases/step.yaml
     - 07-dual-network/step.yaml
     - 08-dns-failure/step.yaml
     - 09-cleanup/step.yaml
@@ -44,12 +43,6 @@ metadata-files:
 {{< include 05-isolation/_theory.qmd >}}
 
 {{< include 05-isolation/_task.qmd >}}
-
-## {{< meta aliases.title >}}
-
-{{< include 06-aliases/_theory.qmd >}}
-
-{{< include 06-aliases/_task.qmd >}}
 
 ## {{< meta dual_network.title >}}
 

@@ -1,0 +1,16 @@
+title: "Virtualization Libvirt"
+description: _description.md
+book-url: http://10.135.250.210/theory/
+start_date: "2026-05-01"
+end_date: "2026-06-30"
+assignments:
+    - ubuntu/assignment.yaml
+    - libvirt/assignment.yaml
+    - libvirt-networking/_assignment.yaml
+    - libvirt-storage-pools/_assignment.yaml
+    - libvirt-storage-volumes/_assignment.yaml
+    - libvirt-snapshots/_assignment.yaml
+    - libvirt-cpu-scheduling/_assignment.yaml
+    - libvirt/capstone/_assignment.yaml
+
+  

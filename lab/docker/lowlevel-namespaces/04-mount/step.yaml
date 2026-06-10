@@ -1,8 +1,14 @@
-title: "04. Mount namespace и отдельная таблица монтирования"
-theory: _theory.qmd
-task: _task.qmd
-actions:
-  - host:
-      pre-step: pre-step.bash
-      check: check.bash
-      solution: solution.bash
+04-mount:
+  title: "04. Mount namespace и отдельная таблица монтирования"
+  theory: _theory.qmd
+  task: _task.qmd
+  actions:
+        pre-step: 
+          exec:
+            - pre-step.bash
+        check: 
+          exec:
+            - check.bash
+        solution:
+          exec:
+            - solution.bash

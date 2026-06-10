@@ -1,7 +1,7 @@
 title: "Swarm placement constraints, reservations и ресурсное управление"
 description: _assignment-description.qmd
 time-limit-minutes: 90
-virtual-machine: "Ubuntu — Docker Swarm Lab"
+virtual-machine: "Ubuntu 26.04 LTS — Docker Lab"
 steps:
   - 01-node-labels/step.yaml
   - 02-placement-constraints/step.yaml

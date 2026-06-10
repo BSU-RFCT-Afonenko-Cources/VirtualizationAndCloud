@@ -8,70 +8,39 @@ book:
     - linux/filesystem/permission.qmd
     - linux/package.qmd
 
-    - part: "Задания"
+    - part: "Задания. Лабораторные. Libvirt"
       chapters:
         - lab/ubuntu/main.qmd
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         - lab/libvirt/main.qmd
-||||||| f589c88
-=======
-        - lab/docker/compose-debugging/main.qmd
->>>>>>> remotes/origin/codex/create-debugging-lab-for-compose-applications
-||||||| 6df1dcb
-=======
-        - lab/docker/compose/main.qmd
->>>>>>> remotes/origin/codex/create-docker-compose-lab-for-multi-container-app
-||||||| 6df1dcb
-=======
-        - lab/docker/images/main.qmd
->>>>>>> remotes/origin/codex/create-docker-lab-for-reproducible-builds
-||||||| 6df1dcb
-=======
-        - lab/docker/storage/main.qmd
->>>>>>> remotes/origin/codex/create-docker-lab-on-volumes-and-mounts
-||||||| 6df1dcb
-=======
-        - lab/docker/networking/main.qmd
->>>>>>> remotes/origin/codex/create-docker-networking-lab
-||||||| 6df1dcb
-=======
-        - lab/docker/swarm-basic/main.qmd
->>>>>>> remotes/origin/codex/create-docker-swarm-lab-structure
-||||||| 6df1dcb
-=======
-        - lab/docker/capstone-compose/main.qmd
->>>>>>> remotes/origin/codex/create-docker/compose-capstone-lab-assignment
-||||||| 6df1dcb
-=======
-        - lab/docker/lowlevel-checkpoint-restore/main.qmd
->>>>>>> remotes/origin/codex/create-lab-on-checkpoint/restore-in-docker
-||||||| 6df1dcb
-=======
-        - lab/docker/lowlevel-rootfs-overlay/main.qmd
->>>>>>> remotes/origin/codex/create-lab-on-container-root-filesystem
-||||||| 6df1dcb
-=======
+        - lab/libvirt-networking/main.qmd
+        - lab/libvirt-storage-pools/main.qmd
+        - lab/libvirt-storage-volumes/main.qmd
+        - lab/libvirt-snapshots/main.qmd
+        - lab/libvirt-cpu-scheduling/main.qmd
+        - lab/libvirt/capstone/main.qmd
+
+    - part: "Задания. Лабораторные. Docker"
+      chapters:
         - lab/docker/basic-containers/main.qmd
->>>>>>> remotes/origin/codex/create-lab-on-docker-container-management
-||||||| 6df1dcb
-=======
+        - lab/docker/networking/main.qmd
+        - lab/docker/images/main.qmd
+        - lab/docker/security/main.qmd
+        - lab/docker/storage/main.qmd
+
+        - lab/docker/compose/main.qmd
+        - lab/docker/compose-debugging/main.qmd
+        - lab/docker/capstone-compose/main.qmd
+
+        - lab/docker/swarm-basic/main.qmd
+        - lab/docker/swarm-resources/main.qmd
+        - lab/docker/capstone-swarm/main.qmd
+
+        - lab/docker/lowlevel-cgroups-v2/main.qmd
+        - lab/docker/lowlevel-checkpoint-restore/main.qmd
         - lab/docker/lowlevel-network-primitives/main.qmd
->>>>>>> remotes/origin/codex/create-lab-on-low-level-network-primitives
-||||||| 6df1dcb
-=======
         - lab/docker/lowlevel-oci-runc/main.qmd
->>>>>>> remotes/origin/codex/create-low-level-oci/runc-lab
+        - lab/docker/lowlevel-rootfs-overlay/main.qmd
+        - lab/docker/lowlevel-security-primitives/main.qmd
 
   appendices:
     - part: "Командные оболочки"

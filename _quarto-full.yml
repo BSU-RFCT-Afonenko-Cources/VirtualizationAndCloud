@@ -47,31 +47,39 @@ book:
         - docker/secrets.qmd
         - docker/swarm.qmd
 
-    - part: "Задания. Лабораторные"
+    - part: "Задания. Лабораторные. Libvirt"
       chapters:
         - lab/ubuntu/main.qmd
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        - lab/docker/compose/main.qmd
-||||||| 6df1dcb
-=======
-        - lab/docker/images/main.qmd
->>>>>>> remotes/origin/codex/create-docker-lab-for-reproducible-builds
-||||||| 6df1dcb
-=======
+        - lab/libvirt/main.qmd
+        - lab/libvirt-networking/main.qmd
+        - lab/libvirt-storage-pools/main.qmd
+        - lab/libvirt-storage-volumes/main.qmd
+        - lab/libvirt-snapshots/main.qmd
+        - lab/libvirt-cpu-scheduling/main.qmd
+        - lab/libvirt/capstone/main.qmd
+
+    - part: "Задания. Лабораторные. Docker"
+      chapters:
+        - lab/docker/basic-containers/main.qmd
         - lab/docker/networking/main.qmd
->>>>>>> remotes/origin/codex/create-docker-networking-lab
-||||||| 6df1dcb
-=======
+        - lab/docker/images/main.qmd
+        - lab/docker/security/main.qmd
+        - lab/docker/storage/main.qmd
+
+        - lab/docker/compose/main.qmd
+        - lab/docker/compose-debugging/main.qmd
         - lab/docker/capstone-compose/main.qmd
->>>>>>> remotes/origin/codex/create-docker/compose-capstone-lab-assignment
-||||||| 6df1dcb
-=======
+
+        - lab/docker/swarm-basic/main.qmd
+        - lab/docker/swarm-resources/main.qmd
+        - lab/docker/capstone-swarm/main.qmd
+
+        - lab/docker/lowlevel-cgroups-v2/main.qmd
+        - lab/docker/lowlevel-checkpoint-restore/main.qmd
         - lab/docker/lowlevel-network-primitives/main.qmd
->>>>>>> remotes/origin/codex/create-lab-on-low-level-network-primitives
-        - lab/libvirt/single/main.qmd
+        - lab/docker/lowlevel-oci-runc/main.qmd
+        - lab/docker/lowlevel-rootfs-overlay/main.qmd
+        - lab/docker/lowlevel-security-primitives/main.qmd
 
     - part: "Задания. Практика"
       chapters:

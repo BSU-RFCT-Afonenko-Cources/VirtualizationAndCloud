@@ -1,7 +1,7 @@
 title: "Итоговое задание Docker Swarm: отказоустойчивая оркестрация сервиса"
 description: _assignment-description.qmd
 time-limit-minutes: 360
-virtual-machine: "Ubuntu 26.04 LTS — KVM/QEMU Lab"
+virtual-machine: "Ubuntu 26.04 LTS — Docker Lab"
 steps:
   - 01-swarm-inventory/step.yaml
   - 02-registry-images/step.yaml

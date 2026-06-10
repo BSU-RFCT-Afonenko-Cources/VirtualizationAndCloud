@@ -1,0 +1,33 @@
+title: "Containerization Docker"
+description: _description.md
+book-url: http://10.135.250.210/theory/
+start_date: "2026-05-01"
+end_date: "2026-06-30"
+assignments:
+    - docker/basic-containers/assignment.yaml
+    - docker/networking/assignment.yaml
+    - docker/images/assignment.yaml
+    - docker/registry/assignment.yaml
+    - docker/security/assignment.yaml
+    - docker/storage/assignment.yaml
+
+    - docker/compose/assignment.yaml
+    - docker/compose-debugging/assignment.yaml
+#    - docker/capstone-compose/assignment.yaml
+
+    - docker/swarm-basic/assignment.yaml
+    - docker/swarm-networking/assignment.yaml
+    - docker/swarm-resources/assignment.yaml
+    - docker/swarm-stack-secrets/assignment.yaml
+    - docker/swarm-updates/assignment.yaml
+    - docker/capstone-swarm/assignment.yaml
+
+    - docker/lowlevel-namespaces/assignment.yaml
+    - docker/lowlevel-cgroups-v2/assignment.yaml
+    - docker/lowlevel-checkpoint-restore/assignment.yaml
+    - docker/lowlevel-network-primitives/assignment.yaml
+    - docker/lowlevel-oci-runc/assignment.yaml
+    - docker/lowlevel-rootfs-overlay/assignment.yaml
+#    - docker/lowlevel-security-primitives/assignment.yaml
+    - docker/capstone-mini-runtime/assignment.yaml
+#    - docker/capstone-process-hibernation/assignment.yaml
